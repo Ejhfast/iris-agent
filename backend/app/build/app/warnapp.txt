@@ -1,0 +1,328 @@
+missing module named 'PyQt5.sip' - imported by /Users/ethanfast/miniconda2/envs/py3/lib/python3.5/site-packages/PyInstaller/loader/rthooks/pyi_rth_qt5plugins.py
+missing module named pyimod03_importers - imported by /Users/ethanfast/miniconda2/envs/py3/lib/python3.5/site-packages/PyInstaller/loader/rthooks/pyi_rth_pkgres.py
+missing module named rfc822 - imported by twitter.models, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'jwt.algorithms' - imported by oauthlib.oauth1.rfc5849.signature, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named blinker - imported by oauthlib.signals, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named jwt - imported by oauthlib.common, oauthlib.oauth2.rfc6749.clients.service_application, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named requests_toolbelt - imported by twitter.api, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cPickle - imported by numpy.core.numeric, numpy.lib.format, numpy.lib.npyio, numpy.ma.core, pycparser.ply.yacc, pickleshare, zmq.sugar.socket, jupyter_client.session, zmq.eventloop.zmqstream, ipykernel.serialize, ipykernel.pickleutil, sklearn.externals.joblib.memory, sklearn.externals.joblib.parallel, sklearn.externals.joblib.pool, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cStringIO - imported by cPickle, pytz.tzfile, cffi.ffiplatform, tornado.template, pygments.util, dill.dill, dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named future_builtins - imported by numpy.lib.npyio, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named dbhash - imported by anydbm, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named gdbm - imported by anydbm, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named dumbdbm - imported by anydbm, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named whichdb - imported by anydbm, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named anydbm - imported by dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named commands - imported by numpy.distutils.cpuinfo, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named Numeric - imported by numpy.distutils.system_info, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numarray - imported by numpy.distutils.system_info, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named __svn_version__ - imported by numpy.f2py.__version__, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy_distutils - imported by numpy.f2py.diagnose, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'numpy_distutils.command' - imported by numpy.f2py.diagnose, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'numpy_distutils.fcompiler' - imported by numpy.f2py.diagnose, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'numpy_distutils.cpuinfo' - imported by numpy.f2py.diagnose, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ConfigParser - imported by numpy.distutils.system_info, numpy.distutils.npy_pkg_config, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32con - imported by distutils.msvccompiler, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'multiprocessing.forking' - imported by sklearn.externals.joblib._multiprocessing_helpers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named exceptions - imported by sklearn.externals.joblib.my_exceptions, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'sklearn.externals.six.moves' - imported by sklearn.utils.extmath, sklearn.multiclass, sklearn.random_projection, sklearn.feature_extraction.dict_vectorizer, sklearn.feature_extraction.text, sklearn.model_selection._split, sklearn.ensemble.bagging, sklearn.ensemble.weight_boosting, sklearn.ensemble.partial_dependence, sklearn.cross_validation, sklearn.linear_model.least_angle, sklearn.linear_model.coordinate_descent, sklearn.linear_model.theil_sen, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.less - imported by numpy, scipy.special.basic, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.expit - imported by scipy.special, sklearn.utils.fixes, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.gammainc - imported by scipy.special, sklearn.neighbors.kde, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.erf - imported by scipy.special, sklearn.gaussian_process.gpc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.ndtr - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.log_ndtr - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.erfc - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.inv_boxcox - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.inv_boxcox1p - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.chndtrix - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.i1 - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.i0 - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.boxcox - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.boxcox1p - imported by scipy.special, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.tan - imported by numpy, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.arctanh - imported by numpy, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.arcsin - imported by numpy, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.arctan - imported by numpy, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.beta - imported by scipy.special, scipy.stats._tukeylambda_stats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.cosh - imported by numpy, scipy.stats._continuous_distns, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.log1p - imported by numpy, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.tanh - imported by numpy, scipy.stats._continuous_distns, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.sinh - imported by numpy, scipy.stats._continuous_distns, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.expm1 - imported by numpy, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.hypot - imported by numpy, scipy.stats.morestats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.chndtr - imported by scipy.special, scipy.stats._distn_infrastructure, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.kl_div - imported by scipy.special, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.entr - imported by scipy.special, scipy.stats._distn_infrastructure, scipy.stats._discrete_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.ive - imported by scipy.special, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.logical_and - imported by numpy, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.NINF - imported by numpy, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.power - imported by numpy, scipy.stats.kde, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.random.multivariate_normal - imported by numpy.random, scipy.stats.kde, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.random.randint - imported by numpy.random, scipy.stats.kde, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.random.randn - imported by numpy.random, scipy, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.random.rand - imported by numpy.random, scipy, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.arccos - imported by numpy, scipy.special.orthogonal, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.airy - imported by scipy.special, scipy.special.orthogonal, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.logical_or - imported by numpy, scipy.interpolate.interpolate, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.xlogy - imported by scipy.special, scipy.stats._distn_infrastructure, scipy.interpolate.rbf, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named new - imported by scipy.interpolate.rbf, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named wx - imported by matplotlib.pyplot, IPython.lib.guisupport, ipykernel.eventloops, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'PyQt4.QtGui' - imported by matplotlib.pyplot, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named gi - imported by matplotlib.pyplot, ipykernel.gui.gtk3embed, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named gobject - imported by matplotlib.pyplot, ipykernel.gui.gtkembed, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'IPython.kernel.zmq' - imported by IPython, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ipykernel.get_connection_info - imported by ipykernel, ipykernel.zmqshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ipykernel.connect_qtconsole - imported by ipykernel, ipykernel.zmqshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ipykernel.get_connection_file - imported by ipykernel, ipykernel.zmqshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'ipyparallel.serialize' - imported by ipykernel.pickleutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named dill.diff - imported by dill, dill.dill, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named diff - imported by dill.dill, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ordereddict - imported by dill, dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.pyparsing
+missing module named mutex - imported by dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _gdbm - imported by dbm.gnu
+missing module named number - imported by dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cloudpickle - imported by ipykernel.pickleutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named netifaces - imported by jupyter_client.localinterfaces, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named paramiko - imported by zmq.ssh.tunnel, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named SocketServer - imported by zmq.ssh.forward, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _subprocess - imported by jupyter_client.launcher, ipykernel.parentpoller, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pysqlite2 - imported by IPython.core.history, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named docrepr - imported by IPython.core.interactiveshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pathlib2 - imported by pickleshare, IPython.utils.text, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'backports.shutil_get_terminal_size' - imported by IPython.utils.terminal, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named repr - imported by IPython.core.debugger, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32clipboard - imported by IPython.lib.clipboard, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win_unicode_console - imported by IPython.terminal.interactiveshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'win_unicode_console.streams' - imported by IPython.terminal.interactiveshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named mock - imported by IPython.testing.tools, matplotlib, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'nose.tools' - imported by IPython.testing.tools, IPython.testing.decorators, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'nose.core' - imported by IPython.testing.iptest, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named coverage - imported by IPython.testing.iptestcontroller, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'coverage.html' - imported by IPython.testing.iptestcontroller, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ipyparallel - imported by ipykernel.zmqshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.ETERM - imported by zmq, zmq.error, zmq.eventloop.ioloop, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.EAGAIN - imported by zmq, zmq.error, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.zmq_version - imported by zmq, zmq.error, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.zmq_version_info - imported by zmq, zmq.error, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.zmq_poll - imported by zmq.backend, zmq.sugar.poll, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.constants - imported by zmq.backend, zmq.sugar.constants, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.Frame - imported by zmq.backend, zmq.sugar.tracker, zmq.sugar.frame, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.Socket - imported by zmq.backend, zmq.sugar.socket, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.zmq_version_info - imported by zmq.backend, zmq.sugar.version, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.Context - imported by zmq.backend, zmq.sugar.context, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pyczmq - imported by zmq.sugar.context, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.zmq_errno - imported by zmq.backend, zmq.error, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named zmq.backend.strerror - imported by zmq.backend, zmq.error, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named gevent - imported by zmq.green.poll, zmq.green.core
+missing module named 'gevent.core' - imported by zmq.green.core
+missing module named 'gevent.hub' - imported by zmq.green.core
+missing module named 'gevent.event' - imported by zmq.green.core
+missing module named PySide2 - imported by IPython.external.qt_loaders, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named Tkinter - imported by IPython.lib.clipboard, ipykernel.eventloops, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, PIL.ImageTk
+missing module named gtk - imported by ipykernel.gui.gtkembed, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'gi.repository' - imported by ipykernel.gui.gtk3embed, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named Queue - imported by requests.packages.urllib3.connectionpool, nbconvert.preprocessors.execute, zmq.eventloop.zmqstream, jupyter_client.manager, jupyter_client.blocking.client, jupyter_client.blocking.channels, dill._objects, ipykernel.inprocess.socket, ipykernel.inprocess.blocking, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named HTMLParser - imported by nbconvert.filters.citation, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named jinja2 - imported by nbconvert.exporters.templateexporter, nbconvert.filters.ansi, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32api - imported by distutils.msvccompiler, IPython.utils._process_win32, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.appdirs
+missing module named clr - imported by IPython.utils._process_cli, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pygments.lexers.PythonLexer - imported by pygments.lexers, IPython.lib.lexers, IPython.core.oinspect, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pygments.lexers.Python3Lexer - imported by pygments.lexers, IPython.lib.lexers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pygments.lexers.BashLexer - imported by pygments.lexers, IPython.lib.lexers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named colorama - imported by pygments.cmdline, IPython.terminal.interactiveshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.FancyURLopener - imported by urllib, pygments.lexers._sourcemod_builtins
+missing module named ctags - imported by pygments.formatters.html
+missing module named PIL._imagingagg - imported by PIL, PIL.ImageDraw
+missing module named pygments.formatters.LatexFormatter - imported by pygments.formatters, nbconvert.filters.highlight, nbconvert.preprocessors.latex, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pygments.formatters.HtmlFormatter - imported by pygments.formatters, nbconvert.filters.highlight, nbconvert.filters.markdown_mistune, nbconvert.preprocessors.csshtmlheader, IPython.core.oinspect, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named rfc3987 - imported by jsonschema._format, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named strict_rfc3339 - imported by jsonschema._format, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named isodate - imported by jsonschema._format, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named webcolors - imported by jsonschema._format, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named OpenSSL - imported by requests.packages.urllib3.contrib.pyopenssl, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cryptography - imported by requests.packages.urllib3.contrib.pyopenssl, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'cryptography.hazmat' - imported by requests.packages.urllib3.contrib.pyopenssl, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named socks - imported by requests.packages.urllib3.contrib.socks, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib3 - imported by requests.packages, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named idna - imported by requests.packages, requests.packages.urllib3.contrib.pyopenssl, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named simplejson - imported by requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cookielib - imported by requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _abcoll - imported by requests.packages.urllib3.packages.ordered_dict, sklearn.externals.odict, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named backports - imported by requests.packages.urllib3.packages.ssl_match_hostname, entrypoints, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'requests.packages.urllib3.packages.six.moves' - imported by requests.packages.urllib3.exceptions, requests.packages.urllib3.connectionpool, requests.packages.urllib3.connection, requests.packages.urllib3.util.response, requests.packages.urllib3.request, requests.packages.urllib3.response, requests.packages.urllib3.poolmanager, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named repoze - imported by jsonschema.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named functools32 - imported by jsonschema.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named  - imported by nbformat.validator, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named traitlets.config.Application - imported by traitlets.config, traitlets.log, ipykernel.kernelspec, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named System - imported by traitlets.traitlets, IPython.utils._process_cli, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'matplotlib.externals.six.moves' - imported by matplotlib.cbook, matplotlib.finance, matplotlib.dates, matplotlib.hatch, matplotlib.collections, matplotlib.colors, matplotlib.patches, matplotlib.backend_bases, matplotlib.widgets, matplotlib.mlab, matplotlib.contour, matplotlib.font_manager, matplotlib.afm, matplotlib.text, matplotlib.markers, matplotlib.textpath, matplotlib.image, matplotlib.colorbar, matplotlib.gridspec, matplotlib.axes._subplots, matplotlib.axes._axes, matplotlib.legend, matplotlib.offsetbox, matplotlib.legend_handler, matplotlib.stackplot, matplotlib.streamplot, matplotlib.table, matplotlib.axes._base, matplotlib.dviread, matplotlib.backends.backend_svg, matplotlib.tri.triinterpolate, matplotlib, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, matplotlib.backends.qt_editor.formlayout, matplotlib.backends.backend_tkagg, matplotlib.backends.tkagg, matplotlib.backends.backend_ps
+missing module named 'mpl_toolkits.natgrid' - imported by matplotlib.mlab, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named matplotlib.axes.Axes - imported by matplotlib.axes, matplotlib.legend, matplotlib.projections.geo, matplotlib.projections.polar, matplotlib.pyplot, matplotlib.figure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named dateutil.tz.tzfile - imported by dateutil.tz, dateutil.zoneinfo, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32wnet - imported by uuid, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named netbios - imported by uuid, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'IPython.kernel.comm' - imported by matplotlib.backends.backend_nbagg
+missing module named 'matplotlib._windowing' - imported by matplotlib.backends.windowing
+missing module named Cookie - imported by requests.compat, tornado.httputil, tornado.web, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named httplib - imported by tornado.httputil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named singledispatch - imported by tornado.gen, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named backports_abc - imported by tornado.gen, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _overlapped - imported by asyncio, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named asyncio.DefaultEventLoopPolicy - imported by asyncio, asyncio.events, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named trollius - imported by tornado.platform.asyncio, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named monotime - imported by tornado.platform.auto, zmq.eventloop.minitornado.platform.auto, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named monotonic - imported by tornado.platform.auto, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named certifi - imported by requests.certs, tornado.netutil, tornado.simple_httpclient, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named htmlentitydefs - imported by tornado.escape, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32evtlogutil - imported by logging.handlers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32evtlog - imported by logging.handlers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named UserDict - imported by pytz.lazy, dill.dill, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named sets - imported by numpy.distutils.misc_util, numpy.distutils.fcompiler, numpy.distutils.command.build_ext, matplotlib.transforms, pytz.tzinfo, matplotlib.font_manager, matplotlib.mathtext, dill._objects, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, matplotlib.backends.backend_ps
+missing module named six.moves.range - imported by six.moves, dateutil.rrule, prompt_toolkit.utils, prompt_toolkit.document, prompt_toolkit.buffer, prompt_toolkit.layout.containers, prompt_toolkit.layout.controls, prompt_toolkit.layout.lexers, prompt_toolkit.layout.processors, prompt_toolkit.layout.margins, prompt_toolkit.styles.from_dict, prompt_toolkit.renderer, prompt_toolkit.key_binding.bindings.named_commands, prompt_toolkit.key_binding.bindings.scroll, prompt_toolkit.key_binding.bindings.vi, prompt_toolkit.layout.menus, prompt_toolkit.terminal.vt100_output, prompt_toolkit.terminal.win32_input, prompt_toolkit.key_binding.input_processor, prompt_toolkit.terminal.vt100_input, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named six.moves.winreg - imported by six.moves, dateutil.tz.win, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named six.moves.map - imported by six.moves, prompt_toolkit.document, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+runtime module named six.moves - imported by dateutil.rrule, dateutil.tz._common, dateutil.tz.win, cycler, prompt_toolkit.utils, prompt_toolkit.document, prompt_toolkit.buffer, prompt_toolkit.layout.containers, prompt_toolkit.layout.controls, prompt_toolkit.layout.lexers, prompt_toolkit.layout.processors, prompt_toolkit.layout.margins, prompt_toolkit.styles.from_dict, prompt_toolkit.renderer, prompt_toolkit.key_binding.bindings.named_commands, prompt_toolkit.key_binding.bindings.scroll, prompt_toolkit.key_binding.bindings.vi, prompt_toolkit.layout.menus, prompt_toolkit.terminal.vt100_output, prompt_toolkit.terminal.win32_input, prompt_toolkit.key_binding.input_processor, prompt_toolkit.terminal.vt100_input, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named six.moves.zip - imported by six.moves, cycler, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named matplotlib.tri.Triangulation - imported by matplotlib.tri, matplotlib.tri.trifinder, matplotlib.tri.tritools, matplotlib.tri.triinterpolate, matplotlib.mlab, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.spatial.cKDTree - imported by scipy.spatial, scipy.interpolate.ndgriddata, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.isinf - imported by numpy, matplotlib.mathtext, scipy.optimize.optimize, scipy.stats._distn_infrastructure, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.greater - imported by numpy, scipy.optimize.minpack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.float64 - imported by numpy, scipy.optimize.lbfgsb, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.double - imported by numpy, scipy.optimize.nnls, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.linalg._cblas - imported by scipy.linalg, scipy.linalg.blas, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.linalg._clapack - imported by scipy.linalg, scipy.linalg.lapack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.conj - imported by numpy, scipy.linalg.decomp, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.inexact - imported by numpy, scipy.special.basic, scipy.linalg.decomp, scipy.optimize.minpack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.linalg.qr_insert - imported by scipy.linalg, scipy.sparse.linalg.isolve.lgmres, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.conjugate - imported by numpy, scipy.linalg.matfuncs, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.logical_not - imported by numpy, scipy.linalg.matfuncs, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.isfinite - imported by numpy, scipy.linalg.decomp, scipy.linalg.matfuncs, scipy.misc.common, scipy.optimize.slsqp, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.sign - imported by numpy, scipy.linalg.matfuncs, scipy.misc.common, scipy.optimize.zeros, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.absolute - imported by numpy, scipy.linalg.matfuncs, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.single - imported by numpy, scipy.linalg.decomp_schur, scipy.linalg.matfuncs, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.arange - imported by scipy, scipy.sparse.linalg.isolve.minres, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.ones - imported by scipy, scipy.sparse.linalg.isolve.minres, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scikits - imported by scipy.sparse.linalg.dsolve.linsolve, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.log - imported by numpy, scipy.misc.common, scipy.stats._distn_infrastructure, scipy.stats._continuous_distns, scipy.stats._discrete_distns, scipy.stats.morestats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.factorial - imported by scipy.special, scipy.misc, scipy.interpolate.polyint, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.factorial2 - imported by scipy.special, scipy.misc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.factorialk - imported by scipy.special, scipy.misc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named PIL._webp - imported by PIL, PIL.WebPImagePlugin
+missing module named 'setuptools.extern.six' - imported by setuptools, setuptools.extension, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'backports.ssl_match_hostname' - imported by setuptools.ssl_support, tornado.netutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named wincertstore - imported by setuptools.ssl_support, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'setuptools.extern.six.moves' - imported by setuptools.dist, setuptools.command.easy_install, setuptools.sandbox, setuptools.command.setopt, setuptools.package_index, setuptools.ssl_support, setuptools.command.egg_info, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32com.client.gencache - imported by setuptools.sandbox, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named setuptools_svn - imported by setuptools.command.egg_info, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'pkg_resources.extern.six.moves' - imported by pkg_resources, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.packaging.requirements
+missing module named __main__ - imported by pkg_resources, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'com.sun' - imported by pkg_resources._vendor.appdirs
+missing module named com - imported by pkg_resources._vendor.appdirs
+missing module named win32com.shell - imported by pkg_resources._vendor.appdirs
+missing module named 'pkg_resources.extern.pyparsing' - imported by pkg_resources._vendor.packaging.requirements, pkg_resources._vendor.packaging.markers
+missing module named pkg_resources.extern.six - imported by pkg_resources.extern, pkg_resources, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pkg_resources.extern.appdirs - imported by pkg_resources.extern, pkg_resources, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named pkg_resources.extern.packaging - imported by pkg_resources.extern, pkg_resources, setuptools.dist, setuptools.command.egg_info, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named setuptools.extern.six - imported by setuptools.extern, setuptools.monkey, setuptools.dist, setuptools.depends, setuptools.command.easy_install, setuptools.sandbox, setuptools.package_index, setuptools.command.bdist_egg, setuptools.command.egg_info, setuptools.command.sdist, setuptools.unicode_utils, setuptools.command.develop, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named testing - imported by cffi.recompiler, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named dummy_thread - imported by requests.packages.urllib3.packages.ordered_dict, cffi.lock, sklearn.externals.odict, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named cffi._pycparser - imported by cffi, cffi.cparser, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named md5 - imported by twitter, pycparser.ply.yacc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, matplotlib.backends.backend_ps
+missing module named thread - imported by requests.packages.urllib3.packages.ordered_dict, cffi.lock, cffi.cparser, tornado.ioloop, zmq.eventloop.minitornado.ioloop, dill.dill, ipykernel.parentpoller, sklearn.externals.odict, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.BufferTooShort - imported by multiprocessing, multiprocessing.connection, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.AuthenticationError - imported by multiprocessing, multiprocessing.connection, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.TimeoutError - imported by multiprocessing, multiprocessing.pool, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.get_context - imported by multiprocessing, multiprocessing.pool, multiprocessing.managers, multiprocessing.sharedctypes, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.set_start_method - imported by multiprocessing, multiprocessing.spawn, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.get_start_method - imported by multiprocessing, multiprocessing.spawn, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.SimpleQueue - imported by multiprocessing, concurrent.futures.process, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named multiprocessing.Process - imported by multiprocessing, zmq.ssh.tunnel, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _imaging_gif - imported by PIL.GifImagePlugin, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named PyQt4 - imported by /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, matplotlib.backends.qt_compat
+missing module named 'PyQt4.QtCore' - imported by PIL.ImageQt, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named PySide - imported by /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, matplotlib.backends.qt_compat
+missing module named 'PySide.QtCore' - imported by PIL.ImageQt, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named olefile - imported by PIL.FpxImagePlugin, PIL.MicImagePlugin
+missing module named Image - imported by scipy.misc.pilutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ImageFilter - imported by scipy.misc.pilutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.sparse.coo_matrix - imported by scipy.sparse, scipy.sparse.data, sklearn.utils.fixes, scipy.optimize._numdiff, scipy.integrate._bvp, sklearn.metrics.classification, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named scipy.special.comb - imported by scipy.special, scipy.linalg.special_matrices, scipy.misc, scipy.stats._distn_infrastructure, scipy.interpolate.interpolate, scipy.stats._continuous_distns, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named mklfft - imported by numpy.fft, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'nose.util' - imported by numpy.testing.noseclasses, IPython.testing.iptest, IPython.testing.plugin.ipdoctest, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'nose.plugins' - imported by numpy.testing.noseclasses, numpy.testing.nosetester, IPython.testing.iptest, IPython.testing.plugin.ipdoctest, IPython.external.decorators._numpy_testing_noseclasses, matplotlib, matplotlib.testing.noseclasses, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.conjugate - imported by numpy.core, numpy.fft.fftpack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.integer - imported by numpy.core, numpy.fft.helper, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named copy_reg - imported by cPickle, cStringIO, numpy.core, ipykernel.codeutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.float32 - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named StringIO - imported by requests.packages.urllib3.packages.six, six, requests.compat, matplotlib.externals.six, scipy._lib.six, numpy.lib.utils, numpy.testing.utils, numpy.lib.format, IPython.testing.plugin.ipdoctest, IPython.utils.capture, jsonschema.compat, pygments.util, IPython.core.inputtransformer, IPython.utils.PyColorize, IPython.core.magics.execution, dill.dill, dill.temp, dill._objects, sklearn.externals.six, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.six
+missing module named nose - imported by numpy.testing.nosetester, numpy.testing.noseclasses, numpy.testing.utils, numpy.testing.decorators, IPython.testing.iptest, IPython.external.decorators._decorators, IPython.testing.decorators, matplotlib, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.isnan - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.isfinite - imported by numpy.core, numpy.testing.utils, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.isinf - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.float64 - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named win32pdh - imported by numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.signbit - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.lib.triu - imported by numpy.lib, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.lib.i0 - imported by numpy.lib, numpy.dual, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.histogramdd - imported by numpy, numpy.lib.twodim_base, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.geterrobj - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.complexfloating - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.longdouble - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.single - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.double - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.add - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.inexact - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.cdouble - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.csingle - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.intp - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.multiply - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.maximum - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.object_ - imported by numpy.core, numpy.linalg.linalg, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.sqrt - imported by numpy.core, numpy.fft.fftpack, numpy.linalg.linalg, scipy.sparse.linalg._norm, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.linalg.inv - imported by numpy.linalg, numpy.matrixlib.defmatrix, numpy.lib.polynomial, matplotlib.transforms, scipy.linalg._solvers, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urlparse - imported by requests.compat, oauthlib.common, oauthlib.oauth1.rfc5849, oauthlib.oauth1.rfc5849.parameters, oauthlib.oauth1.rfc5849.signature, requests_oauthlib.oauth1_session, oauthlib.oauth2.rfc6749.tokens, oauthlib.oauth2.rfc6749.utils, oauthlib.oauth2.rfc6749.parameters, twitter.api, twitter.ratelimit, numpy.lib._datasource, notebook.nbextensions, tornado.escape, tornado.web, notebook.utils, jsonschema.compat, tornado.simple_httpclient, IPython.core.extensions, tornado.websocket, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib2 - imported by requests.compat, oauthlib.oauth1.rfc5849.utils, twitter.api, numpy.lib._datasource, setuptools.package_index, IPython.lib.display, jsonschema.compat, nbconvert.filters.strings, IPython.core.display, IPython.core.magics.code, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.amax - imported by numpy, numpy.ma.core, scipy.linalg.matfuncs, scipy.misc.common, scipy.misc.pilutil, scipy.stats.morestats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.iscomplexobj - imported by numpy, numpy.ma.core, scipy.linalg.decomp, scipy.misc.pilutil, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.amin - imported by numpy, numpy.ma.core, scipy.misc.pilutil, scipy.stats.morestats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.expand_dims - imported by numpy, numpy.ma.core, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.dtype - imported by numpy, numpy.ma.mrecords, numpy.ctypeslib, scipy.optimize.minpack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.array - imported by numpy, numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords, numpy.ctypeslib, dill._objects, scipy.linalg.decomp, scipy.sparse.linalg.isolve.utils, scipy.misc.common, scipy.misc.pilutil, scipy.stats.stats, scipy.optimize.lbfgsb, scipy.optimize.tnc, scipy.optimize.slsqp, scipy.optimize.minpack, scipy.integrate._ode, scipy.interpolate.interpolate, scipy.interpolate.fitpack, scipy.interpolate.fitpack2, scipy.stats.morestats, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.ndarray - imported by numpy, numpy.ma.core, numpy.ma.extras, numpy.ma.mrecords, numpy.ctypeslib, IPython.core.magics.namespace, dill.dill, scipy.stats._distn_infrastructure, scipy.stats.mstats_basic, scipy.stats.mstats_extras, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.recarray - imported by numpy, numpy.ma.mrecords, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.bool_ - imported by numpy, numpy.ma.core, numpy.ma.mrecords, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.lib.iscomplexobj - imported by numpy.lib, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.lib.real - imported by numpy.lib, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.lib.imag - imported by numpy.lib, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named numpy.core.number - imported by numpy.core, numpy.testing.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'org.python' - imported by pickle, setuptools.sandbox, xml.sax, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named __builtin__ - imported by numpy.core.numerictypes, numpy.core.numeric, scipy._lib.six, numpy.lib._iotools, numpy.ma.core, numpy.distutils.misc_util, numpy, pyparsing, PIL.Image, ipython_genutils.py3compat, IPython.utils.py3compat, ptyprocess.ptyprocess, tornado.gen, dill.dill, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.pyparsing
+missing module named numpy.eye - imported by numpy, numpy.core.numeric, scipy.misc.common, scipy.optimize.optimize, scipy.optimize.minpack, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _winreg - imported by platform, numpy.distutils.cpuinfo, IPython.utils.path, nbconvert.preprocessors.svg2pdf, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pkg_resources._vendor.appdirs, pygments.formatters.img
+missing module named java - imported by platform, unittest.mock, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named 'java.lang' - imported by platform, xml.sax._exceptions, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named vms_lib - imported by platform, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named winreg - imported by platform, mimetypes, urllib.request, distutils.msvc9compiler, distutils._msvccompiler, distutils.msvccompiler, numpy.distutils.cpuinfo, IPython.utils.path, nbconvert.preprocessors.svg2pdf, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pygments.formatters.img
+missing module named urllib.unquote_plus - imported by urllib, requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.urlencode - imported by urllib, requests.compat, oauthlib.common, oauthlib.oauth1.rfc5849.endpoints.authorization, twitter.api, IPython.lib.display, tornado.httputil, tornado.web, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.getproxies - imported by urllib, requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.proxy_bypass - imported by urllib, requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.unquote - imported by urllib, requests.compat, oauthlib.common, notebook.utils, jsonschema.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.quote - imported by urllib, requests.compat, oauthlib.common, oauthlib.oauth2.rfc6749.utils, notebook.utils, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.quote_plus - imported by urllib, requests.compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.__version__ - imported by urllib, twitter.api, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.splittag - imported by urllib, setuptools.py26compat, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named urllib.urlretrieve - imported by urllib, notebook.nbextensions, IPython.core.extensions, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pygments.lexers._php_builtins
+missing module named urllib.urlopen - imported by urllib, IPython.utils.openpy, IPython.core.interactiveshell, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, pygments.lexers._lua_builtins, pygments.lexers._postgres_builtins
+missing module named org - imported by copy, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+excluded module named _frozen_importlib - imported by importlib, importlib.abc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _frozen_importlib_external - imported by importlib._bootstrap, importlib, importlib.abc, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named nt - imported by os, ntpath, shutil, pathlib, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named ce - imported by os, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named msvcrt - imported by subprocess, getpass, multiprocessing.spawn, multiprocessing.popen_spawn_win32, numpy.distutils.mingw32ccompiler, asyncio.windows_utils, prompt_toolkit.terminal.win32_input, prompt_toolkit.eventloop.win32, _pyio, IPython.core.page, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _winapi - imported by subprocess, multiprocessing.reduction, multiprocessing.connection, multiprocessing.heap, multiprocessing.popen_spawn_win32, asyncio.windows_events, asyncio.windows_utils, jupyter_client.launcher, ipykernel.parentpoller, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named _dummy_threading - imported by dummy_threading, /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py
+missing module named iris - imported by /Users/ethanfast/Desktop/Code/iris-electron/backend/app/app.py, util
+missing module named aiodns - imported by aiohttp.resolver
+missing module named cchardet - imported by aiohttp.client_reqrep

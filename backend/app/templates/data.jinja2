@@ -1,0 +1,51 @@
+<html>
+<style>
+  body{
+    font-family: 'helvetica neue', helvetica;
+  }
+  span.item{
+    width:210px;
+    display:block;
+    float:left;
+  }
+  li{
+    float:left;
+    list-style-type:none;
+    margin:2px 0px;
+  }
+  li.title{
+    margin-bottom:3px;
+    font-weight:800;
+  }
+  .clear{
+    clear:both;
+  }
+</style>
+<body>
+<h1>Import Data</h1>
+<ul>
+  <li class="title"><span class="item">Feature Name</span><span class="item">Type</span><span class="item">Example Value</span><span class="item">X-Value</span><span class="item">Y-Value</span></li>
+  <div class="clear"></div>
+<form action="/import_data" method="post">
+{% set i = 0 %}
+{% for v in lines %}
+  <li>
+    <span class="item name">{{ v[0] }}<input type="hidden" name="name_{{ i }}" value={{ v[0] }}></input></span>
+    <span class="item type"><select name="type_{{ i }}">
+        <option value="number" {% if v[1][0]=="Number" %} selected="selected"{% endif %}>Number</option>
+        <option value="categorical" {% if v[1][0]=="Categorical" %} selected="selected"{% endif %}>Categorical</option>
+        <option value="text" {% if v[1][0]=="Text" %} selected="selected"{% endif %}>Text</option></select></span>
+    <span class="item example">{{ v[1][1] }}</span>
+    <span class="item x-value"><input type="checkbox" name="x_value_{{ i }}"></span>
+    <span class="item y-value"><input type="checkbox" name="y_value_{{ i }}"></span>
+  </li>
+  <div class="clear"></div>
+  {% set i = i + 1 %}
+{% endfor %}
+<br/>
+<input type="submit" value="Import data"></input>
+</form>
+</ul>
+
+</body>
+</html>

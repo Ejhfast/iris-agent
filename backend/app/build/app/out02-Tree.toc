@@ -1,0 +1,11 @@
+('/Users/ethanfast/Desktop/Code/iris-electron/backend/app/build/app/setuptools-27.2.0-py3.5.egg',
+ None,
+ {'*.so', '*.pyd', '*.pyc', '*.py', 'EGG-INFO', '*.pyo'},
+ 'DATA',
+ [('setuptools/script (dev).tmpl',
+   '/Users/ethanfast/Desktop/Code/iris-electron/backend/app/build/app/setuptools-27.2.0-py3.5.egg/setuptools/script '
+   '(dev).tmpl',
+   'DATA'),
+  ('setuptools/script.tmpl',
+   '/Users/ethanfast/Desktop/Code/iris-electron/backend/app/build/app/setuptools-27.2.0-py3.5.egg/setuptools/script.tmpl',
+   'DATA')])
