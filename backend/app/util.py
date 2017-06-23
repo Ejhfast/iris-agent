@@ -182,7 +182,12 @@ import re
 
 def untab(lines):
     succ = False
-    if lines[0][0] == "\t":
+    for i in range(2,9)[::-1]:
+        if lines[0][0:i] == "\t"*i:
+            tab = "\t"*i
+            succ = True
+            break
+    if not succ and lines[0][0] == "\t":
         tab = "\t"
         succ = True
     for i in range(2,9)[::-1]:
@@ -211,17 +216,20 @@ def code2ui(code_lines):
     remove_def = code_lines[1:]
     remove_def[-1] = remove_def[-1].replace("return ", "").rstrip()
     # still need to remove tabs/spaces
+    print(code_lines)
+    print("".join(untab(remove_def)))
     return "".join(untab(remove_def))
+
 #bin dune earth water space walk despair
 def command2obj(command):
     obj = {}
     if command.__explain_code__:
-        explain_code = command.__explain_code__.rstrip().split("\n")
+        explain_code = [x+"\n" for x in command.__explain_code__.rstrip().split("\n")]
         print(explain_code)
     else:
         explain_code = inspect.getsourcelines(command.explanation)[0]
     if command.__source_code__:
-        source_code = command.__source_code__.rstrip().split("\n")
+        source_code = [x+"\n" for x in command.__source_code__.rstrip().split("\n")]
     else:
         source_code = inspect.getsourcelines(command.command)[0]
     obj["name"] = command.__class__.__name__

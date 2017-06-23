@@ -73,19 +73,14 @@ add_cors(app.router.add_route('POST', '/new_loop', new_loop))
 async def docs(request):
     question = await request.json()
     text = question["text"]
-    print(text)
-    if text == "":
-        doc_obj = {
-            "title": "",
-            "examples": [],
-            "description": ""
-        }
-    else:
-        class_instance = iris.predict_commands(text)[0][0]
+    query = iris.predict_commands(text)
+    if len(query) > 0:
+        class_instance = query[0][0]
         doc_obj = class_instance.docs()
         cmd_obj = util.command2obj(class_instance)
-        # doc_obj = state_machine.docs(text)
-        print(doc_obj)
+    else:
+        cmd_obj = None
+        doc_obj = None
     return web.json_response({"doc":doc_obj, "command":cmd_obj})
 
 add_cors(app.router.add_route('POST', '/docs', docs))
