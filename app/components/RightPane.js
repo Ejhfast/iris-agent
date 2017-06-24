@@ -26,7 +26,7 @@ let RightPane = ({ dispatch, variables, doc, minimizeState }) => {
     <img className="settingsButton" width="26px" src="http://0.0.0.0:8000/static/noun_879834.svg"></img>
     <img className="newCodeButton" width="21px" src="http://0.0.0.0:8000/static/noun_993053.svg" onClick={() => editCode(dispatch, minimizeState)}></img>
   </div>
-  <SplitPane split="horizontal" defaultSize="30%">
+  <SplitPane split="horizontal" defaultSize={sizeP}>
     <div className="variableTable">
         <div className="title">Current Variables</div>
         <ul>
@@ -38,7 +38,7 @@ let RightPane = ({ dispatch, variables, doc, minimizeState }) => {
             })}
         </ul>
     </div>
-    <SplitPane className="secondSplit" split="horizontal" size={sizeP} allowResize={true}>
+    <SplitPane className="secondSplit" split="horizontal" defaultSize="50%" allowResize={true}>
       <FunctionSearch />
       <FunctionInfo />
     </SplitPane>

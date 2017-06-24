@@ -1,7 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import SyntaxHighlighter from 'react-syntax-highlighter';
+import { updateCommandAPI } from '../api_calls/python.js';
+import { setCodeEdit } from '../actions/index.js';
 
+
+const editCommand = (dispatch, text) => {
+  updateCommandAPI(text);
+  dispatch(setCodeEdit({code_edit:false}));
+}
 
 class FunctionInfo extends Component {
 
@@ -27,6 +34,7 @@ class FunctionInfo extends Component {
             </SyntaxHighlighter>
             </pre>
           </div>
+          <button onClick={() => editCommand(this.props.dispatch, this.props.doc.title)}>Edit Command</button>
         </div>)
       }
     }

@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { updateFunc, updateResults, storeCurrentInput, setDocs } from '../actions/index.js';
-import { doSearch, updateHint, updateDocs } from '../api_calls/python.js';
+import { doSearch, updateHint, updateDocs, updateCommandAPI } from '../api_calls/python.js';
 import { input } from '../containers/InputBox';
 
 let search_input;
@@ -22,6 +22,7 @@ const onClick = (dispatch, func_text) => {
   // dispatch(storeCurrentInput(func_text));
   // updateHint(func_text);
   updateDocs(func_text);
+  // updateCommandAPI(func_text);
   dispatch(setDocs({docs: false})); // open docs pane
   // input.value = func_text;
 };

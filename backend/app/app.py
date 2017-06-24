@@ -74,16 +74,28 @@ async def docs(request):
     question = await request.json()
     text = question["text"]
     query = iris.predict_commands(text)
+    print(query)
     if len(query) > 0:
         class_instance = query[0][0]
         doc_obj = class_instance.docs()
+    else:
+        doc_obj = {"title":""}
+    return web.json_response({"doc":doc_obj})
+
+add_cors(app.router.add_route('POST', '/docs', docs))
+
+async def command(request):
+    question = await request.json()
+    text = question["text"]
+    query = iris.predict_commands(text)
+    if len(query) > 0:
+        class_instance = query[0][0]
         cmd_obj = util.command2obj(class_instance)
     else:
         cmd_obj = None
-        doc_obj = None
-    return web.json_response({"doc":doc_obj, "command":cmd_obj})
+    return web.json_response({"command":cmd_obj})
 
-add_cors(app.router.add_route('POST', '/docs', docs))
+add_cors(app.router.add_route('POST', '/command', command))
 
 async def function_test(request):
     data = await request.json()

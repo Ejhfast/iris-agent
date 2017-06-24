@@ -113,7 +113,10 @@ def args_json_to_str(args_json):
         "Int": "t.Int",
         "String": "t.String",
         "Array": "t.Array",
-        "Float": "t.Float"
+        "Float": "t.Float",
+        "Dataframe": "t.Dataframe",
+        "List": "t.List",
+        "Any": "t.Any"
     }
     key_vals = []
     for arg in args_json:

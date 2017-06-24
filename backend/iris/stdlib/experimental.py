@@ -22,8 +22,10 @@ class ApplyFunctionDataframe(IrisCommand):
     }
     def command(self, dataframe, selector_names, command):
         function_to_apply = command.function.function.command # wrapper + argmatch object...
+        new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
-        return dataframe.map_columns(selector_names.column_names, function_to_apply)
+        # also, whether the function takes the right type? and what type it returns?
+        return new_df.map_columns(selector_names.column_names, function_to_apply)
 
 applyFunctionDataframe = ApplyFunctionDataframe()
 

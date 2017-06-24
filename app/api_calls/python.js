@@ -47,6 +47,22 @@ export const updateDocs = (text) => {
     .then(json => {
         console.log(json);
         dispatch({'type': 'UPDATE_DOCS', 'doc': json.doc});
+        // dispatch({'type': 'UPDATE_COMMAND', 'command': json.command});
+
+    });
+};
+
+export const updateCommandAPI = (text) => {
+    fetch('http://localhost:8000/command', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({text})
+    })
+    .then(response => response.json())
+    .then(json => {
+        console.log("command", json);
         dispatch({'type': 'UPDATE_COMMAND', 'command': json.command});
     });
 };

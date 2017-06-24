@@ -90,6 +90,13 @@ export function addExample() {
     };
 }
 
+export function updateCommand(command){
+  return {
+    type: 'UPDATE_COMMAND',
+    command: command
+  }
+}
+
 export function updateCommandArg(id, values) {
     return {
         type: types.UPDATE_COMMAND_ARG,

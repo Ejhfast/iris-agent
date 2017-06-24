@@ -66,14 +66,14 @@ class CommandEdit extends Component {
           <div className="command_edit">
             <div class="overflow">
             <div className="label">Command name:</div>
-            <input type="text" placeholder="e.g., add_two_numbers" onChange={() => onChangeInput(this.props.dispatch, 'name', command_name)} ref={node => {command_name = node;}} value={this.props.name} />
+            <input type="text" placeholder="e.g., AddTwoNumbers" onChange={() => onChangeInput(this.props.dispatch, 'name', command_name)} ref={node => {command_name = node;}} value={this.props.name} />
             <div className="label">Command title:</div>
             <input type="text" placeholder="e.g., add {x} and {y}" onChange={() => onChangeInput(this.props.dispatch, 'title', command_title)} ref={node => {command_title = node;}} value={this.props.title}/>
             <div className="label">Arguments:</div>
-            <button onClick={addArgument(this.props.dispatch)}>Add Argument</button>
             <div className="arguments">
               {this.props.args.map((arg,i) => <ArgumentAnnotation id={i} name={arg.arg_name} string={arg.arg_string} arg_t={arg.arg_type}/>)}
             </div>
+            <button onClick={addArgument(this.props.dispatch)}>Add Argument</button>
             <div className="label">Examples</div>
             <ExamplesEditor />
             <div className="label">The python command:</div>

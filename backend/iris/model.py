@@ -100,6 +100,7 @@ class IrisBase:
         return True, new_command_string
 
     def predict_commands(self, text, n=1):
+        print(self.cmd2class.keys())
         predictions = self.predict_input(text)[0].tolist()
         sorted_predictions = sorted([(self.class_functions[i],x) for i,x in enumerate(predictions) if has_subword(self.class_functions[i], text)], key=lambda x: x[-1], reverse=True)
         return sorted_predictions[:n]

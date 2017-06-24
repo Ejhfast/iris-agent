@@ -11,6 +11,19 @@ footer {
 	}
 }
 
+button{
+	border:none;
+	background-color:#efefef;
+	margin:5px 0px;
+	font-size:.9em;
+	cursor:pointer;
+	padding:5px 10px;
+	// color: white;
+}
+button:hover{
+	opacity:.8;
+}
+
 
 span.Resizer.vertical{
 	border-right:1px solid #ccc;
@@ -63,7 +76,7 @@ span.Resizer.horizontal.disabled:hover{
 		border-radius:5px;
 		box-sizing: border-box;
 		border-style: none;
-		width:90%;
+		width:70%;
 		padding:0px 3%;
 		height:30px;
 		margin:0px 5px;
@@ -92,6 +105,7 @@ span.Resizer.horizontal.disabled:hover{
 		}
 		input.arg_string{
 			width:400px;
+			margin-right:5px;
 		}
 	}
 	.errorBox{

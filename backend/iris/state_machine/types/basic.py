@@ -148,6 +148,14 @@ class Array(EnvVar):
     def error_message(self, text):
         return ["I could not find '{}' in the environment or convert it to an Array. Please try again:".format(text)]
 
+class List(EnvVar):
+    def is_type(self, x):
+        if isinstance(x, list): return True
+        return False
+
+    def error_message(self, text):
+        return ["I could not find '{}' in the environment or convert it to an List. Please try again:".format(text)]
+
 class Function(EnvVar):
     def is_type(self, x):
         if isinstance(x, iris_objects.FunctionWrapper): return True

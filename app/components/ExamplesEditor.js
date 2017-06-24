@@ -29,8 +29,8 @@ const onChangeInput = (dispatch, id) =>
 
 let ExamplesEditor = ({ dispatch, examples }) =>
     <div className="command_examples">
+        {examples.map((example, id) => <div className="example"><input type="text" ref={node => {examples_ref[id] = node;}} onChange={onChangeInput(dispatch, id)} value={example} /><button onClick={onClickDelete(dispatch, id)}>Delete</button></div>)}
         <button onClick={addExampleButton(dispatch)}>Add Example</button>
-        {examples.map((example, id) => <div><div className="example"><input type="text" ref={node => {examples_ref[id] = node;}} onChange={onChangeInput(dispatch, id)} value={example} /></div><button onClick={onClickDelete(dispatch, id)}>Delete</button></div>)}
     </div>;
 
 const mapStateToProps = (state) => ({
