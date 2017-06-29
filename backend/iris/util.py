@@ -6,6 +6,21 @@ import re
 import csv
 import inspect
 
+# dataframe typing detection (duplicate?)
+def detect_type(type_):
+    try:
+        return "Number"
+    except:
+        if len(type_.split()) > 0:
+            return "Text"
+    return "String"
+
+def json_encode_df_type(x):
+    if any([isinstance(x,t) for t in [str,float,int]]):
+        return x
+    else:
+        return str(type(x))
+
 def get_source(cmd):
     if cmd.__source_code__ != None:
         code = "    "  + cmd.__source_code__

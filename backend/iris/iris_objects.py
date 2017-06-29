@@ -102,7 +102,7 @@ class IrisDataframe(IrisValue):
         column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
         row_data = []
         for row in self.data:
-            row_data.append({self.column_names[i]:d for i,d in enumerate(row)})
+            row_data.append({self.column_names[i]:util.json_encode_df_type(d) for i,d in enumerate(row)})
         return json.dumps({"column_data":column_data, "row_data":row_data})
 
     def get_column(self, name):
@@ -129,10 +129,18 @@ class IrisDataframe(IrisValue):
     def map_columns(self, columns, func):
         indexes = {name:i for i, name in enumerate(self.column_names)}
         columns_to_map = [indexes[column] for column in columns]
+        types = defaultdict(set)
         for i in range(0, len(self.data)):
             for j in range(0, len(self.data[i])):
                 if j in columns_to_map:
-                    self.data[i][j] = func(self.data[i][j])
+                    new_v = func(self.data[i][j])
+                    types[j].add(util.detect_type(new_v))
+                    self.data[i][j] = new_v
+        current_types = [x for x in self.column_types]
+        for i,col_typ in enumerate(current_types):
+            if len(types[i]) == 1:
+                current_types[i] = list(types[i])[0]
+        self.column_types = current_types
         return self
 
     def change_type(self, name, type_):
