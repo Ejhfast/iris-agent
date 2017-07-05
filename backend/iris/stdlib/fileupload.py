@@ -110,7 +110,8 @@ class CheckTypes(sm.StateMachine):
         if not self.force_check:
             self.context["types"] = types
         if self.force_check or util.verify_response(text):
-            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=types, data=[types], do_conversion=False)
+            print(types)
+            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[types], do_conversion=False)
             print_types = sm.Print([{"type":"collection_select_one", "value":dummy_frame.generate_spreadsheet_data()}]) #util.prettify_data(type_obj)}])
             return sm.DoAll([print_types, ChangeIndex()]).when_done(self.get_when_done_state())
         return None #True, Done().when_done(self.get_when_done_state())

@@ -99,7 +99,9 @@ class IrisDataframe(IrisValue):
             self.cat2index = defaultdict(dict)
 
     def generate_spreadsheet_data(self):
+        print(self.column_types)
         column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
+        print(column_data)
         row_data = []
         for row in self.data:
             row_data.append({self.column_names[i]:util.json_encode_df_type(d) for i,d in enumerate(row)})

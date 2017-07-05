@@ -50,10 +50,16 @@ class TableSelectMessage extends Component {
         <div className="data_table" style={{width: this.testColumns.length * (350+10+1)}}>
           <div className="header">
           {this.testColumns.map((column,i) => {
+            let newColStyle = {};
             if(column.type === "Text"){
+              newColStyle['width'] = 350;
               containsText = true;
+              // newColStyle['height'] = '4em';
             }
-            return <span className="data_column" onClick={setInput(this.props.dispatch, this.props.active, column.name, this.props.onlyOne)} style={singleColumn || i == 0 ? {'border-left': 'none'} : {}}>{column.name}</span>;
+            if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
+            if (i < 50){
+              return <span className="data_column" onClick={setInput(this.props.dispatch, this.props.active, column.name, this.props.onlyOne)} style={newColStyle}>{column.name}</span>;
+            }
           })}
           </div>
           {this.testRows.map((row,i) => {
@@ -64,13 +70,17 @@ class TableSelectMessage extends Component {
                 let newColStyle = {};
                 if(column.type === "Text"){
                   newColStyle['width'] = 350;
+                }
+                if(containsText){
                   newColStyle['height'] = '4em';
                 }
                 if(this.props.active && this.props.currentInput.includes(this.colMap[i])){
                   newColStyle['background-color'] = '#eee';
                 }
                 if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
-                return <span className="data_column" style={newColStyle}>{row[column.name]}</span>;
+                if (i < 50){
+                  return <span className="data_column" style={newColStyle}>{row[column.name]}</span>;
+                }
               })}
             </div>)
           })}

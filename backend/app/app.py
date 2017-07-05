@@ -8,6 +8,7 @@ from iris import stdlib
 from iris import EventLoop
 from iris import state_machine as sm
 from iris import IrisCommand
+from iris import iris_objects
 from iris import state_types as t
 import util
 from collections import defaultdict
@@ -108,7 +109,8 @@ async def function_test(request):
         exec(extra)
         exec(extra_explain)
         base_str = """from iris import state_types as t
-from iris import IrisCommand\n"""
+from iris import IrisCommand\n
+from iris import iris_objects"""
         with open("user_functions/{}.py".format(data['name']),'w') as f:
             f.write(base_str+"\n"+outs+"\n")
         print(outs)

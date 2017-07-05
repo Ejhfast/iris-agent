@@ -4,6 +4,29 @@ from .. import state_machine as sm
 from .. import util as util
 from .. import iris_objects
 
+
+class TFIDF(IrisCommand):
+    title = "tfidf {dataframe}"
+    examples = ["encode text features"]
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe?"),
+        "selector_names": t.DataframeSelector("Please choose a the columns to transform.", dataframe="dataframe"),
+    }
+    def command(self, dataframe, selector_names):
+        from sklearn.feature_extraction.text import CountVectorizer
+        vec = CountVectorizer(max_features=200)
+        documents = dataframe.get_column(selector_names.column_names[0]).tolist()
+        features = vec.fit_transform(documents)
+        i2t = {v:k for k,v in vec.vocabulary_.items()}
+        c_names = [i2t[i] for i in range(len(i2t.keys()))]
+        c_types = ["Number" for _ in range(len(i2t.keys()))]
+        print(c_names)
+        print(c_types)
+        new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray(), do_conversion=False)
+        return new_df
+
+tfidf = TFIDF()
+
 class MakeClassifier(IrisCommand):
     title = "make a classification model: {features} to predict {classes}"
     examples = [ "build a new classification model",
@@ -166,7 +189,7 @@ class MakeFeatureGroup(IrisCommand):
     ]
     argument_types = {
         "dataframe": t.Dataframe("What dataframe?"),
-        "selector": t.DataframeSelector("From what dataframe?", dataframe="dataframe")
+        "selector": t.DataframeSelector("From what dataframe?", dataframe="dataframe") # forgot how i did this? sketch?
     }
     def command(self, dataframe, selector):
         return selector

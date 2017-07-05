@@ -40,6 +40,7 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
         case types.ADD_MESSAGE:
             return { history, currentConvo: appendMessagesConvo(currentConvo, action), 'state': state.state };
         case types.ADD_SERVER_MESSAGE:
+            console.log("SERVER!!!", action);
             if (action.text.length === 0) {
                 return state;
             }

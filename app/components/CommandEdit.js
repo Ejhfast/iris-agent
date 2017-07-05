@@ -4,22 +4,19 @@ import brace from 'brace';
 import AceEditor from 'react-ace';
 import ArgumentAnnotation from './ArgumentAnnotation';
 import { ExamplesEditor, exampleValues } from './ExamplesEditor';
-import { updateCodeEditor, addCommandArg } from '../actions/index.js';
+import { updateCodeEditor } from '../actions/index.js';
 import { doSearch, updateHint, updateDocs, testFunction } from '../api_calls/python.js';
 import SplitPane from 'react-split-pane';
 
 import 'brace/mode/python';
 import 'brace/theme/github';
 
-
+// references to dom elements
 let command_name, command_title, test_inputs, args_editor, command_editor, explanation_editor, code_preview;
 
-const argValues = () => _.map(examples_ref, (value, key) => value.value);
-
-const runTest = (args_obj) => {
-  console.log(command_name);
-  console.log("running", command_name.value)
-  console.log("running", command_title.value)
+// helper to compile function on backend
+// TODO: change name of python API
+const compileFunction = (args_obj) => {
   testFunction({
       name: command_name.value,
       title:command_title.value,
@@ -30,31 +27,20 @@ const runTest = (args_obj) => {
   });
 };
 
+// helper to map user input to state for the command edit attributes
 const onChangeInput = (dispatch, name, i) => {
-    console.log(name, i);
-    console.log(i.value);
-    console.log("setting",name,i.value);
     dispatch(updateCodeEditor(name, i.value));
-  };
+};
 
-
+// similar to above, helper to map dom state for the ace elements
 const onChange = (dispatch, name) =>
   (value) => {
-    console.log(value);
-    console.log("setting",name,value);
     dispatch(updateCodeEditor(name, value));
-  };
-
-const addArgument = (dispatch) =>
-  () => {
-    dispatch(addCommandArg());
   };
 
 class CommandEdit extends Component {
 
     componentDidUpdate() {
-        console.log("setting values", this.props.command);
-        // command_editor.editor.setValue(this.props.command);
         code_preview.editor.setOptions({
             readOnly: true,
             highlightActiveLine: false,
@@ -69,12 +55,7 @@ class CommandEdit extends Component {
             <input type="text" placeholder="e.g., AddTwoNumbers" onChange={() => onChangeInput(this.props.dispatch, 'name', command_name)} ref={node => {command_name = node;}} value={this.props.name} />
             <div className="label">Command title:</div>
             <input type="text" placeholder="e.g., add {x} and {y}" onChange={() => onChangeInput(this.props.dispatch, 'title', command_title)} ref={node => {command_title = node;}} value={this.props.title}/>
-            <div className="label">Arguments:</div>
-            <div className="arguments">
-              {this.props.args.map((arg,i) => <ArgumentAnnotation id={i} name={arg.arg_name} string={arg.arg_string} arg_t={arg.arg_type}/>)}
-            </div>
-            <button onClick={addArgument(this.props.dispatch)}>Add Argument</button>
-            <div className="label">Examples</div>
+            <ArgumentAnnotation />
             <ExamplesEditor />
             <div className="label">The python command:</div>
             <AceEditor
@@ -104,7 +85,7 @@ class CommandEdit extends Component {
               ref={node => {explanation_editor = node;}}
             />
           </div>
-          <button onClick={() => runTest(this.props.args)}>Compile Code</button>
+          <button onClick={() =>  compileFunction(this.props.args)}>Compile Code</button>
           <div className="command_edit testpane overflow">
             <div className="label">Code preview:</div>
             <AceEditor
@@ -122,10 +103,9 @@ class CommandEdit extends Component {
             {this.props.error !== "" ? <div className="errorBox">{this.props.error}</div> : <div></div>}
           </div>
           </div>
-
-
 }
 
+// the command edit pane requires a lot of state
 const mapStateToProps = (state) => ({
     title: state.commandEditPane.title,
     name: state.commandEditPane.name,

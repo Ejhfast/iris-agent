@@ -116,6 +116,7 @@ def args_json_to_str(args_json):
         "Float": "t.Float",
         "Dataframe": "t.Dataframe",
         "List": "t.List",
+        "DataframeSelector": "t.DataframeSelector",
         "Any": "t.Any"
     }
     key_vals = []

@@ -45,6 +45,7 @@ class Conversation extends Component {
                 } else if (typeof message.text === 'object' && message.text.type === 'collection_select') {
                         content = <TableSelectMessage key={message.id} onlyOne={false} active={this.props.active && i === lastSelectMessageIndex} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
                 } else if (typeof message.text === 'object' && message.text.type === 'collection_select_one') {
+                        console.log(message.text.value);
                         content = <TableSelectMessage key={message.id} onlyOne={true} active={this.props.active && i === lastSelectMessageIndex} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
                 } else if (typeof message.text === 'object' && message.text.type === 'vega') {
                         console.log("vega", message.text);
