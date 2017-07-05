@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import * as types from '../actions/types';
 import * as _ from 'lodash';
 
+// TODO: a bit confused why we need this function
 const valueOrNull = (value) => {
     if (value !== undefined) {
         return value;
@@ -10,7 +11,8 @@ const valueOrNull = (value) => {
     return null;
 };
 
-const appendMessages = (oldMessages, action) => { // text, origin = 'user', type = null, arg = null) => {
+// given an action, push any new messages onto an existing set of messages
+const appendMessages = (oldMessages, action) => {
     const newMessages = [];
     let currentMax = 0;
     if (oldMessages.length > 0) {
@@ -25,11 +27,16 @@ const appendMessages = (oldMessages, action) => { // text, origin = 'user', type
     return oldMessages.concat(newMessages);
 };
 
+// given an action, update a conversation with new messages
 const appendMessagesConvo = (convo, action) => {
     const { messages } = convo;
     return { ...convo, messages: appendMessages(messages, action), args: action.arg_map };
 };
 
+// reducer for conversations
+// TODO: This definition state is pretty long, messy
+// Also not clear what "args" represents in a conversation with multiple sub-convos
+// Maybe it is only important to represent the convo title, if so maybe that should be refactored
 const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 'title': null, 'hidden': false, 'id': 0, 'args': {} }, 'state': 'START'}, action) => {
     const { history, currentConvo } = state;
     let newConvo;
@@ -39,8 +46,8 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
             return { history: action.conversation.history, currentConvo: action.conversation.currentConvo, 'state': state.state };
         case types.ADD_MESSAGE:
             return { history, currentConvo: appendMessagesConvo(currentConvo, action), 'state': state.state };
+        // this is a bit complex, maybe needs review for clarity
         case types.ADD_SERVER_MESSAGE:
-            console.log("SERVER!!!", action);
             if (action.text.length === 0) {
                 return state;
             }
@@ -54,6 +61,7 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
             }
             return { history, currentConvo: newConvo, state: action.state };
         case types.HIDE_CONVERSATION:
+            // this is super verbose just to update a specific convo index, better way?
             const newHistory = _.map(history, conv => {
                 const out = {...conv};
                 if (conv.id === action.id) {
@@ -61,6 +69,7 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
                 }
                 return out;
             });
+            // TODO: also wasteful to do a copy everytime, indendent of the index?
             newConvo = {...currentConvo};
             if (newConvo.id === action.id) {
                 newConvo.hidden = !newConvo.hidden;
@@ -71,6 +80,7 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
     }
 };
 
+// variables reducer, constrols variables in right sidebar
 const variables = (state = [], action) => {
     switch (action.type) {
         case types.UPDATE_VARIABLES:
@@ -80,6 +90,7 @@ const variables = (state = [], action) => {
     }
 };
 
+// predictions reducer, governs hints above input box
 const predictions = (state = [], action) => {
     switch (action.type) {
         case types.UPDATE_PREDICTIONS:
@@ -89,6 +100,7 @@ const predictions = (state = [], action) => {
     }
 };
 
+// docs reducer, governs what is displayed in docs pane
 const docs = (state = {title: '', examples: [], description: [], source:''}, action) => {
     switch (action.type) {
         case types.UPDATE_DOCS:
@@ -98,6 +110,7 @@ const docs = (state = {title: '', examples: [], description: [], source:''}, act
     }
 };
 
+// function search reducer, governs function search in the right sidebar
 const functionSearch = (state = {search: '', results: []}, action) => {
   switch (action.type){
     case types.UPDATE_FUNC:
@@ -109,6 +122,7 @@ const functionSearch = (state = {search: '', results: []}, action) => {
   }
 };
 
+// input reducer, manages current user input on main conversation pane
 const currentInput = (state = {'input': ''}, action) => {
   switch (action.type){
     case types.STORE_CURRENT_INPUT:
@@ -118,6 +132,8 @@ const currentInput = (state = {'input': ''}, action) => {
   }
 };
 
+// reducer that manages which pans are open and closed
+// TODO: this is a bad API, make more consistent
 const minimizeState = (state={'docs': true, 'code_edit':true}, action) => {
   switch (action.type){
     case types.SET_DOCS:
@@ -129,6 +145,7 @@ const minimizeState = (state={'docs': true, 'code_edit':true}, action) => {
   }
 };
 
+// helper to create a new array/list with desired index removed
 const removeIndex = (arr, i) => {
   let first_half = arr.concat([]).slice(0, i);
   let second_half = arr.concat([]).slice(i+1,arr.length);
@@ -137,6 +154,7 @@ const removeIndex = (arr, i) => {
 
 const blankCommand = {name: '', title: '', args: [], examples: [], command: '', explanation: '', testInput: '', preview:'', error: ''};
 
+// reducer to manage the command editing pane
 const commandEditPane = (state={...blankCommand}, action) => {
   switch (action.type){
     case types.UPDATE_CODE_EDITOR:
@@ -169,6 +187,7 @@ const commandEditPane = (state={...blankCommand}, action) => {
   }
 };
 
+// reducer to manage the input history state, going through old commands with up/down arrow
 const inputHistory = (state = {'history': [], 'currId': null, 'showHistory': false }, action) => {
     let newId;
     switch (action.type) {
@@ -198,6 +217,7 @@ const inputHistory = (state = {'history': [], 'currId': null, 'showHistory': fal
     }
 };
 
+// combine all these reducers together
 const rootReducer = combineReducers({
     conversation,
     variables,

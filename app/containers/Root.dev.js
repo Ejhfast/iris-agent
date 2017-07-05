@@ -4,6 +4,7 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import routes from '../routes';
 
+// some boilerplate, if we're not actually drawing a distinction between dev and production, maybe remove?
 export default class Root extends Component {
     render() {
         const { store, history } = this.props;
@@ -16,8 +17,3 @@ export default class Root extends Component {
         );
     }
 }
-
-Root.propTypes = {
-    store: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-};

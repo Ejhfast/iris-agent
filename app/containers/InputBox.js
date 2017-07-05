@@ -2,18 +2,20 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { addMessage, addInputHistory, moveInputHistory, storeCurrentInput, updateDocEvent, setDocs } from '../actions/index.js';
 import { updateHint, updateDocs } from '../api_calls/python.js';
-
 import * as _ from 'lodash';
 
-
+// dom reference element for main user input box
 let input;
 
+// helper to check whether history id (tracker in list) is not null (why does this exist??)
 const notNull = (inputHistory) => inputHistory.currId !== null;
+// get currently selected history element
 const getCurrentHistory = (inputHistory) => _.reverse(inputHistory.history.slice())[inputHistory.currId];
 
+// key binder to interact with history
 const onKeyDown = (dispatch, inputHistory, e, predictions) => {
     const keyCode = e.keyCode || e.which;
-    console.log(keyCode);
+    // so this is great, but tab completion has nothing to do with history...
     if (keyCode === 9){ // tab
       if(predictions.length > 0){
         let stripText = predictions[0].text.replace(/{/g, '').replace(/}/g, '');
@@ -23,42 +25,26 @@ const onKeyDown = (dispatch, inputHistory, e, predictions) => {
       e.preventDefault();
     }
     if (keyCode === 38) { // up arrow
-        console.log('up arrow');
         dispatch(moveInputHistory({'direction': 'up'}));
-        console.log(inputHistory);
         if (notNull(inputHistory)) {
-            console.log('diplay', getCurrentHistory(inputHistory));
             input.value = getCurrentHistory(inputHistory);
         }
     } else if(keyCode === 40) { // down arrow
-        console.log('down arrow');
         dispatch(moveInputHistory({'direction': 'down'}));
-        console.log(inputHistory);
         if (notNull(inputHistory)) {
-            console.log('display', getCurrentHistory(inputHistory));
             input.value = getCurrentHistory(inputHistory);
         }
     }
 };
-// canal artefact wood angle coffee february media aunt tail load weapon jazz
+
+// store input value, and update hint and docs
 const onChangeInput = (dispatch) => {
     dispatch(storeCurrentInput(input.value));
     updateHint(input.value);
     updateDocs(input.value);
 };
 
-const lookup_func = (dispatch, minimizeState, currMessages) => {
-  dispatch(setDocs({docs:!minimizeState.docs}))
-  if (currMessages.length > 0){
-    // console.log(currMessages);
-    updateDocs(currMessages[0].text);
-  }
-  else{
-    updateDocs(input.value);
-  }
-}
-
-// input goes here
+// this component defines main text input
 let InputBox = ({ dispatch, inputHistory, predictions }) =>
     <div className="input_box">
         <form onSubmit={e => {
@@ -66,18 +52,11 @@ let InputBox = ({ dispatch, inputHistory, predictions }) =>
             dispatch(addMessage({'origin': 'user', 'text': [input.value] }));
             dispatch(addInputHistory({'message': input.value}));
             dispatch(storeCurrentInput(''));
-            // dispatch(updateDocEvent({'doc':{'title':''}}));
             input.value = '';
         }}>
             <input onChange={() => onChangeInput(dispatch)} onKeyDown={(e) => onKeyDown(dispatch, inputHistory, e, predictions)} type="text" placeholder="your message here" ref={node => {input = node;}}></input>
         </form>
     </div>;
-
-InputBox.propTypes = {
-    dispatch: PropTypes.func,
-    inputHistory: PropTypes.any,
-    predictions: PropTypes.any
-};
 
 const mapStateToProps = (state) => ({
     inputHistory: state.inputHistory,

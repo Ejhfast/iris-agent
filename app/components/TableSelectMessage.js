@@ -6,14 +6,17 @@ import { updateHint } from '../api_calls/python.js';
 import { input } from '../containers/InputBox';
 import { storeCurrentInput } from '../actions/index.js';
 
-
+// this function updates the main conversation input (input) with a column selection
 const setInput = (dispatch, active, text, onlyOne = false) => {
     return () => {
+        // if component is not active, this will do nothing
         if(active === true){
           let stripText = text.replace(/{/g, '').replace(/}/g, '');
+          // if this is a selectOne component, the job is easy
           if(onlyOne === true){
             input.value = text;
           }
+          // otherwise, if input already includes text, we are going to remove/deselect it
           else if(input.value.includes(text)){
             let items = input.value.split(",").map(x => x.replace(/^\s+|\s+$/g, ''));
             let findIndex = items.indexOf(text);
@@ -22,6 +25,7 @@ const setInput = (dispatch, active, text, onlyOne = false) => {
             }
             input.value = items.join(", ");// input.value.replace(RegExp(test+",|"test), '');
           }
+          // otherwise, we are going to append it
           else{
             if(input.value !== "") input.value = input.value + ", " + stripText;
             else input.value = stripText;
@@ -32,8 +36,9 @@ const setInput = (dispatch, active, text, onlyOne = false) => {
     };
 };
 
+// this component defines tables that have allow users to dynamically select columns
+// TODO: this shares a lot with CollectionMessage, factor out as much as possible. Also, rename
 class TableSelectMessage extends Component {
-
   render = () => {
     const data = JSON.parse(this.props.text);
     this.testColumns = data["column_data"];
@@ -54,7 +59,6 @@ class TableSelectMessage extends Component {
             if(column.type === "Text"){
               newColStyle['width'] = 350;
               containsText = true;
-              // newColStyle['height'] = '4em';
             }
             if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
             if (i < 50){
@@ -88,10 +92,7 @@ class TableSelectMessage extends Component {
         </div>
     </div>);
   }
-
 }
-
-TableSelectMessage.propTypes = proptypes.messageType;
 
 const mapStateToProps = (state) => ({
     currentInput: state.currentInput.input

@@ -47,7 +47,7 @@ class CommandEdit extends Component {
             highlightGutterLine: false
         });
     }
-
+    // Could refactor out the ace components below, but possible overkill
     render = () =>
           <div className="command_edit">
             <div class="overflow">

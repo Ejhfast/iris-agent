@@ -4,31 +4,30 @@ import { updateFunc, updateResults, storeCurrentInput, setDocs } from '../action
 import { doSearch, updateHint, updateDocs, updateCommandAPI } from '../api_calls/python.js';
 import { input } from '../containers/InputBox';
 
+// reference to input search dom element
 let search_input;
 
+// this governs state change in function search box, update state value and pass to backend to match with function
 const onChangeInput = (dispatch) => {
-  console.log(search_input.value);
   if (search_input.value !== ""){
     dispatch(updateFunc({search: search_input.value}));
     doSearch(search_input.value);
   }
   else{
-    dispatch({'type': 'UPDATE_RESULTS', 'results': []});
+    // if nothing in field, clear results
+    dispatch(updateResults([]));
   }
 };
 
+// on click, we want to load the clicked upon function into the docs view
+// TODO: as with the hints, may not be one-to-one mapping here if classifier is weird?
 const onClick = (dispatch, func_text) => {
-  console.log("executing");
-  // dispatch(storeCurrentInput(func_text));
-  // updateHint(func_text);
   updateDocs(func_text);
-  // updateCommandAPI(func_text);
   dispatch(setDocs({docs: false})); // open docs pane
-  // input.value = func_text;
 };
 
+// component that defines function search field
 class FunctionSearch extends Component {
-
     render = () =>
       <div className="func_search">
         <div className="search_box"><input type="text" placeholder="search iris commands" onChange={() => onChangeInput(this.props.dispatch)} ref={node => {search_input = node;}}></input></div>

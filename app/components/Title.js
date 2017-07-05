@@ -3,14 +3,12 @@ import * as _ from 'lodash';
 import { hideConversation } from '../actions/index.js';
 import { connect } from 'react-redux';
 
-
+// this mess formats how arugment names appear in conversation titles
 const formatArgs = (title, args) => {
     if(title === null || title === undefined) {
         return '';
     }
     const words = title.split(' ');
-    console.log(words);
-    console.log(args);
     const replaceArgs = _.map(words, (w) => {
         let wd;
         if(w[0] === '{' && w[w.length - 1] === '}' && w.substring(1, w.length - 1).toLowerCase() in args) {
@@ -23,6 +21,7 @@ const formatArgs = (title, args) => {
     return replaceArgs;
 };
 
+// this defines a conversation title component
 let Title = ({ text, args, id, dispatch }) => {
     return (<div className="title" onClick={e => {
         e.preventDefault();
@@ -30,14 +29,6 @@ let Title = ({ text, args, id, dispatch }) => {
     }}>{ formatArgs(text, args) }</div>);
 };
 
-Title.propTypes = {
-    text: PropTypes.string,
-    args: PropTypes.any,
-    id: PropTypes.int,
-    dispatch: PropTypes.func
-};
-
 Title = connect()(Title);
-
 
 export default Title;

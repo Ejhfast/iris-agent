@@ -3,28 +3,34 @@ import { connect } from 'react-redux';
 import { addExample, deleteCommandExample, updateCommandExample } from '../actions/index.js';
 import * as _ from 'lodash';
 
+// reference to example dom objects, indexed on position
 let examples_ref = {};
 
+// map over example objects to get all their text values
+// necessary for call to backend
 const exampleValues = () => {
-  console.log(examples_ref);
   return _.map(_.filter(examples_ref, (value, key) => value !== null), (value, key) => value.value);
 }
 
+// helper function to add new example
 const addExampleButton = (dispatch) =>
   () => {
     dispatch(addExample());
   };
 
+// helper function to delete example
 const onClickDelete = (dispatch, id) =>
   () => {
     dispatch(deleteCommandExample(id));
   };
 
+// helper function to update example, indexed on its position in list
 const onChangeInput = (dispatch, id) =>
   () => {
     dispatch(updateCommandExample(id, examples_ref[id].value));
   };
 
+// Manage all the examples in the command edit pane
 let ExamplesEditor = ({ dispatch, examples }) =>
     <div>
       <div className="label">Examples</div>

@@ -4,6 +4,7 @@ import { updateHint } from '../api_calls/python.js';
 
 import { connect } from 'react-redux';
 
+// set main input text and update hint
 const setInput = (text) => {
     return () => {
         let stripText = text.replace(/{/g, '').replace(/}/g, '');
@@ -12,6 +13,9 @@ const setInput = (text) => {
     };
 };
 
+// TODO: should logic that binds to tab-key press be here as well?
+
+// defines component for prediction strip above main input text
 let PredictionStrip = ({predictions}) =>
     <div className="prediction_strip">
       <div className="predictions">
@@ -19,9 +23,6 @@ let PredictionStrip = ({predictions}) =>
       </div>
     </div>;
 
-PredictionStrip.propTypes = {
-    predictions: PropTypes.any
-};
 
 const mapStateToProps = (state) => ({
     predictions: state.predictions

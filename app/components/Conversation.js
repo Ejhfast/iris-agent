@@ -1,7 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Message from './Message';
 import TitleMessage from './TitleMessage';
-import VisualMessage from './VisualMessage';
 import DataMessage from './DataMessage';
 import CodeMessage from './CodeMessage';
 import ExplainMessage from './ExplainMessage';
@@ -12,11 +11,11 @@ import VegaMessage from './VegaMessage';
 import Title from './Title';
 import * as proptypes from '../proptypes/types';
 
-// import SemanticView from '../components/SemanticView';
 
 class Conversation extends Component {
 
     render = () => {
+        // this is somewhat cludgy, but basically we only want only one SelectMessage component to be visually fuctional within a conversation
         let lastSelectMessageIndex = null;
         let i;
         for (i = 0; i < this.props.messages.length; i++){
@@ -24,15 +23,12 @@ class Conversation extends Component {
             lastSelectMessageIndex = i;
           }
         }
-        console.log("last message", i);
+        // TODO: is there a way to clean this up, maybe via switch?
         return (<div className="innerConversation">
             <Title text={this.props.title} args={this.props.args} id={this.props.id}/>
             {this.props.messages.map((message,i) => {
                 let content;
-                console.log('INCOMING', message.text);
-                if(typeof message.text === 'object' && message.text.type === 'image') {
-                    content = <VisualMessage key={message.id} origin={message.origin} content={message.text.value} hidden={this.props.hidden}/>;
-                } else if (typeof message.text === 'object' && message.text.type === 'data') {
+                if (typeof message.text === 'object' && message.text.type === 'data') {
                     content = <DataMessage key={message.id} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
                 } else if (typeof message.text === 'object' && message.text.type === 'explain') {
                     content = <ExplainMessage key={message.id} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
@@ -61,14 +57,5 @@ class Conversation extends Component {
         </div>);
       }
 }
-
-Conversation.propTypes = {
-    messages: proptypes.messagesType,
-    title: PropTypes.any,
-    args: PropTypes.any,
-    id: PropTypes.int,
-    hidden: PropTypes.bool,
-    active: PropTypes.bool
-};
 
 export default Conversation;

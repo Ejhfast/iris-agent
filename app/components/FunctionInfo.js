@@ -5,11 +5,14 @@ import { updateCommandAPI } from '../api_calls/python.js';
 import { setCodeEdit } from '../actions/index.js';
 
 
+// function to load a command into the command edit pane, and open pane
+// the button for this is in the docs pane, but maybe logic should be moved to CommandEdit?
 const editCommand = (dispatch, text) => {
   updateCommandAPI(text);
   dispatch(setCodeEdit({code_edit:false}));
 }
 
+// this component defines what is displayed in the docs window
 class FunctionInfo extends Component {
 
     render = () => {

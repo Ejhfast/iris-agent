@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import routes from '../routes';
 import { Router } from 'react-router';
 
+// some boilderplate
 export default class Root extends Component {
     render() {
         const { store, history } = this.props;
@@ -13,8 +14,3 @@ export default class Root extends Component {
         );
     }
 }
-
-Root.propTypes = {
-    store: PropTypes.object.isRequired,
-    history: PropTypes.object.isRequired
-};
