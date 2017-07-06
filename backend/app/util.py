@@ -6,51 +6,7 @@ from iris import state_types as t
 import inspect
 from iris import util as iris_util
 
-
-# crappy data type inference function
-def detect_data_type(data):
-    try:
-        return "Number", float(data)
-    except:
-        if len(data.split()) > 1:
-            return "Text", data
-        else:
-            return "Categorical", data
-
-# crappy function to figure out csv type and header
-# TODO: deal with no header
-# TODO: deal with quoted strings
-def rows_and_types(data):
-    title = data[0]
-    cols = title.replace("\"","").split(",")
-    sample_line = data[1].split(",")
-    return list(zip(cols,[detect_data_type(x) for x in sample_line]))
-
-def process_data(meta, content):
-    env = defaultdict(list)
-    cat2index = {}
-    for j,line in enumerate(content):
-        if j == 0: continue
-        cols = line.replace("\"","").split(",")
-        for i,col in enumerate(cols):
-            val = None
-            if meta[i]["type"] == "number":
-                val = float(col)
-            elif meta[i]["type"] == "categorical":
-                if col in cat2index:
-                    val = cat2index[col]
-                else:
-                    val = len(cat2index)
-                    cat2index[col] = val
-            else:
-                val = col
-            env[meta[i]["name"]].append(val)
-    for k,vs in meta.items():
-        tp = meta[k]["type"]
-        if tp in ["number", "categorical"]:
-            env[meta[k]["name"]] = np.array(env[meta[k]["name"]])
-    return env
-
+# this determines the type label to give to the variables that appear in the right sidebar
 def detect_type(x):
     if isinstance(x, str):
         return "string"
@@ -79,6 +35,8 @@ def detect_type(x):
     else:
         return str(type(x))
 
+# this returns a dictionary of name and type for variables in the environment
+# TODO: what doesn't ASTS have an underscore?
 def env_vars(iris):
     out = []
     for k,v in iris.env.items():
@@ -87,27 +45,10 @@ def env_vars(iris):
         out.append({"name": key, "value": detect_type(v), "order": iris.env_order[k]})
     return out
 
-def make_xy(meta, env):
-    X, y = None, None
-    feature_index = {"X":{}, "y":{}}
-    def init_or_append(X,data):
-        npx = np.array(data)
-        npx = npx.reshape(npx.shape[0],1)
-        if X != None: return np.concatenate((X,npx),axis=1)
-        return npx
-    for k,vs in meta.items():
-        if "x_value" in vs:
-            X = init_or_append(X, env[vs["name"]])
-            feature_index["X"][X.shape[1]-1] = vs["name"]
-        if "y_value" in vs:
-            y = init_or_append(y, env[vs["name"]])
-            feature_index["y"][y.shape[1]-1] = vs["name"]
-    if y.shape[1] == 1:
-        y = y.reshape(y.shape[0])
-    return X,y,feature_index
-
 # command construction utils
+# TODO: should this go elsewhere, a separate file, maybe even somewhere in the iris lib itself?
 
+# take a json list of objects fields arg_name, arg_type, and arg_string (question), and return an argument class string
 def args_json_to_str(args_json):
     arg_type_hash = {
         "Int": "t.Int",
@@ -124,9 +65,11 @@ def args_json_to_str(args_json):
         key_vals.append("\""+arg["arg_name"]+"\":"+arg_type_hash[arg["arg_type"]]+"(\""+arg["arg_string"]+"\")" )
     return "{"+",".join(key_vals)+"}"
 
+# given a code block, tab it
 def tab_block(text, tab_="    "):
     return "\n".join([tab_+x for x in text.split("\n")])
 
+# given a code block, tab it and "return" the last value
 def tab_and_return(text, tab_="    "):
     lines = text.split("\n")
     lines[-1] = "return " + lines[-1]
@@ -134,27 +77,26 @@ def tab_and_return(text, tab_="    "):
     formatted_lines = "\n".join(tab_indent)
     return formatted_lines
 
+# get a comma-separated list of arguments for the command definition
 def make_args_string(args_obj):
-    # try:
-    #     args_obj_rep = eval(args_obj)
-    # except:
-    #     return "ARGS..."
     return ", ".join([x["arg_name"] for x in args_obj])
 
+# make the source code of a command given a text block and args
 def make_command_text(text, args_obj):
     args_str = make_args_string(args_obj)
     start = "def command(self, " + args_str + "):\n"
     formatted_lines = tab_and_return(text)
     return start+formatted_lines
 
+# make the sourcew code of an explanation given a text block
 def make_explanation_text(text):
     start = "def explanation(self, result):\n"
     formatted_lines = tab_and_return(text)
     return start+formatted_lines
 
+# finally, put everything together to construct the full text source
 def make_class_text(class_name, title, command_text, explanation_text, args_obj, examples, tab_="    "):
     args_obj_str = args_json_to_str(args_obj)
-    #class_name = "".join([x.capitalize() for x in name.split("_")])
     start = "class {}(IrisCommand):\n".format(class_name)
     start += "{}title = \"{}\"\n".format(tab_,title)
     start += "{}examples = [".format(tab_) + ", ".join(["\""+x+"\"" for x in examples]) + "]\n"
@@ -167,23 +109,23 @@ def make_class_text(class_name, title, command_text, explanation_text, args_obj,
     start += tab_block(command_text)+"\n"
     start += tab_block(explanation_text)+"\n"
     start += "{} = {}()\n".format("_"+class_name, class_name)
+    # metadata with command source (can't retrieve with inspect)
     extra = "{}.__source_code__ = \"\"\"".format("_"+class_name)
     extra += command_text+"\n"
     extra += "\"\"\""
+    # same for the explanation
     extra_explain = "{}.__explain_code__ = \"\"\"".format("_"+class_name)
     extra_explain += explanation_text+"\n"
     extra_explain += "\"\"\""
     return start, extra, extra_explain
 
-def evalTest(name, title, command_text, explanation_text, args_obj):
-    env = {}
-    class_str = make_class_text(name, title, command_text, explanation_text, args_obj)
-    exec(class_str, env)
 
-# command 2 json
+# helpers for breaking apart a class instance into a json object
+# TODO: should this go elsewhere?
 
 import re
 
+# function to detect what type and how many tabs there are
 def untab(lines):
     succ = False
     for i in range(2,9)[::-1]:
@@ -206,6 +148,7 @@ def untab(lines):
     print("using tab", (tab,))
     return [re.sub(tab, "", line, 1) for line in lines]
 
+# generate json arguments from the command argument annotation
 def args2json(argument_types):
     out_args = []
     for k,v in argument_types.items():
@@ -216,6 +159,7 @@ def args2json(argument_types):
         })
     return out_args
 
+# transform command body to source that will appear in the command editor UI
 def code2ui(code_lines):
     remove_def = code_lines[1:]
     remove_def[-1] = remove_def[-1].replace("return ", "").rstrip()
@@ -224,7 +168,7 @@ def code2ui(code_lines):
     print("".join(untab(remove_def)))
     return "".join(untab(remove_def))
 
-#bin dune earth water space walk despair
+# put all of these methods together
 def command2obj(command):
     obj = {}
     if command.__explain_code__:
@@ -243,5 +187,3 @@ def command2obj(command):
     obj["explanation"] = code2ui(explain_code)
     obj["command"] = code2ui(source_code)
     return obj
-
-# IVFPT7RKGRZLAOCO
