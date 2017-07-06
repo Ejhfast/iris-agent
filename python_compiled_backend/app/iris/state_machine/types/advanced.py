@@ -121,11 +121,6 @@ class Select(sm.AssignableMachine):
         question_text.append("Would you like any of these?")
         self.output = question_text
 
-    def string_representation(self, value):
-        if isinstance(value, str):
-            return value
-        return "CHOICE FOR {}".format(self.arg_name)
-
     def get_output(self):
         if self.arg_name != None:
             message = "Please choose from one of the following for {}:".format(self.arg_name)

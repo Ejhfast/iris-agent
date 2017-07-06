@@ -16,8 +16,6 @@ class AssignableMachine(StateMachine):
     def set_arg_name(self, name):
         self.arg_name = name
         return self
-    def string_representation(self, value):
-        return str(value)
 
 class DoAll(AssignableMachine):
     def __init__(self, states, next_state_obj=None):

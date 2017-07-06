@@ -226,27 +226,28 @@ class GetCoefficients(IrisCommand):
 
 getCoefficients = GetCoefficients()
 
-class TrainTestSplit(IrisCommand):
-    title = "create training and test data splits"
-    examples = [ "create train test data",
-                 "split data into train and test" ]
-    store_result = [ t.VarName(question="Where to store training data?"),
-                     t.VarName(question="Where to store testing data?") ]
-    help_text = [
-        "This command takes a dataset and splits it into training and testing data.",
-        "By convention, training data is used to train a model, and testing data is used to evaluate a model's performance."
-    ]
-    def command(self, x_features : t.ArgList(), y_classes : t.ArgList()):
-        from sklearn.model_selection import train_test_split
-        xvals = np.array(x_features).T
-        yvals = np.array(y_classes).T
-        yvals = yvals.reshape(yvals.shape[0])
-        x_train, x_test, y_train, y_test = train_test_split(xvals, yvals, train_size=0.25)
-        train_data = iris_objects.IrisData(x_train, y_train)
-        test_data = iris_objects.IrisData(x_test, y_test)
-        return train_data, test_data
-
-trainTestSplit = TrainTestSplit()
+# update below to get rid of store_result
+# class TrainTestSplit(IrisCommand):
+#     title = "create training and test data splits"
+#     examples = [ "create train test data",
+#                  "split data into train and test" ]
+#     store_result = [ t.VarName(question="Where to store training data?"),
+#                      t.VarName(question="Where to store testing data?") ]
+#     help_text = [
+#         "This command takes a dataset and splits it into training and testing data.",
+#         "By convention, training data is used to train a model, and testing data is used to evaluate a model's performance."
+#     ]
+#     def command(self, x_features : t.ArgList(), y_classes : t.ArgList()):
+#         from sklearn.model_selection import train_test_split
+#         xvals = np.array(x_features).T
+#         yvals = np.array(y_classes).T
+#         yvals = yvals.reshape(yvals.shape[0])
+#         x_train, x_test, y_train, y_test = train_test_split(xvals, yvals, train_size=0.25)
+#         train_data = iris_objects.IrisData(x_train, y_train)
+#         test_data = iris_objects.IrisData(x_test, y_test)
+#         return train_data, test_data
+#
+# trainTestSplit = TrainTestSplit()
 
 class TrainModel(IrisCommand):
     title = "train {model} on {data}"

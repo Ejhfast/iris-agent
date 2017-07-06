@@ -4,7 +4,7 @@ from ... import state_machine as sm
 from .. import command_search as cs
 from . import iris_objects
 from .basic import EnvVar, YesNo, OR, primitive_or_question
-from .converters import conversion, type_dict
+from .converters import type_dict
 # for statistical machine
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer
@@ -126,11 +126,6 @@ class Select(sm.AssignableMachine):
                     question_text.append({"type":"explain", "value":m})
         question_text.append("Would you like any of these?")
         self.output = question_text
-
-    def string_representation(self, value):
-        if isinstance(value, str):
-            return value
-        return "CHOICE FOR {}".format(self.arg_name)
 
     def get_output(self):
         if self.arg_name != None:

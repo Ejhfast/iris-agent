@@ -33,11 +33,6 @@ class EnvVar(sm.AssignableMachine):
         self.converters = []
         super().__init__()
 
-    def string_representation(self, value):
-        if isinstance(value, iris_objects.IrisValue):
-            return value.name
-        return str(value)
-
     def get_output(self):
         return [self.question.format(self.arg_name)]
 
@@ -149,9 +144,6 @@ class ArgList(EnvVar):
     def is_type(self, x):
         return True, x
 
-    def string_representation(self, value):
-        return 'LIST OF {}'.format(self.arg_name)
-
     def error_message(self, text):
         return ["I couldn't parse that. Please try again:".format(text)]
 
@@ -165,9 +157,6 @@ class ArgList(EnvVar):
 class StrList(EnvVar):
     def is_type(self, x):
         return True, x
-
-    def string_representation(self, value):
-        return 'LIST OF {}'.format(self.arg_name)
 
     def error_message(self, text):
         return ["I couldn't parse that. Please try again:".format(text)]
@@ -224,11 +213,6 @@ class YesNo(sm.AssignableMachine):
             self.output = question
         else:
             self.output = [question]
-
-    def string_representation(self, value):
-        if isinstance(value, str) or isinstance(value, int):
-            return str(value)
-        return "CHOICE FOR {}".format(self.arg_name)
 
     def convert_type(self, text):
         return OR([

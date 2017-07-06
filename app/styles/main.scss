@@ -482,3 +482,12 @@ li{
 	list-style-type:none;
 	margin:2px 0px;
 }
+
+// iris command title styling
+
+span.normal_text, span.iris_arg{
+ 	margin-right:4px;
+ }
+ span.iris_arg{
+ 	font-weight:800;
+ }
