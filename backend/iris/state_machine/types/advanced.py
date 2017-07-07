@@ -5,13 +5,11 @@ from .. import command_search as cs
 from . import iris_objects
 from .basic import EnvVar, YesNo, OR, primitive_or_question
 from .converters import type_dict
-# for statistical machine
-from sklearn.linear_model import LogisticRegression
-from sklearn.feature_extraction.text import CountVectorizer
 import numpy as np
 
 IRIS = IRIS_MODEL
 
+# type class for dataframe objects, see irisobjects.js for more
 class Dataframe(EnvVar):
     def is_type(self, x):
         if isinstance(x, iris_objects.IrisDataframe):
@@ -22,6 +20,8 @@ class Dataframe(EnvVar):
     def type_from_string(self, text):
         return False, None
 
+# type converter for dataframe objects
+# TODO: this may not be important now that iris commands are becoming so dataframe-centric
 class DataframeToArray(sm.AssignableMachine):
     def __init__(self, user_input):
         self.user_input = user_input
@@ -52,29 +52,24 @@ class DataframeToArray(sm.AssignableMachine):
 
 type_dict["Array"].append((Dataframe, DataframeToArray))
 
+# the dataframe selector type generates a column selection interaction
 class DataframeSelector(sm.AssignableMachine):
     def __init__(self, question, dataframe = None):
         super().__init__()
         self.question = question
         self.dataframe = dataframe
         self.accepts_input = False
-        # if self.dataframe != None:
-        #     self.accepts_input = True
-            # self.write_variable("dataframe", dataframe)
-            # self.accepts_input = True
     def get_output(self):
         dataframe = self.read_variable("dataframe") # we are assuming EnvReference now...
         if dataframe:
             return [
                 self.question,
-                {"type": "collection_select", "value": dataframe.get_value(IRIS_MODEL).generate_spreadsheet_data() }, #util.prettify_data(dataframe.get_value(IRIS_MODEL).column_names)},
+                {"type": "collection_select", "value": dataframe.get_value(IRIS_MODEL).generate_spreadsheet_data() }
             ]
         return []
     def convert_type(self, x):
         return False, None
-    def selector_transform(self, columns):
-        dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
-        return np.array([dataframe.get_column(name) for name in columns]).T
+    # here the hint will verify whether the user has selected a valid set of columns
     def base_hint(self, text):
         dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
         possible_columns = [x.strip() for x in text.split(",")]
@@ -83,13 +78,16 @@ class DataframeSelector(sm.AssignableMachine):
                 return ["your selection is a valid set of columns"]
         return cs.ApplySearch().hint(text)
     def next_state_base(self, text):
+        # if we passed this a dataframe ref already, no need to ask user
         if self.read_variable("dataframe") == None and self.dataframe != None:
             print(self.arg_context['ASSIGNMENTS'].keys())
             self.accepts_input = True
             return sm.Assign("dataframe", sm.ValueState(self.arg_context['ASSIGNMENTS'][self.gen_scope(self.dataframe)])).when_done(self)
+        # otherwise ask user
         elif self.read_variable("dataframe") == None:
             self.accepts_input = True
             return sm.Assign("dataframe", Dataframe(self.question)).when_done(self)
+        # otherwise we have already asked user
         else:
             dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
             print(self.read_variable("dataframe"))
@@ -97,19 +95,14 @@ class DataframeSelector(sm.AssignableMachine):
             possible_columns = [x.strip() for x in text.split(",")]
             if all([col in dataframe.column_names for col in possible_columns]):
                 selection = dataframe.copy_frame(possible_columns)
-                #selection = self.selector_transform(possible_columns)
                 self.assign(selection)
                 dataframe = self.delete_variable("dataframe")
                 self.accepts_input = False
                 return selection
             return cs.ApplySearch(text=text).when_done(self.get_when_done_state())
-            #return sm.Print(["A least one of those wasn't a valid column name. Try again?"]).when_done(self)
 
-class DataframeNameSelector(DataframeSelector):
-    def selector_transform(self, columns):
-        dataframe = self.read_variable("dataframe")
-        return (dataframe, columns)
-
+# the select class allows a user to choose among some number of options
+# TODO: improve the visual representation of this!
 class Select(sm.AssignableMachine):
     def __init__(self, options={}, option_info={}, default=None):
         super().__init__()
@@ -117,7 +110,6 @@ class Select(sm.AssignableMachine):
         self.id2option = {}
         option_keys = sorted(options.keys())
         question_text = []
-        #question_text.append()
         for i,k in enumerate(option_keys):
             self.id2option[i] = options[k]
             question_text.append("{}: {}".format(i,k))
@@ -128,6 +120,8 @@ class Select(sm.AssignableMachine):
         self.output = question_text
 
     def get_output(self):
+        # is there a named variable we are asking for, otherwise use generic message
+        # arg_name is some magic inherited by AssignableMachine
         if self.arg_name != None:
             message = "Please choose from one of the following for {}:".format(self.arg_name)
             return [message] + self.output
@@ -136,9 +130,12 @@ class Select(sm.AssignableMachine):
     def error_message(self, text):
         return ["{} is not a valid option".format(text)]
 
+    # the most conservative thing is to take the OR of any component type value under matching logic
+    # TODO: is this broken? matching on selects might be having some problems
     def convert_type(self, text, doing_match=False):
         return OR([primitive_or_question(value, text, doing_match) for _, value in self.id2option.items()])
 
+    # hint will display the choice the user is making
     def base_hint(self, text):
         success, choice = util.extract_number(text)
         if success:
@@ -154,64 +151,16 @@ class Select(sm.AssignableMachine):
         if success:
             if choice in self.id2option:
                 new_state = self.id2option[choice]
+                # if we've hit ground, do assignment
                 if not isinstance(new_state, sm.StateMachine):
                     self.assign(new_state, new_state)
                 return new_state
         return self.set_error(self.error_message(text))
 
+    # need to pass any when_dones on this down to component state machines, if any
     def when_done(self, next_state):
         for id, state in self.id2option.items():
             if isinstance(state, sm.StateMachine):
                 state.when_done(next_state)
         self.when_done_state = next_state
         return self
-
-class StatisticalState(sm.AssignableMachine):
-    def __init__(self, question, class2example):
-        self.class2example = class2example
-        self.titles = {}
-        super().__init__()
-        if isinstance(question, list):
-            self.output = question
-        else:
-            self.output = [question]
-        self.model = LogisticRegression()
-        self.vectorizer = CountVectorizer()
-        self.train()
-
-    def train(self):
-        docs = []
-        classes = []
-        self.transitions = {}
-        for i, title in enumerate(self.class2example.keys()):
-            examples = self.class2example[title]["examples"]
-            self.transitions[i] = self.class2example[title]["state"]
-            self.titles[i] = title
-            for example in examples:
-                docs.append(example)
-                classes.append(i)
-        X = self.vectorizer.fit_transform(docs)
-        self.model.fit(X, classes)
-
-    def base_hint(self, text):
-        next_state = self.predict(text)
-        return [self.titles[next_state]]
-
-    def predict(self, text):
-        x = self.vectorizer.transform([text])
-        return self.model.predict(x)[0]
-
-    def next_state_base(self, text):
-        next_state = self.predict(text)
-        if not isinstance(self.transitions[next_state], sm.StateMachine):
-            self.assign(self.transitions[next_state])
-        return self.transitions[next_state]
-
-class Memory(sm.AssignableMachine):
-    def __init__(self, iris = IRIS):
-        self.iris = IRIS
-        super().__init__()
-        self.accepts_input = False
-    def next_state_base(self, text):
-        self.assign(iris_objects.EnvReference("__MEMORY__"))
-        return iris_objects.EnvReference("__MEMORY__")
