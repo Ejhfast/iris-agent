@@ -2,30 +2,32 @@ from .core import StateMachine
 from .. import iris_objects
 import uuid
 
+# this gives automata the ability to perform assignment
+# inherited by all type-oriented state machines, for example
 class AssignableMachine(StateMachine):
     arg_name = None
+    # assign a value to the variable at the top of the stack
+    # this is a helper method that an inheriting state will call somewhere within its logic
+    # to make good on an assignment
     def assign(self, value, name=None):
         if len(self.context["assign"]) > 0:
-            # print(self.context)
             curr_assign = self.context["assign"].pop()
-            print("ASSIGN", curr_assign, value, name)
             self.context["ASSIGNMENTS"][curr_assign] = value
             self.context["ASSIGNMENT_NAMES"][curr_assign] = name
-    def is_assignable(self):
-        return True
+    # set argument name for possible display purposes on interface
     def set_arg_name(self, name):
         self.arg_name = name
         return self
 
+# this executes a series of computations in sequence
+# for example, printing several messages then asking the user for a value
 class DoAll(AssignableMachine):
-    def __init__(self, states, next_state_obj=None):
+    def __init__(self, states):
         self.states = states
+        # link each state to the next state
         for i, _ in enumerate(self.states):
             if i+1 < len(self.states):
-                #if isinstance(self.states[i+1], StateMachine):
                 self.states[i].when_done(self.states[i+1])
-        if next_state_obj:
-            self.states[-1].when_done(next_state_obj)
         super().__init__()
         self.accepts_input = False
     def next_state_base(self, text):
@@ -41,104 +43,40 @@ class DoAll(AssignableMachine):
                 state.set_arg_name(name)
         return self
 
-class Label(StateMachine):
-    def __init__(self, label, next_state_obj):
-        self.label = label
-        self.next_state_obj = next_state_obj
-        super().__init__()
-        self.accepts_input = False
-    def next_state_base(self, text):
-        self.context[self.label] = self.next_state_obj
-        return self.next_state_obj
-
-class Jump(StateMachine):
-    def __init__(self, state_label):
-        self.state_label = state_label
-        super().__init__()
-        self.accepts_input = False
-    def next_state_base(self, text):
-        return self.context[self.state_label]
-    def when_done(self, new_state):
-        self.context[self.state_label].when_done(new_state)
-        return self
-
+# automata that displays output to user, very common component of other automata classes
 class Print(StateMachine):
     def __init__(self, output):
         super().__init__()
         self.output = output
         self.accepts_input = False
     def next_state_base(self, text):
+        # TODO: do we still need to return a value wrapper that holds context?
         return Value(None, self.context)
 
-class PrintF(StateMachine):
-    def __init__(self, output_f):
-        self.output_f = output_f
-        super().__init__()
-        self.accepts_input = False
-    def get_output(self):
-        return [self.output_f()]
-    def next_state_base(self, text):
-        return Value(None, self.context)
-
+# automata used to wrap another automata in an assignment condition
 class Assign(StateMachine):
+    # "variable" is what variable to assign
+    # "assign_state" is the automata to wrap
     def __init__(self, variable, assign_state):
         self.variable = variable
-        # if not assign_state.is_assignable():
-        #     raise Exception("{} is not assignable!".format(assign_state))
         self.assign_state = assign_state
         super().__init__()
         self.accepts_input = False
     def next_state_base(self, text):
-        if isinstance(self.variable, Variable):
-            self.context["assign"].append(self.variable.scope_name())
-        else:
-            self.context["assign"].append(self.variable)
+        # push assignment to stack and execute next state
+        # some state downstream (inheriting from AssignableMachine) will call .assign
+        self.context["assign"].append(self.variable)
         return self.assign_state
+    # pass through hint request to wrapped state
     def base_hint(self, text):
         return self.assign_state.hint(text)
+    # pass through when_done logic to wrapped state
     def when_done(self, state):
         self.assign_state.when_done(state)
         return self
 
-class Let(StateMachine):
-    def __init__(self, variable, equal=None, then_do=None):
-        super().__init__()
-        self.next_state_obj = then_do
-        self.variable = variable
-        self.equal = equal
-        self.accepts_input = False
-    def next_state_base(self, text):
-        self.context["ASSIGNMENTS"][self.variable.scope_name()]=self.equal
-        return self.next_state_obj
-    def base_hint(self, text):
-        return self.next_state_obj.hint(text)
-
-class Variable(StateMachine):
-    def __init__(self, name, scope=None):
-        self.name = name
-        self.scope = scope
-        super().__init__()
-        self.accepts_input = False
-    def scope_name(self):
-        if self.scope:
-            return self.scope + "_" + self.name
-        return self.name
-    def next_state_base(self, text):
-        # print("VALUE", self.name, self.context)
-        return ValueState(self.get_value()).when_done(self.get_when_done_state())
-    def get_value(self):
-        return self.context["ASSIGNMENTS"][self.scope_name()]
-    def get_named_value(self):
-        return self.context["ASSIGNMENT_NAMES"][self.scope_name()]
-
-class SequentialMachine:
-    def __init__(self):
-        self.states = []
-    def add(self, state):
-        self.states.append(state)
-    def compile(self):
-        return DoAll(self.states)
-
+# helper automata for passing along a value for assignment
+# manty automata return ValueState wrappers on a value they want to assign, unstead of doing the assignment themselves
 class ValueState(AssignableMachine):
     def __init__(self, value, name=None):
         self.value = value
@@ -146,50 +84,50 @@ class ValueState(AssignableMachine):
         super().__init__()
         self.accepts_input = False
     def next_state_base(self, text):
-        print(self.value, self.name)
         if isinstance(self.value, iris_objects.IrisValue):
             self.assign(self.value, name=self.value.name)
         elif self.name:
             self.assign(self.value, name=self.name)
         else:
             self.assign(self.value)
-        return self.assign
+        # doesn't matter what is returned here, as long as it is not an automata
+        # we can still extend a computation by applying .when_done to the ValueState
+        return None
 
+# TODO: double check whether we still need this!
 class Value:
     def __init__(self, result, context):
         self.result = result
         self.context = context
 
-class PrintVar(StateMachine):
-    def __init__(self, var, func):
-        self.var = var
-        self.func = func
-        super().__init__()
-        self.accepts_input = False
-    def next_state_base(self, text):
-        self.var(self.context)
-        name, named_value, value = self.var.name, self.var.get_named_value(), self.var.get_value()
-        return Print(self.func(name, named_value, value)).when_done(self.get_when_done_state())
-
+# scope allows nested automata assignments to make sense without overwriting each other in the context store
+# e.g., prevents a child command variable named "x" from overwriting a parent command's variable of the same name
 class Scope:
+    # choose a random scope name
     def init_scope(self):
         self.scope = str(uuid.uuid4()).upper()[0:10]
+    # new var name is join with scope name on underscore
     def gen_scope(self, name):
         return self.scope + "_" + name
+    # helper to read scoped variable from context store
     def read_variable(self, varname):
         scope_var = self.gen_scope(varname)
         if scope_var in self.context["ASSIGNMENTS"]:
             return self.context["ASSIGNMENTS"][scope_var]
         return None
+    # helper to write scoped variable to context store
     def write_variable(self, varname, value):
         scope_var = self.gen_scope(varname)
         self.context["ASSIGNMENTS"][scope_var] = value
+    # helper for appending value to scoped var list
+    # Note: this seems to be used by only one function, possibly refactor or remove
     def append_variable(self, varname, value):
         scope_var = self.gen_scope(varname)
         if not scope_var in self.context["ASSIGNMENTS"]:
             self.context["ASSIGNMENTS"][scope_var] = [value]
         else:
             self.context["ASSIGNMENTS"][scope_var].append(value)
+    # likewise, this function is only being used in one place, maybe refactor or delete
     def delete_variable(self, varname):
         scope_var = self.gen_scope(varname)
         if scope_var in self.context["ASSIGNMENTS"]:

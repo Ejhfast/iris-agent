@@ -1,5 +1,5 @@
 from .core import StateMachine
-from .basic import Jump, Print
+from .basic import Print
 
 class Middleware:
     def test(self, text):

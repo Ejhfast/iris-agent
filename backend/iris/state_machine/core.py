@@ -57,11 +57,14 @@ class StateMachineRunner:
             return False
 
 class StateMachine:
+    # TODO: possibly clean up some of these attributes that are not in use anymore
     def __init__(self):
+        # important! determines whether this state accetps input from user (feeds a "text" argument to next_state_base)
         self.accepts_input = True
         self.error = None
         self.context = { "ASSIGNMENTS": {}, "ASSIGNMENT_NAMES": {}, "assign": [] }
         self.when_done_state = None
+        # important! output defines what the state will output to the user
         self.output = []
         self.middleware = []
         self.previous_state = None
@@ -85,9 +88,7 @@ class StateMachine:
         return self.base_hint(text)
     def base_hint(self, text):
         return []
-    # does this machine support assignment
-    def is_assignable(self):
-        return False
+    # clear all context (internal state)
     def reset_context(self):
         self.context = { "ASSIGNMENTS": {}, "ASSIGNMENT_NAMES": {}, "assign": [] }
         return self
