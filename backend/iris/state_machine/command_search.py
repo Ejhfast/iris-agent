@@ -76,5 +76,7 @@ class ApplySearch(Scope, AssignableMachine):
         if self.read_variable("FUNCTION") == None:
             return Assign(self.gen_scope("FUNCTION"), self.function_generator).when_done(self)
         command = self.read_variable("FUNCTION").function # Wrapper
+        # save a reference to the command we decided to execute
+        # TODO: make an API for this!
         self.command = command.function
         return command.when_done(self.get_when_done_state())
