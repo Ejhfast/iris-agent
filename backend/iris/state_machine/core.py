@@ -12,10 +12,12 @@ class StateMachineRunner:
         self.previous_context = []
     # get current state machine output
     def current_output(self):
-        print(self.current_state)
+        # If there's an error, we'll return that, else the state output
+        # Error's only happen with non-checking types that don't map on to a new command at this pointer
+        # TODO: can possibly remove
         if self.current_state.error:
             message_out = self.current_state.error
-            self.current_state.error = None
+            self.current_state.clear_error()
             return message_out
         return self.current_state.get_output()
     # keep running the state machine until it needs user input
@@ -34,29 +36,31 @@ class StateMachineRunner:
         self.previous_state = []
         self.previous_context = []
         return self
+    # TODO: this is broken, potentially fix! Not exposed in UI right now
     def go_back(self):
-        print(self.previous_state)
         while len(self.previous_state) > 0 and self.previous_state[-1].reset().accepts_input == False:
             self.previous_state.pop()
             self.previous_context.pop()
         if len(self.previous_state) > 0:
             previous_state, previous_context = self.previous_state.pop(), self.previous_context.pop()
             self.current_state = previous_state(previous_context)
-            print("GO BACK", previous_state, previous_context)
         else:
             self.current_state = self.original_state
             self.original_state.reset()
     # proceed to next state for machine
     def next_state(self, text):
+        # commented out below was incredibly slow if i remember, reason i removed and broke "go back"?
         #self.previous_state.append(self.current_state)
         #self.previous_context.append(copy.deepcopy(self.current_state.context))
+        # ask the state for its next state
         new_state = self.current_state.next_state(text)
-        print("TRANSITIONING", self.current_state, new_state)
+        # if that's a state, set current state there
         if isinstance(new_state, StateMachine):
             self.current_state = new_state(self.current_state.context)
             return True
+        # else we have a value, which likely we don't care about
         else:
-            self.current_state = new_state # appropriate?
+            self.current_state = new_state # appropriate? won't be a state type
             return False
 
 class StateMachine:
@@ -148,6 +152,7 @@ class StateMachine:
     # wrap the next_state_base function, allow for linked-list style machines
     def next_state(self, text):
         next_state = self.next_state_base(text)
+        # if we're done, but the state has a pointer to some other state, go there
         if (not isinstance(next_state, StateMachine)) and self.get_when_done_state():
                 next_state = self.get_when_done_state()
         # peek at the future, then (if middleware), decide if we want to go there
