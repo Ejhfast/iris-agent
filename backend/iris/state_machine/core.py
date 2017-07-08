@@ -1,6 +1,9 @@
 import copy
 from .. import iris_objects
 
+# This file contains the core automata logic, inherited by IrisCommands, Types, etc.
+# TODO: a bit of switching between SM and automata, be more consistent
+
 class StateMachineRunner:
     def __init__(self, state_machine):
         self.original_state = state_machine

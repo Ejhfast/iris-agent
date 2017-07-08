@@ -59,8 +59,18 @@ def walk_transform_ast(ast, name_map):
                 args.append(walk_transform_ast(ast.binding_machine[arg], name_map))
             elif isinstance(ast.binding_machine[arg], sm.ValueState):
                 args.append(transform_value(ast.binding_machine[arg].value))
+            # Not a problem that these are not implemented, as long as not available in production
+            elif isinstance(ast.binding_machine[arg], sm.Block):
+                # TODO: actually implement!
+                args.append("{BLOCK}")
+            elif isinstance(ast.binding_machine[arg], sm.If):
+                # TODO: actually implement!
+                args.append("{IF}")
+            elif isinstance(ast.binding_machine[arg], sm.While):
+                # TODO: actually implement!
+                args.append("{WHILE}")
             else:
-                raise Exception("Cannot transform AST node class {}".format(arg.__class__))
+                raise Exception("Cannot transform AST node class {}".format(ast.binding_machine[arg].__class__))
         else:
             raise Exception("AST argument not bound {}".format(arg))
     package_args = ",".join(args)

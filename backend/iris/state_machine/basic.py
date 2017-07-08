@@ -8,7 +8,7 @@ class AssignableMachine(StateMachine):
     arg_name = None
     # assign a value to the variable at the top of the stack
     # this is a helper method that an inheriting state will call somewhere within its logic
-    # to make good on an assignment
+    # to make an assignment happen
     def assign(self, value, name=None):
         if len(self.context["assign"]) > 0:
             curr_assign = self.context["assign"].pop()
