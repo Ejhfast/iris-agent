@@ -6,7 +6,7 @@ import re
 import csv
 import inspect
 
-# dataframe typing detection (duplicate?)
+# dataframe typing detection (TODO: duplicate?)
 def detect_type(type_):
     try:
         float(type_)
@@ -17,6 +17,8 @@ def detect_type(type_):
         else:
             return "String"
 
+# how should we represent row[i][j] type in export to json?
+# TODO: should be expanded
 def json_encode_df_type(x):
     try:
         return float(x)
@@ -26,16 +28,16 @@ def json_encode_df_type(x):
         else:
             return str(type(x))
 
-def get_source(cmd):
+# helper for getting command source either from special attribute or through inspect
+# TODO: this is only used in expression.py right now, helpful elsewhere?
+def get_source(cmd, indent="    "):
     if cmd.__source_code__ != None:
-        code = "    "  + cmd.__source_code__
+        code = indent + cmd.__source_code__
     else:
         code = "".join(inspect.getsourcelines(cmd.command)[0])
     return code
 
-def split_with_quotes(string, delim = " "):
-    return [p for p in re.split("({}|\\\".*?\\\"|'.*?')".format(delim), string) if p.strip()]
-
+# helpful for iterating when target is usually a list, but sometimes a single value
 def single_or_list(x):
     if isinstance(x, list):
         return x
@@ -44,23 +46,7 @@ def single_or_list(x):
     else:
         return [x]
 
-def is_data(result):
-    if any([isinstance(result, x) for x in [np.ndarray, list, dict, tuple]]):
-        return True
-    return False
-
-def print_assignment(name, named_value, value):
-    print(value, type(value), named_value)
-    if (named_value == None) or named_value == "COMMAND VALUE":
-        if is_data(value):
-            return ["For {}, I am using:".format(name), {"type":"data", "value":prettify_data(value)}]
-        if isinstance(value, iris_objects.EnvReference):
-            return ["For {}, I am using {}".format(name, value.name)]
-        if isinstance(value, iris_objects.FunctionWrapper):
-            return ["For {}, I am using:".format(name), "<Bound Function: {}>".format(value.name)]
-        return ["I am using {} for {}.".format(value, name)]
-    return ["I am using {} for {}.".format(named_value, name)]
-
+# return nicer looking numpy and dictionary data representations
 def prettify_data(result):
     try:
         np_transform = np.array(result)
@@ -71,6 +57,7 @@ def prettify_data(result):
         return json.dumps(result, indent=4, default=str)
     return result
 
+# helper for printing a (potentially long) list of values
 def print_list(lst, n):
     if len(lst) <= n:
         return "["+ ", ".join(lst) + "]"
@@ -79,24 +66,24 @@ def print_list(lst, n):
     second_p = lst[-half_n:]
     return "[" + ", ".join(first_p) + ", ..., " + ", ".join(second_p) + "]"
 
-# state machine util, conversation parsing
+# is "result" data that we want to format using prettifiers in the frontent output?
+def is_data(result):
+    if any([isinstance(result, x) for x in [np.ndarray, list, dict, tuple]]):
+        return True
+    return False
 
-def get_start_message(messages): return messages[0]["text"]
+# get latest message from conversation
 def get_last_message(messages): return messages[-1]["text"]
-def get_resolve_args_message(messages): return messages[0]["text"]
 
+# helper for checking for "yes"/"no" in response logic
+# TODO: make more sophisticated
 def verify_response(text):
     if text.lower() == "yes":
         return True
     else:
         return False
 
-def verify_explain(text):
-    if any([x in text.lower() for x in ["explain", "tell me more", "say more"]]):
-        return True
-    else:
-        return False
-
+# helper for extracting a number from user input text
 def extract_number(text):
     for w in text.split():
         try:
@@ -105,46 +92,27 @@ def extract_number(text):
             pass
     return False, None
 
-# is this word an argument?
+# is this word an argument in a template string?
 def is_arg(s):
     if len(s)>2 and s[0] == "{" and s[-1] == "}": return True
     return False
 
+# logic to split csv lines (by default on commas)
 def split_line(line, delim = ","):
     return [x for x in csv.reader([line], delimiter=delim)][0]
 
 # attempt to match query string to command and return mappings
-def arg_match(query_string, command_string):#, types):
+# Note: a match returned by this function will still be type checked, that code is elsewhere
+# this is used by both argmatch.js and commandsearch.js so keeping it here
+def arg_match(query_string, command_string):
     maps = {}
-    labels = []
     query_words, cmd_words = [split_line(x.lower(), delim=" ") for x in [query_string, command_string]]
-    print("SPLIT", query_words, cmd_words)
+    # if there is not alignment between words in query and words in command string, can immediately conclude no match
     if len(query_words) != len(cmd_words): return False, {}
     for qw, cw in zip(query_words, cmd_words):
         if is_arg(cw):
             word_ = cw[1:-1]
-            maps[word_] = qw #self.magic_type_convert(qw, types[word_])
+            maps[word_] = qw
         else:
             if qw != cw: return False, {}
     return True, maps
-
-# helper to walk over match results and return bindings of first
-def first_match(lst):
-    for tup in lst:
-        if tup[0]:
-            return tup[1]
-    return {}
-
-# given a dictionary of bindings, replace words in text (between "{}")
-def replace_args(bindings, text):
-    out = []
-    for word in split_line(text, delim=" "):
-        if is_arg(word):
-            word_ = word[1:-1]
-            if word_ in bindings:
-                out.append("{"+bindings[word_]+"}")
-            else:
-                out.append(word)
-        else:
-            out.append(word)
-    return " ".join(out)

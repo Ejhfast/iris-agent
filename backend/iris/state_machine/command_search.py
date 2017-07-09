@@ -5,6 +5,27 @@ from .. import iris_objects
 from .. import util
 import copy
 
+# helper to walk over match results (if there are multiple possible matches) and return bindings of first
+def first_match(lst):
+    for tup in lst:
+        if tup[0]: # is it a match
+            return tup[1] # then return the bindings
+    return {}
+
+# given a dictionary of bindings, replace words in text (between "{}")
+def replace_args(bindings, text):
+    out = []
+    for word in util.split_line(text, delim=" "):
+        if util.is_arg(word):
+            word_ = word[1:-1]
+            if word_ in bindings:
+                out.append("{"+bindings[word_]+"}")
+            else:
+                out.append(word)
+        else:
+            out.append(word)
+    return " ".join(out)
+
 # This is the state machine that allows a user to RETRIEVE a command from the system
 # Basically, supporting first-class Iris commands
 class FunctionSearch(AssignableMachine):
@@ -22,11 +43,11 @@ class FunctionSearch(AssignableMachine):
     # hint will show a preview of what commands will be retrieved
     def base_hint(self, text):
         predictions = self.iris.predict_commands(text, 3)
-        arg_matches = [(util.first_match([util.arg_match(text, x) for x in self.iris.class2cmd[cmd[0].class_index]]), cmd[0].title) for cmd in predictions]
-        replace_args = [util.replace_args(*x) for x in arg_matches]
-        if len(replace_args) > 0:
-            replace_args[0] = {"style":"c0", "text":replace_args[0]}
-        return replace_args
+        arg_matches = [(first_match([util.arg_match(text, x) for x in self.iris.class2cmd[cmd[0].class_index]]), cmd[0].title) for cmd in predictions]
+        with_replace_args = [replace_args(*x) for x in arg_matches]
+        if len(with_replace_args) > 0:
+            with_replace_args[0] = {"style":"c0", "text":with_replace_args[0]}
+        return with_replace_args
     # return docs object for a search
     # TODO: is this being used anywhere?
     def docs(self, text):
