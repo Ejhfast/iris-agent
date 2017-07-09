@@ -16,8 +16,7 @@ class EmpathAnalysis(IrisCommand):
         for k,v in sorted(out_dict.items(), key=lambda x: x[1], reverse=True):
             to_df.append([k,v])
         #to_df = np.array(to_df)
-        return iris_objects.IrisDataframe(column_names=["category", "normalized_count"], column_types=["String", "Number"], data=to_df, do_conversion=False)
+        return iris_objects.IrisDataframe(column_names=["category", "normalized_count"], column_types=["String", "Number"], data=to_df)
     def explanation(self, result):
         return result
 _EmpathAnalysis = EmpathAnalysis()
-

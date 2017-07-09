@@ -66,6 +66,7 @@ class ComputeAUC(IrisCommand):
 
 computeAUC = ComputeAUC()
 
+# TODO: port to vega
 class PlotAUCFromData(IrisCommand):
     title = "plot auc curve from {data}"
     examples = [ "plot auc data {data}",
@@ -125,6 +126,7 @@ class PlotAUC(IrisCommand):
 
 plotAUC = PlotAUC()
 
+# TODO: port to vega
 class PlotStats(IrisCommand):
     title = "plot two-sample test {data}"
     examples = [ "plot p-values {data}" ]
@@ -167,6 +169,7 @@ class PlotStats(IrisCommand):
 
 plotStats = PlotStats()
 
+# TODO: port to vega
 class PlotHistogram(IrisCommand):
     title = "plot a histogram on {data}"
     examples = [ "plot histogram {data}",
@@ -191,6 +194,7 @@ class PlotHistogram(IrisCommand):
 
 plotHistogram = PlotHistogram()
 
+# TODO: port to vega
 class PlotBar(IrisCommand):
     title = "plot bars {data1} {data2}"
     examples = [ "plot barchart {data1} {data2}",

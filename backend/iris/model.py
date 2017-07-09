@@ -32,9 +32,9 @@ class IrisBase:
     def add_to_env(self, name, result):
         self.env[name] = result
         self.env_order[name] = len(self.env_order)
-        if isinstance(result, iris_objects.IrisValue):
-            if not result.name or result.name == "__MEMORY__":
-                result.name = name
+        # if isinstance(result, iris_objects.IrisValue):
+        #     if not result.name or result.name == "__MEMORY__":
+        #         result.name = name
 
     def remove_from_env(self, name):
         del self.env[name]

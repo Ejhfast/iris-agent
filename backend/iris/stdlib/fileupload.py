@@ -34,7 +34,7 @@ class Done(sm.StateMachine):
         self.accepts_input = False
     def next_state_base(self, next):
         filename = self.read_variable("loaded_file").name
-        dataframe = iris_objects.IrisDataframe(filename, self.context["headers"], self.context["types"], self.context["data"])
+        dataframe = iris_objects.IrisDataframe(self.context["headers"], self.context["types"], self.context["data"], type_convert_data=True)
         return sm.ValueState(dataframe).when_done(self.get_when_done_state())
 
 class SetIndex(sm.StateMachine):
@@ -111,7 +111,7 @@ class CheckTypes(sm.StateMachine):
             self.context["types"] = types
         if self.force_check or util.verify_response(text):
             print(types)
-            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[types], do_conversion=False)
+            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[types])
             print_types = sm.Print([{"type":"collection_select_one", "value":dummy_frame.generate_spreadsheet_data()}]) #util.prettify_data(type_obj)}])
             return sm.DoAll([print_types, ChangeIndex()]).when_done(self.get_when_done_state())
         return None #True, Done().when_done(self.get_when_done_state())
@@ -128,7 +128,7 @@ class AskForHeaders(sm.StateMachine):
     def get_output(self):
         start_from = 1 if self.read_variable("throw_away") else 0
         sample_data = split_line(self.read_variable("loaded_file").content.split("\n")[start_from])
-        dummy_frame = iris_objects.IrisDataframe(column_names=["column {}".format(i) for i,_ in enumerate(sample_data)], column_types=["_" for x in sample_data], data=[sample_data], do_conversion=False)
+        dummy_frame = iris_objects.IrisDataframe(column_names=["column {}".format(i) for i,_ in enumerate(sample_data)], column_types=["_" for x in sample_data], data=[sample_data])
         return [
             "What are the headers? Please enter a list of comma-separated values. I've provided a line of sample data below.",
             {"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}
@@ -161,7 +161,7 @@ class GenerateHeaders(sm.StateMachine):
         self.context['data'] = file_str.split("\n")[start_from:]
         format_header = util.prettify_data(headers)
         data_sample = [[x for x in split_line(line)] for line in self.context['data'][start_from+1:start_from+4]]
-        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample, do_conversion=False)
+        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample)
         return sm.Print([{"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}]).when_done(self.get_when_done_state())
 
 class FirstLineHeader(sm.StateMachine):
@@ -171,7 +171,7 @@ class FirstLineHeader(sm.StateMachine):
         headers = [x.lower() for x in split_line(file_str.split("\n")[start_read])]
         data_sample = [[x for x in split_line(line)] for line in file_str.split("\n")[start_read+1:start_read+4]]
         format_header = util.prettify_data(headers)
-        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample, do_conversion=False)
+        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample)
         return [
             "Here are the headers I inferred from the first line. Do these look good?",
             {"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}

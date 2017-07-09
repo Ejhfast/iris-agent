@@ -246,9 +246,6 @@ class IrisCommand(Function):
             # basically, if command wants to overwrite display type directly, let it
             if isinstance(r, dict) and "type" in r:
                 out.append(r)
-            # TODO: no longer using IrisImage, remove?
-            elif isinstance(r, iris_objects.IrisImage):
-                out.append({"type": "image", "value": r.value})
             elif isinstance(r, iris_objects.FunctionWrapper):
                 out.append("<Bound function: {}>".format(r.name))
             elif isinstance(r, iris_objects.IrisModel):

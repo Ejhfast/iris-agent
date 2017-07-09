@@ -84,9 +84,9 @@ class ValueState(AssignableMachine):
         super().__init__()
         self.accepts_input = False
     def next_state_base(self, text):
-        if isinstance(self.value, iris_objects.IrisValue):
-            self.assign(self.value, name=self.value.name)
-        elif self.name:
+        # if isinstance(self.value, iris_objects.IrisValue):
+        #     self.assign(self.value, name=self.value.name)
+        if self.name:
             self.assign(self.value, name=self.name)
         else:
             self.assign(self.value)

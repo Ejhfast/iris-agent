@@ -20,7 +20,7 @@ class GetUserTweets(IrisCommand):
         tweet_text = [x.text for x in tweets]
         import numpy as np
         tweet_frame =np.array(tweet_text).reshape(-1,1)
-        return iris_objects.IrisDataframe(column_names=["tweet_text"], column_types=["Text"], data=tweet_frame, do_conversion=False)
+        return iris_objects.IrisDataframe(column_names=["tweet_text"], column_types=["Text"], data=tweet_frame)
     # def explanation(self, results):
     #     return ["I stored the tweets in a new dataframe:",
     #             results,
@@ -44,7 +44,7 @@ class SearchTweets(IrisCommand):
         tweet_text = [x.text for x in tweets]
         import numpy as np
         tweet_frame = np.array(tweet_text).reshape(-1,1)
-        return iris_objects.IrisDataframe(column_names=["tweet_text"], column_types=["Text"], data=tweet_frame, do_conversion=False)
+        return iris_objects.IrisDataframe(column_names=["tweet_text"], column_types=["Text"], data=tweet_frame)
 
 
 searchTweets = SearchTweets()

@@ -54,8 +54,6 @@ def print_assignment(name, named_value, value):
     if (named_value == None) or named_value == "COMMAND VALUE":
         if is_data(value):
             return ["For {}, I am using:".format(name), {"type":"data", "value":prettify_data(value)}]
-        if isinstance(value, iris_objects.IrisId):
-            return []
         if isinstance(value, iris_objects.EnvReference):
             return ["For {}, I am using {}".format(name, value.name)]
         if isinstance(value, iris_objects.FunctionWrapper):

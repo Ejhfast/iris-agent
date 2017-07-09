@@ -45,7 +45,7 @@ class LiwcAnalysis(IrisCommand):
         import numpy as np
         data = np.array([order_liwc(analyze(doc, normalize=True), liwc_keys) for doc in documents])
         liwc_types = ["Number" for _ in order_liwc.s_keys]
-        return top_n, iris_objects.IrisDataframe(column_names=order_liwc.s_keys, column_types=liwc_types, data=data, do_conversion=False)
+        return top_n, iris_objects.IrisDataframe(column_names=order_liwc.s_keys, column_types=liwc_types, data=data)
     def explanation(self, result):
         top_n = result[0]
         result = result[1]

@@ -45,11 +45,8 @@ class EmpathAnalysis(IrisCommand):
         out_dict = lexicon.analyze(documents.tolist(), normalize=True)
         for k,v in sorted(out_dict.items(), key=lambda x: x[1], reverse=True):
             to_df.append([k,v])
-        #to_df = np.array(to_df)
-        return iris_objects.IrisDataframe(column_names=["category", "normalized_count"], column_types=["String", "Number"], data=to_df, do_conversion=False)
-        # data = np.array([order_keys(lexicon.analyze(doc, normalize=True)) for doc in documents])
-        # types_ = ["Number" for _ in order_keys.s_keys]
-        # return top_n, iris_objects.IrisDataframe(column_names=order_keys.s_keys, column_types=types_, data=data, do_conversion=False)
+        return iris_objects.IrisDataframe(column_names=["category", "normalized_count"], column_types=["String", "Number"], data=to_df)
+
 
     # def explanation(self, result):
     #     top_n = result[0]

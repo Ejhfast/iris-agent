@@ -118,7 +118,7 @@ class StatisticalTestDataframe(IrisCommand):
             stat_val = ttest(data1M[:,i], data2M[:,i])
             results.append(Statistic(stat_val[0], stat_val[1], np.average(data1M[:,i].flatten())/np.average(data2M[:,i].flatten())))
         results = np.array(results).reshape(1, data1M.shape[1], 3)
-        df = iris_objects.IrisDataframe(column_names=list(data1.column_names), column_types=[], data=results, do_conversion=False)
+        df = iris_objects.IrisDataframe(column_names=list(data1.column_names), column_types=[], data=results)
         df.pops = [data1.name, data2.name]
         return df
 
@@ -137,7 +137,7 @@ class BonferroniCorrection(IrisCommand):
         new_data = np.copy(dataM)
         for i in range(0, num_tests):
             new_data[0,i,1] = new_data[0,i,1] * num_tests
-        df = iris_objects.IrisDataframe(column_names=list(data.column_names), column_types=[], data=new_data, do_conversion=False)
+        df = iris_objects.IrisDataframe(column_names=list(data.column_names), column_types=[], data=new_data)
         df.pops = list(data.pops)
         return df
 
@@ -158,7 +158,7 @@ class HolmCorrection(IrisCommand):
         p2i = {k[0]:i for i,k in enumerate(pvals)}
         for i in range(0, num_tests):
             new_data[0,i,1] = new_data[0,i,1] * (num_tests-p2i[i]+1)
-        df = iris_objects.IrisDataframe(column_names=list(data.column_names), column_types=[], data=new_data, do_conversion=False)
+        df = iris_objects.IrisDataframe(column_names=list(data.column_names), column_types=[], data=new_data)
         df.pops = list(data.pops)
         return df
 

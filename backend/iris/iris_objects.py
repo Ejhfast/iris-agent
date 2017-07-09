@@ -6,42 +6,17 @@ import copy
 from collections import defaultdict
 import json
 
-class IrisValue:
-    def __init__(self, value, name=None):
-        self.value = value
-        self.name = name
+# this file contains classes that define wrapper APIs for common data in the iris environment
+# for example, Models (predictive model) or Dataframes
 
-class IrisValues(IrisValue):
-    def __init__(self, values, names):
-        self.values = values
-        self.names = names
-
-class IrisId(IrisValue):
-    def __init__(self, value, id, name=None):
-        self.value = value
-        self.id = id
-        if not name:
-            self.name = value
-        else:
-            self.name = name
-
-class IrisImage(IrisId):
-    type="Image"
-    def __init__(self, plt, name):
-        buf = io.BytesIO()
-        plt.savefig(buf, format='png')
-        buf.seek(0)
-        self.value = base64.b64encode(buf.read()).decode('utf-8')
-        self.name = name
-
-class IrisVega(IrisId):
+# wrapper for vega types (nothing special here, just an indicator to let frontent know this is vega data)
+class IrisVega:
     type="Vega"
-    def __init__(self, name):
-        self.name = name
 
+# define a vega schema for a bar chart
 class IrisBar(IrisVega):
     def __init__(self, name, keys, data, bar_label="label", value_label="value"):
-        super().__init__(name)
+        self.name = name
         self.bar_label = bar_label
         self.value_label = value_label
         self.spec = {
@@ -59,61 +34,73 @@ class IrisBar(IrisVega):
             data_vals.append(obj)
         self.data = { "values": data_vals }
 
-class IrisModel(IrisValue):
+# a wrapper for sklearn models
+# unlike sklean model classes, iris models keep track of the data over which they are defined
+# TODO: model.model is a bit weird
+class IrisModel:
     type="Model"
+    # "model" is a sklearn model class
     def __init__(self, model, X, y, name=None):
         self.dataframe_X = X
         self.dataframe_y = y
         self.X = X.to_matrix()
         self.y = y.to_matrix()
-        print("X shape", self.X.shape)
-        print("y shape", self.y.shape)
         self.y = self.y.reshape(self.y.shape[0])
         self.model = model
         self.name = name
     def fit(self):
         self.model.fit(self.X, self.y)
 
-class IrisData(IrisValue):
-    type="Data"
-    def __init__(self, xvals, yvals):
-        self.X = xvals
-        self.y = yvals
-
-class IrisFile(IrisValue):
+# simple wrapper for files in the iris environment
+# TODO: not good to read in all file content by default
+# TODO: should store full path
+class IrisFile:
     type="File"
     def __init__(self, name, content):
         self.name = name.split("/")[-1]
         self.content = content
 
-class IrisDataframe(IrisValue):
+# defines API for dataframes in Iris
+# TODO: this API is very important, so needs a lot of work
+class IrisDataframe:
     type="DataFrame"
-    def __init__(self, name=None, column_names=[], column_types=[], data=[], do_conversion=True):
-        self.name = name
+    # "column_names" is ordered list of names associated with each column
+    # "column_types" is ordered list of types associated with each column
+    # "data" is a list of lists or ndarray (matrix) that holds the data
+    # "type_convert_data" indicates whether the Dataframe should attempt automatic type inference
+    def __init__(self, column_names=[], column_types=[], data=[], type_convert_data=False):
         self.column_names = column_names
         self.column_types = column_types
-        if do_conversion:
+        if type_convert_data:
             self.data = self.convert_data(data)
         else:
             self.data = data
             self.cat2index = defaultdict(dict)
 
+    # produce a data representation that the frontend can understand and display
     def generate_spreadsheet_data(self):
-        print(self.column_types)
+        # column data listing columns and types # TODO: key, name currently redundant
         column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
-        print(column_data)
         row_data = []
+        # each row will be a dictionary mapping column name to value
         for row in self.data:
             row_data.append({self.column_names[i]:util.json_encode_df_type(d) for i,d in enumerate(row)})
         return json.dumps({"column_data":column_data, "row_data":row_data})
 
+    # get a single column from the dataframe
+    # TODO: likely unnecessary give dataframe-centric functions
     def get_column(self, name):
         indexes = {name:i for i, name in enumerate(self.column_names)}
         return np.array([row[indexes[name]] for row in self.data])
 
+    # return matrix representation of underlying data
     def to_matrix(self):
-        return np.array(self.data)#.T #np.array([self.get_column(name) for name in self.column_names]).T
+        return np.array(self.data)#.T
 
+    # copy a dataframe (only the provided columns)
+    # "conditions" is an optional list of functions that can filter rows from the copied frame
+    # to be included in the copy, a row must pass all condition functions
+    # condition function: row => Bool
     def copy_frame(self, columns, conditions=[]):
         new_frame = copy.copy(self)
         new_frame.column_names = list(columns)
@@ -128,6 +115,9 @@ class IrisDataframe(IrisValue):
             new_frame.column_types[i] = str(self.column_types[indexes[name]])
         return new_frame
 
+    # map a function over the list of columns
+    # function takes row[i][j] and can return anything
+    # this function happens in place! so usually make a copy of the frame first
     def map_columns(self, columns, func):
         indexes = {name:i for i, name in enumerate(self.column_names)}
         columns_to_map = [indexes[column] for column in columns]
@@ -139,12 +129,17 @@ class IrisDataframe(IrisValue):
                     types[j].add(util.detect_type(new_v))
                     self.data[i][j] = new_v
         current_types = [x for x in self.column_types]
+        # if the function produces a consistent type across the data in each column, then adjust the type label
         for i,col_typ in enumerate(current_types):
             if len(types[i]) == 1:
                 current_types[i] = list(types[i])[0]
         self.column_types = current_types
         return self
 
+    # convert a column to a new type
+    # "name" is the name of the column
+    # "type_" is the new type, for now either "String", "Number", or "Categorical"
+    # this changes a dataframe in place!
     def change_type(self, name, type_):
         cat2index = {}
         def convert_type(value, type_):
@@ -163,32 +158,26 @@ class IrisDataframe(IrisValue):
         self.cat2index[indexes[name]] = cat2index
         return self
 
-    def remove_column(self, name):
-        new_frame = copy.copy(self)
-        new_frame.column_names = list(self.column_names)
-        new_frame.data = []
-        new_frame.cat2index = {}
-        indexes = {name:i for i, name in enumerate(self.column_names)}
-        for i in range(0, len(self.data)):
-            new_frame.data.append(list(self.data[i]))
-            del new_frame.data[i][indexes[name]]
-        new_frame.column_names.remove(name)
-        for i,name in enumerate(new_frame.column_names):
-            new_frame.cat2index[i] = dict(self.cat2index[indexes[name]])
-            new_frame.column_types[i] = str(self.column_types[indexes[name]])
-        return new_frame
+    # create a copy of a dataframe with the columns in question removed
+    def remove_column(self, names):
+        return self.copy_frame([x for x in self.column_names if not x in names])
 
+    # select rows across the dataframe where corresponding values in a column match an operation
+    # e.g., "filter dataframe to all rows with petal-length less than 2"
+    # creates a new copy of the dataframe
     def select_data(self, column, operation):
         indexes = {name:i for i, name in enumerate(self.column_names)}
         col_i = indexes[column]
+        # capture the column index in a closure
         def selector(row):
-            print(type(row[col_i]))
             if(operation(row[col_i])):
                 return True
             return False
         return self.copy_frame(self.column_names, conditions=[selector])
 
+    # process an initial csv file and transform types
     # TODO: add error handling
+    # TODO: probably let models handle categorical logic? think about this?
     def convert_data(self, data):
         new_data = []
         cat2index = defaultdict(dict)
@@ -209,37 +198,25 @@ class IrisDataframe(IrisValue):
         self.cat2index = cat2index
         return new_data
 
+    # export a dataframe to a string representation
+    # TODO: this is really brittle, need to escape commas in quoted strings etc.
     def to_csv(self, file_path):
         header = ",".join(self.column_names)
         data = "\n".join([",".join([str(x) for x in row]) for row in self.data])
         with open(file_path, "w") as f:
             f.write(header+"\n"+data)
 
+# a wrapper ior Iris functions
+# the reason we need this is that, by defauly, if an iris command returns another iris command
+# this will be interpreted as passing control to that function, e.g., calling it
 class FunctionWrapper:
     def __init__(self, function, name="anonymous func"):
         self.function = function
         self.name = name
 
+# references point to data in the iris environment
 class EnvReference:
     def __init__(self, name):
         self.name = name
     def get_value(self, iris):
         return iris.env[self.name]
-
-class CoefficientResults(IrisValue):
-    def __init__(self):
-        self.name = None
-        self.feature_names = defaultdict(lambda: defaultdict(list))
-    def add_pos_feature(self, class_, feature, value):
-        self.feature_names[class_]["pos"].append((feature, value))
-    def add_neg_feature(self, class_, feature, value):
-        self.feature_names[class_]["neg"].append((feature, value))
-    def explanation(self):
-        results = []
-        for class_, rest in self.feature_names.items():
-            results.append(class_)
-            results.append("most positively associated features:")
-            results.append(rest["pos"])
-            results.append("most negatively associated features:")
-            results.append(rest["neg"])
-        return results

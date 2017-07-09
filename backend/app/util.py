@@ -20,12 +20,8 @@ def detect_type(x):
         return "array"
     elif isinstance(x, list):
         return "list"
-    elif isinstance(x, iris_objects.IrisImage):
-        return "image"
     elif isinstance(x, iris_objects.IrisModel):
         return "model"
-    elif isinstance(x, iris_objects.IrisData):
-        return "dataset"
     elif isinstance(x, iris_objects.IrisDataframe):
         return "dataframe"
     elif isinstance(x, iris_objects.FunctionWrapper):
@@ -41,8 +37,7 @@ def env_vars(iris):
     out = []
     for k,v in iris.env.items():
         if k in ["__MEMORY__", "__MEMORY_FUNC__", "ASTS"]: continue
-        key = k.name if isinstance(k, iris_objects.IrisValue) else k
-        out.append({"name": key, "value": detect_type(v), "order": iris.env_order[k]})
+        out.append({"name": k, "value": detect_type(v), "order": iris.env_order[k]})
     return out
 
 # command construction utils

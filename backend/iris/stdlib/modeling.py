@@ -22,7 +22,7 @@ class TFIDF(IrisCommand):
         c_types = ["Number" for _ in range(len(i2t.keys()))]
         print(c_names)
         print(c_types)
-        new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray(), do_conversion=False)
+        new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray())
         return new_df
 
 tfidf = TFIDF()
@@ -87,6 +87,7 @@ class MakeRegression(IrisCommand):
 
 makeRegression = MakeRegression()
 
+# TODO: rewrite with dataframe!
 class LassoFeatures(IrisCommand):
     title = "lasso feature selection for {model} with L1 of {regularization}"
     examples = [
@@ -153,7 +154,7 @@ class RemoveFeature(IrisCommand):
         "feature": t.String("Except what feature?")
     }
     def command(self, dataframe, feature):
-        return dataframe.remove_column(feature)
+        return dataframe.remove_column([feature])
 
 removeFeature = RemoveFeature()
 
@@ -226,28 +227,26 @@ class GetCoefficients(IrisCommand):
 
 getCoefficients = GetCoefficients()
 
-# update below to get rid of store_result
-# class TrainTestSplit(IrisCommand):
-#     title = "create training and test data splits"
-#     examples = [ "create train test data",
-#                  "split data into train and test" ]
-#     store_result = [ t.VarName(question="Where to store training data?"),
-#                      t.VarName(question="Where to store testing data?") ]
-#     help_text = [
-#         "This command takes a dataset and splits it into training and testing data.",
-#         "By convention, training data is used to train a model, and testing data is used to evaluate a model's performance."
-#     ]
-#     def command(self, x_features : t.ArgList(), y_classes : t.ArgList()):
-#         from sklearn.model_selection import train_test_split
-#         xvals = np.array(x_features).T
-#         yvals = np.array(y_classes).T
-#         yvals = yvals.reshape(yvals.shape[0])
-#         x_train, x_test, y_train, y_test = train_test_split(xvals, yvals, train_size=0.25)
-#         train_data = iris_objects.IrisData(x_train, y_train)
-#         test_data = iris_objects.IrisData(x_test, y_test)
-#         return train_data, test_data
-#
-# trainTestSplit = TrainTestSplit()
+# TODO: update for dataframes
+class TrainTestSplit(IrisCommand):
+    title = "create training and test data splits"
+    examples = [ "create train test data",
+                 "split data into train and test" ]
+    help_text = [
+        "This command takes a dataset and splits it into training and testing data.",
+        "By convention, training data is used to train a model, and testing data is used to evaluate a model's performance."
+    ]
+    def command(self, x_features : t.ArgList(), y_classes : t.ArgList()):
+        from sklearn.model_selection import train_test_split
+        xvals = np.array(x_features).T
+        yvals = np.array(y_classes).T
+        yvals = yvals.reshape(yvals.shape[0])
+        x_train, x_test, y_train, y_test = train_test_split(xvals, yvals, train_size=0.25)
+        train_data = iris_objects.IrisData(x_train, y_train)
+        test_data = iris_objects.IrisData(x_test, y_test)
+        return train_data, test_data
+
+trainTestSplit = TrainTestSplit()
 
 class TrainModel(IrisCommand):
     title = "train {model} on {data}"
