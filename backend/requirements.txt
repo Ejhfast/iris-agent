@@ -55,13 +55,12 @@ requests==2.12.5
 requests-oauthlib==0.8.0
 scikit-learn==0.18.1
 scipy==0.18.1
+seaborn==0.7.1
 simplegeneric==0.8.1
 six==1.10.0
 tensorflow==0.12.0rc1
 terminado==0.6
 testpath==0.3
-torch==0.1
-torchvision==0.1.7
 tornado==4.4.2
 tqdm==4.11.2
 traitlets==4.3.2
