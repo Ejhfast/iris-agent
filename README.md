@@ -8,7 +8,7 @@ Install and run the Python components:
 
     cd iris-agent/backend
     # create new conda env called iris with necessary packages
-    conda create --name iris --file package.txt
+    conda create --name iris --file packages.txt
     # enter the conda env
     source activate iris
     # install the remaining pip packages
