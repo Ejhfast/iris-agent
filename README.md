@@ -19,7 +19,7 @@ Install and run the Python components:
 
 Install and run the Javascript components:
 
-    cd iris-agent/app
+    cd iris-agent
     npm install
     # build JS app with webpack (can also run webpack --watch in seperate command window)
     webpack 
