@@ -2,7 +2,7 @@
 
 These are instructions to install and run Iris in debugging model. A self-contained Electron app for OSX will be released later this summer.
 
-You will first need to [install anaconda](https://conda.io/docs/install/quick.html). 
+You will first need to [install anaconda](https://conda.io/docs/install/quick.html).
 
 Install and run the Python components:
 
@@ -22,8 +22,15 @@ Install and run the Javascript components:
     cd iris-agent
     npm install
     # build JS app with webpack (can also run webpack --watch in seperate command window)
-    webpack 
+    webpack
     # start electron (this will open the application automatically)
     npm start
 
 Both the backend and frontend must be running for Iris to work!
+
+### Tests
+
+To verify the backend is working:
+
+    cd iris-agent/backend/tests
+    python test.py

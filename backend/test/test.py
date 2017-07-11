@@ -90,6 +90,5 @@ class TestUM(unittest.TestCase):
         self.assertEqual(data_out["state"], "START")
         self.assertEqual(data_out["text"][-1], "11.0")
 
-
 if __name__ == '__main__':
     unittest.main()
