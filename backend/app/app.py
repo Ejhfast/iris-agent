@@ -3,7 +3,6 @@ import json
 import os
 import sys
 import aiohttp_cors
-sys.path.insert(0, os.path.abspath('..'))
 from iris import EventLoop
 from iris import state_machine as sm
 import util

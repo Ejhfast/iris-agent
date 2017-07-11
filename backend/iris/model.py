@@ -92,11 +92,16 @@ class IrisBase:
     def predict_input(self, query):
         return self.model.predict_proba(self.vectorizer.transform([query]))
 
+    # should the iris model learn from new user inputs?
+    def set_learning(self, bool):
+        self.learning = bool
+        return self
+
     # learn from a new example of user input that mapped on to a class
     # "bindings" is a dict that maps argument names onto a string representation of their value
     # e.g., x => "2" or y => "my_num"
     def learn(self, cmd, bindings):
-        if cmd.query == None: return False, None
+        if cmd.query == None or self.learning == False: return False, None
         query_words = cmd.query.lower().split()
         out = []
         inverse_bindings = {str(v):k for k,v in bindings.items()}
@@ -115,7 +120,6 @@ class IrisBase:
 
     # given query (text) produce sorted list of (command, prob)
     def predict_commands(self, text, n=1):
-        print(self.cmd2class.keys())
         predictions = self.predict_input(text)[0].tolist()
         sorted_predictions = sorted([(self.class_functions[i],x) for i,x in enumerate(predictions) if has_subword(self.class_functions[i], text)], key=lambda x: x[-1], reverse=True)
         return sorted_predictions[:n]
