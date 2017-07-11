@@ -2,6 +2,7 @@ from aiohttp import web
 import json
 import os
 import sys
+sys.path.insert(0, os.path.abspath('..'))
 import aiohttp_cors
 from iris import EventLoop
 from iris import state_machine as sm

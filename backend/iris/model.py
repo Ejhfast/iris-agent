@@ -28,6 +28,7 @@ class IrisBase:
         self.vectorizer = CountVectorizer() # embedding model for text
         self.env = {} # enviornment store
         self.env_order = {} # keep track of order in which things are added to environment
+        self.learning = True # should the model learn from user interactions
         # we are also keeping track of convo history, so that env does not change on e.g. browser refesh
         # TODO: this is a bit hacky, literally storing react data
         self.history = {"history": [], "currentConvo": { 'messages': [], 'title': None, 'hidden': False, 'id': 0, 'args': {} }}
@@ -104,11 +105,13 @@ class IrisBase:
         if cmd.query == None or self.learning == False: return False, None
         query_words = cmd.query.lower().split()
         out = []
-        inverse_bindings = {str(v):k for k,v in bindings.items()}
-        # TODO: bug here when e.g., someone says x twice
+        inverse_bindings = defaultdict(list)
+        for k,v in bindings.items():
+            inverse_bindings[str(v)].append(k)
+        # inverse_bindings = {str(v):k for k,v in bindings.items()}
         for w in query_words:
             if w in inverse_bindings:
-                out.append("{"+inverse_bindings[w]+"}")
+                out.append("{"+inverse_bindings[w].pop()+"}")
             else:
                 out.append(w)
         new_command_string = " ".join(out)
