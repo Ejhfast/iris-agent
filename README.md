@@ -32,5 +32,5 @@ Both the backend and frontend must be running for Iris to work!
 
 To verify the backend is working:
 
-    cd iris-agent/backend/tests
+    cd iris-agent/backend/test
     python test.py
