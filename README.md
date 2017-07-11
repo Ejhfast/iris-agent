@@ -1,6 +1,6 @@
 # iris-agent
 
-These are instructions to install and run Iris in debugging model. A self-contained Electron app for OSX will be released later this summer.
+These are instructions to install and run Iris in debugging mode. A self-contained Electron app for OSX will be released later this summer.
 
 You will first need to [install anaconda](https://conda.io/docs/install/quick.html).
 
