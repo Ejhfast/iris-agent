@@ -8,7 +8,7 @@ Install and run the Python components:
 
     cd iris-agent/backend
     # create new conda env called iris with necessary packages
-    conda create --name iris --file package.txt
+    conda create --name iris --file packages.txt
     # enter the conda env
     source activate iris
     # install the remaining pip packages
@@ -19,7 +19,7 @@ Install and run the Python components:
 
 Install and run the Javascript components:
 
-    cd iris-agent/app
+    cd iris-agent
     npm install
     # build JS app with webpack (can also run webpack --watch in seperate command window)
     webpack 
