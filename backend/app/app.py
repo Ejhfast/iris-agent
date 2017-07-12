@@ -26,6 +26,7 @@ cors = aiohttp_cors.setup(app)
 state_machine = EventLoop()
 iris = sm.IRIS_MODEL#IRIS
 iris.train_model()
+iris.set_learning(False)
 
 def add_cors(route):
     cors.add(route, {"*": aiohttp_cors.ResourceOptions(

@@ -54,11 +54,12 @@ type_dict["Array"].append((Dataframe, DataframeToArray))
 
 # the dataframe selector type generates a column selection interaction
 class DataframeSelector(sm.AssignableMachine):
-    def __init__(self, question, dataframe = None):
+    def __init__(self, question, dataframe = None, iris = IRIS_MODEL):
         super().__init__()
         self.question = question
         self.dataframe = dataframe
         self.accepts_input = False
+        self.iris = iris
     def get_output(self):
         dataframe = self.read_variable("dataframe") # we are assuming EnvReference now...
         if dataframe:
@@ -71,10 +72,10 @@ class DataframeSelector(sm.AssignableMachine):
         return False, None
     # here the hint will verify whether the user has selected a valid set of columns
     def base_hint(self, text):
-        dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
+        dataframe = self.read_variable("dataframe")
         possible_columns = [x.strip() for x in text.split(",")]
-        if dataframe:
-            if all([col in dataframe.column_names for col in possible_columns]):
+        if dataframe != None:
+            if all([col in dataframe.get_value(self.iris).column_names for col in possible_columns]):
                 return ["your selection is a valid set of columns"]
         return cs.ApplySearch().hint(text)
     def next_state_base(self, text):

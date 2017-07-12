@@ -18,6 +18,10 @@ class FunctionReturn:
     def __init__(self, value, program):
         self.value = value
         self.program = program
+    # giving this the same API as EnvRef, because the can be present in same placed (e.g., DataframeSelector)
+    # TODO: organize to reflect this
+    def get_value(self, iris):
+        return self.value
 
 # helper for .binding_machine that wraps a value in ValueState (for assignment)
 # or else unwraps the program component from a FunctionReturn value, the logic that produced the resul

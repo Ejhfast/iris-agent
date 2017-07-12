@@ -28,19 +28,20 @@ class TFIDF(IrisCommand):
 tfidf = TFIDF()
 
 class MakeClassifier(IrisCommand):
-    title = "make a classification model: {features} to predict {classes}"
-    examples = [ "build a new classification model",
+    title = "make a classification model using {dataframe}"
+    examples = [ "build a new classification model from {dataframe}",
                  "make a new classification model",
-                 "classifier using {features} to predict {classes}",
-                 "logistic regression model",
+                 "classifier using {dataframe} to predict",
+                 "logistic regression model on {dataframe}",
                  "logistic classifier" ]
     argument_types = {
         "model_type": t.Select(options={
             "Logistic Regression classifier": "logistic",
             "Random Forest classifier": "random_forest"
         }),
-        "features": t.Dataframe("What do you want to use as features?"), #t.DataframeSelector("What dataframe do you want to use to select the features?"), #t.ArgList(question="Please give me a comma-separated list of features"),
-        "classes": t.Dataframe("What do you want to predict?"),
+        "dataframe": t.Dataframe("What do you want to use as features?"),
+        "features": t.DataframeSelector("What features do you want to use?", dataframe="dataframe"),
+        "classes": t.DataframeSelector("What do you want to predict?", dataframe="dataframe"),
         "name": t.String("What would you like to call the model?")
     }
     help_text = [
@@ -48,7 +49,7 @@ class MakeClassifier(IrisCommand):
         "This command takes a list of input features, as arrays, that will be used to predict the category in question.",
         "It then takes the name of an array that corresponds to the category to be predicted."
     ]
-    def command(self, model_type, features, classes, name = None):
+    def command(self, model_type, dataframe, features, classes, name = None):
         from sklearn.linear_model import LogisticRegression
         from sklearn.ensemble import RandomForestClassifier
         if model_type == "random_forest":

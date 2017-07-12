@@ -27,22 +27,28 @@ class Mean(IrisCommand):
 mean = Mean()
 
 class LogTransform(IrisCommand):
-    title = "log-transform {array}"
+    title = "log-transform {dataframe}"
     examples = [
-        "log-transform {array} of numbers",
-        "log {array}",
-        "log of {array}",
-        "log value of {array}",
+        "log-transform {dataframe} of numbers",
+        "log {dataframe}",
+        "log of {dataframe}",
+        "log value of {dataframe}",
     ]
     help_text = [
         "This computes the log values of an array of numbers"
     ]
     argument_types = {
-        "array": t.Array("What is the array you'd like to analyze?")
+        "dataframe": t.Dataframe("What dataframe would you like to analyze?"),
+        "selector": t.DataframeSelector("What are the columns you'd like to transform?", dataframe="dataframe")
     }
-    def command(self, array):
+    def command(self, dataframe, selector):
         import numpy as np
-        return np.log(array)
+        data = selector.to_matrix()
+        data_out = []
+        for col in range(0,data.shape[1]):
+            data_out.append(np.log(data[:,col]))
+        data_out = np.array(data_out).T
+        return iris_objects.IrisDataframe(column_names=selector.column_names, column_types=selector.column_types, data=data_out)
 
 log = LogTransform()
 
@@ -190,28 +196,45 @@ class ShowSignificantValues(IrisCommand):
 showSignificantValues = ShowSignificantValues()
 
 class StudentTTest(IrisCommand):
-    title = "calculate two sample Student t-test on {x} and {y}"
-    examples = [
-        "Student t-test on {x} {y}",
-        "statistical test",
-        "two sample statistical test",
-        "test statistic"
-    ]
-    help_text = [
-        "This test determines whether two independent samples are significantly different from one another.",
-        "It assumes that both samples are normally distributed with equal variance."
-    ]
-    def command(self, x : t.Array(), y : t.Array()):
+    title = "student t-test on {dataframe}"
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe contains the data?"),
+        "pop1": t.DataframeSelector("What is the first population to analyze?", dataframe="dataframe"),
+        "pop2": t.DataframeSelector("What is the second population to analyze?", dataframe="dataframe"),
+    }
+    def command(self, dataframe, pop1, pop2):
         from scipy.stats import ttest_ind
-        return ttest_ind(x,y)
+        data_pop1 = pop1.to_matrix().flatten() # TODO: in future, force single column selection
+        data_pop2 = pop2.to_matrix().flatten()
+        return ttest_ind(data_pop1, data_pop2)
     def explanation(self, results):
-        pval = round(results[1], 4)
-        if pval < 0.05:
-            return "These distributions are significantly different, with p-value of {}.".format(pval)
-        else:
-            return "These distributions are not significantly different, with p-value of {}.".format(pval)
+        return "The p-value is {:.2e} and t-statistic is {}.".format(results[1], round(results[0],6))
 
 studentTTest = StudentTTest()
+
+# class StudentTTest(IrisCommand):
+#     title = "calculate two sample Student t-test on {x} and {y}"
+#     examples = [
+#         "Student t-test on {x} {y}",
+#         "statistical test",
+#         "two sample statistical test",
+#         "test statistic"
+#     ]
+#     help_text = [
+#         "This test determines whether two independent samples are significantly different from one another.",
+#         "It assumes that both samples are normally distributed with equal variance."
+#     ]
+#     def command(self, x : t.Array(), y : t.Array()):
+#         from scipy.stats import ttest_ind
+#         return ttest_ind(x,y)
+#     def explanation(self, results):
+#         pval = round(results[1], 4)
+#         if pval < 0.05:
+#             return "These distributions are significantly different, with p-value of {}.".format(pval)
+#         else:
+#             return "These distributions are not significantly different, with p-value of {}.".format(pval)
+#
+# studentTTest = StudentTTest()
 
 class WelchTTest(IrisCommand):
     title = "calculate Welch t-test on {x} and {y}"

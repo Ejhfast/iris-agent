@@ -1,5 +1,9 @@
 # iris-agent
 
+## Warning! This is an alpha release and is not currently meant to be used for real data science work. We are currently adding many new commands to the system and fixing bugs. A production-ready beta release will be out later this summer. Use at your own risk!
+
+![interface](/interface.png)
+
 These are instructions to install and run Iris in debugging model. A self-contained Electron app for OSX will be released later this summer.
 
 You will first need to [install anaconda](https://conda.io/docs/install/quick.html).
