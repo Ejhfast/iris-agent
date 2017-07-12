@@ -1,4 +1,4 @@
-# iris-agent
+# Iris: A Conversational Agent for Data Science
 
 ### Warning! The current version of Iris is an alpha release and is not yet ready for real data science work. We are still adding many new commands to the system and fixing bugs. A production-ready beta release will be out later this summer. Use at your own risk!
 
