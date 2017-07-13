@@ -4,6 +4,36 @@
 
 Read more about the system [in this article](https://hackernoon.com/a-conversational-agent-for-data-science-4ae300cdc220).
 
+## Command DSL
+
+You can add commands to Iris using an in-editor GUI or work directly with the Python DSL. For example:
+
+```python
+from iris import state_types as t
+from iris import IrisCommand
+
+class GenerateArray(IrisCommand):
+    # what iris will call the command + how it will appear in a hint
+    title = "generate a random array of {n} numbers"
+    
+    # give an example for iris to recognize the command
+    examples = ["generate numpy array of size {n}"]
+    
+    # type annotations for each command argument, to help Iris collect missing values from a user
+    argument_types = {"n":t.Int("Please enter size of array:")}
+    
+    # core logic of the command
+    def command(self, n):
+        import numpy
+        return numpy.random.randint(100, size=n)
+        
+    # wrap the output of a command to display to user
+    # by default this will be an identity function
+    # each element of the list defines a separate chat bubble
+    def explanation(self, result):
+        return ["Here are the numbers", result]
+```
+
 ## Installation guide
 
 ### Warning! The current version of Iris is an alpha release. We are still adding many new commands to the system and fixing bugs. A production-ready beta release will be out later this summer. Use at your own risk!
