@@ -1,8 +1,12 @@
 # Iris: A Conversational Agent for Data Science
 
-### Warning! The current version of Iris is an alpha release and is not yet ready for real data science work. We are still adding many new commands to the system and fixing bugs. A production-ready beta release will be out later this summer. Use at your own risk!
-
 ![interface](/interface.png)
+
+Read more about the system [in this article](https://hackernoon.com/a-conversational-agent-for-data-science-4ae300cdc220).
+
+## Installation guide
+
+### Warning! The current version of Iris is an alpha release and is not yet ready for real data science work. We are still adding many new commands to the system and fixing bugs. A production-ready beta release will be out later this summer. Use at your own risk!
 
 These are instructions to install and run Iris in debugging mode. A self-contained Electron app for OSX will be released later this summer.
 
