@@ -192,25 +192,25 @@ const inputHistory = (state = {'history': [], 'currId': null, 'showHistory': fal
     let newId;
     switch (action.type) {
         case types.ADD_INPUT_HISTORY:
-            newId = state.currId;
-            if (state.history.length === 0 && newId === null) {
-                newId = 0;
-            }
-            return {...state, 'history': [...state.history, action.message], 'currId': newId};
+            const newHistory = [...state.history, action.message];
+            console.log("history", newHistory, state.currId, newHistory.length-1);
+            return {...state, 'history': newHistory, 'currId': newHistory.length-1};
         case types.MOVE_INPUT_HISTORY:
-            if (state.history.length === 0) {
+            if (state.history.length === 0 || state.currId === null) {
+                console.log("history", state.currId, newId);
                 return state;
             }
-            newId = state.currId || 0;
+            newId = state.currId;
             if (action.direction === 'up') {
-                if (newId < (state.history.length - 1)) {
-                    newId += 1;
-                }
-            } else {
                 if (newId >= 1) {
                     newId -= 1;
                 }
+            } else {
+                if (newId < (state.history.length - 1)) {
+                    newId += 1;
+                }
             }
+            console.log("history", state.currId, newId);
             return {...state, 'currId': newId };
         default:
             return state;

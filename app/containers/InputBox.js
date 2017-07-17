@@ -8,14 +8,14 @@ import * as _ from 'lodash';
 let input;
 
 // helper to check whether history id (tracker in list) is not null (why does this exist??)
-const notNull = (inputHistory) => inputHistory.currId !== null;
+const doesHistoryExist = (inputHistory) => inputHistory.currId !== null;
 // get currently selected history element
-const getCurrentHistory = (inputHistory) => _.reverse(inputHistory.history.slice())[inputHistory.currId];
+const getCurrentHistory = (inputHistory) => inputHistory.history.slice()[inputHistory.currId];
 
-// key binder to interact with history
+// key binder to grab special keystrokes in main input field
 const onKeyDown = (dispatch, inputHistory, e, predictions) => {
     const keyCode = e.keyCode || e.which;
-    // so this is great, but tab completion has nothing to do with history...
+    // tab autocomplete
     if (keyCode === 9){ // tab
       if(predictions.length > 0){
         let stripText = predictions[0].text.replace(/{/g, '').replace(/}/g, '');
@@ -26,12 +26,12 @@ const onKeyDown = (dispatch, inputHistory, e, predictions) => {
     }
     if (keyCode === 38) { // up arrow
         dispatch(moveInputHistory({'direction': 'up'}));
-        if (notNull(inputHistory)) {
+        if (doesHistoryExist(inputHistory)) {
             input.value = getCurrentHistory(inputHistory);
         }
     } else if(keyCode === 40) { // down arrow
         dispatch(moveInputHistory({'direction': 'down'}));
-        if (notNull(inputHistory)) {
+        if (doesHistoryExist(inputHistory)) {
             input.value = getCurrentHistory(inputHistory);
         }
     }
