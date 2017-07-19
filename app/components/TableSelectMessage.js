@@ -6,6 +6,16 @@ import { updateHint } from '../api_calls/python.js';
 import { input } from '../containers/InputBox';
 import { storeCurrentInput } from '../actions/index.js';
 
+const selectionContains = (inputField, columnName) => {
+  let items = inputField.split(",").map(x => x.replace(/^\s+|\s+$/g, ''));
+  let findIndex = items.indexOf(columnName);
+  if(findIndex > -1){
+     return true;
+  } else {
+    return false;
+  }
+};
+
 // this function updates the main conversation input (input) with a column selection
 const setInput = (dispatch, active, text, onlyOne = false) => {
     return () => {
@@ -14,7 +24,11 @@ const setInput = (dispatch, active, text, onlyOne = false) => {
           let stripText = text.replace(/{/g, '').replace(/}/g, '');
           // if this is a selectOne component, the job is easy
           if(onlyOne === true){
-            input.value = text;
+            if (input.value.includes(text)){
+              input.value = "";
+            } else {
+              input.value = text;
+            }
           }
           // otherwise, if input already includes text, we are going to remove/deselect it
           else if(input.value.includes(text)){
@@ -78,7 +92,7 @@ class TableSelectMessage extends Component {
                 if(containsText){
                   newColStyle['height'] = '4em';
                 }
-                if(this.props.active && this.props.currentInput.includes(this.colMap[i])){
+                if(this.props.active && selectionContains(this.props.currentInput, this.colMap[i])){
                   newColStyle['background-color'] = '#eee';
                 }
                 if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
