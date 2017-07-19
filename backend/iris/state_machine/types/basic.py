@@ -261,7 +261,10 @@ class File(EnvVar):
     def is_type(self, x):
         read_option = "r" if not self.binary else "rb"
         try:
-            f = open(x, read_option, errors='ignore')
+            if not self.binary:
+                f = open(x, read_option, errors='ignore')
+            else:
+                f = open(x, read_option)
             f.read()
             f.close()
         except:
@@ -272,8 +275,12 @@ class File(EnvVar):
     # this exists only for convert_type below, real file API is in irisobjects.py
     def get_content(self, x):
         read_option = "r" if not self.binary else "rb"
-        with open(x, read_option, errors='ignore') as f:
-            return f.read()#.encode('utf-8')
+        if not self.binary:
+            with open(x, read_option, errors='ignore') as f:
+                return f.read()#.encode('utf-8')
+        else:
+            with open(x, read_option) as f:
+                return f.read()#.encode('utf-8')
 
     # this will generate a file-picker UI component that the user can use to select a file
     def get_output(self):
