@@ -21,6 +21,22 @@ class BarChart(IrisCommand):
 
 barChart = BarChart()
 
+#scatter plot function
+class ScatterPlot(IrisCommand):
+    title = "make a scatter plot using {dataframe}"
+    examples = ["scatter plot {dataframe}"]
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe?"),
+        "selector_x": t.DataframeSelector("Please choose a column with values for the x-axis.", dataframe="dataframe"),
+        "selector_y": t.DataframeSelector("Now tell me a column with values for the y-axis", dataframe="dataframe")
+    }
+    def command(self, dataframe, selector_x, selector_y):
+
+        return iris_objects.IrisScatter("name", selector_x.to_matrix().flatten(), selector_y.to_matrix().flatten(), 
+            x_label=selector_x.column_names[0], y_label=selector_y.column_names[0])
+
+scatterPlot = ScatterPlot()
+
 class ComputeAUC(IrisCommand):
     title = "compute auc curve data for {model}"
     examples = [ "auc curve {model}",
