@@ -20,6 +20,8 @@ def detect_type(type_):
 # how should we represent row[i][j] type in export to json?
 # TODO: should be expanded
 def json_encode_df_type(x):
+    if isinstance(x, iris_objects.MissingData):
+        return "<MissingData>"
     try:
         return float(x)
     except:

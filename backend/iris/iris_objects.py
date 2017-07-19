@@ -51,6 +51,11 @@ class IrisModel:
     def fit(self):
         self.model.fit(self.X, self.y)
 
+# This will fill in missing data in a dataframe
+class MissingData:
+    def __init__(self, expected_type=None):
+        self.expected_type = expected_type
+
 # simple wrapper for files in the iris environment
 # TODO: not good to read in all file content by default
 # TODO: should store full path
@@ -71,6 +76,7 @@ class IrisDataframe:
     def __init__(self, column_names=[], column_types=[], data=[], type_convert_data=False):
         self.column_names = column_names
         self.column_types = column_types
+        self.missing_data = False
         if type_convert_data:
             self.data = self.convert_data(data)
         else:
@@ -186,7 +192,11 @@ class IrisDataframe:
             old_row = util.split_line(line)
             new_row = []
             for i,value in enumerate(old_row):
-                if self.column_types[i] == "Number":
+                # check for missing data
+                if value == "":
+                    self.missing_data = True
+                    new_row.append(MissingData(self.column_types[i]))
+                elif self.column_types[i] == "Number":
                     new_row.append(float(value))
                 elif self.column_types[i] == "Categorical":
                     if not value in cat2index[i]:

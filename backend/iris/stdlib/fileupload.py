@@ -34,8 +34,12 @@ class Done(sm.StateMachine):
         self.accepts_input = False
     def next_state_base(self, next):
         filename = self.read_variable("loaded_file").name
+        out_dialog = []
         dataframe = iris_objects.IrisDataframe(self.context["headers"], self.context["types"], self.context["data"], type_convert_data=True)
-        return sm.ValueState(dataframe).when_done(self.get_when_done_state())
+        out_dialog.append(sm.ValueState(dataframe))
+        if dataframe.missing_data:
+            out_dialog.append(sm.Print(["Warning: I detected missing data in the CSV, you may want to handle that prior to any analyses."]))
+        return sm.DoAll(out_dialog).when_done(self.get_when_done_state())
 
 class SetIndex(sm.StateMachine):
     def __init__(self, index):
@@ -110,8 +114,7 @@ class CheckTypes(sm.StateMachine):
         if not self.force_check:
             self.context["types"] = types
         if self.force_check or util.verify_response(text):
-            print(types)
-            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[types])
+            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[self.context["types"]])
             print_types = sm.Print([{"type":"collection_select_one", "value":dummy_frame.generate_spreadsheet_data()}]) #util.prettify_data(type_obj)}])
             return sm.DoAll([print_types, ChangeIndex()]).when_done(self.get_when_done_state())
         return None #True, Done().when_done(self.get_when_done_state())
@@ -196,7 +199,7 @@ class CheckHeader(sm.StateMachine):
         self.accepts_input = False
     def next_state_base(self, text):
         self.write_variable("throw_away", False)
-        file_str = self.read_variable("loaded_file").content
+        file_str = self.read_variable("loaded_file").content.strip()
         success, headers = check_file_header(file_str)
         self.context['headers'] = headers
         format_header = util.prettify_data(headers)

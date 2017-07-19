@@ -5,6 +5,7 @@ from .. import command_search as cs
 from ... import iris_objects
 from .converters import conversion_raw, type_dict
 import numpy as np
+import sys
 
 # TODO: not all of this is "basic", some of this might need to move
 
@@ -260,17 +261,18 @@ class File(EnvVar):
     def is_type(self, x):
         read_option = "r" if not self.binary else "rb"
         try:
-            f = open(x, read_option)
+            f = open(x, read_option, errors='ignore')
             f.read()
             f.close()
         except:
+            print(sys.exc_info())
             return False
         return True
 
     # this exists only for convert_type below, real file API is in irisobjects.py
     def get_content(self, x):
         read_option = "r" if not self.binary else "rb"
-        with open(x, read_option) as f:
+        with open(x, read_option, errors='ignore') as f:
             return f.read()#.encode('utf-8')
 
     # this will generate a file-picker UI component that the user can use to select a file
