@@ -34,6 +34,29 @@ class IrisBar(IrisVega):
             data_vals.append(obj)
         self.data = { "values": data_vals }
 
+
+#vega class for scatter plot (Binbin Chen 7/18/2017)
+class IrisScatter(IrisVega):
+    def __init__(self, name, data_x, data_y, x_label="x value", y_label="y value"):
+        self.name = name
+        self.x_label = x_label
+        self.y_label = y_label
+        self.spec = {
+          "mark": "point",
+          "encoding": {
+            "x": {"field": self.x_label, "type": "quantitative"},
+            "y": {"field": self.y_label, "type": "quantitative"}
+          }
+        }
+        data_vals = []
+        for x0,y0 in zip(data_x,data_y):
+            obj = {}
+            obj[self.x_label] = x0
+            obj[self.y_label] = y0
+            data_vals.append(obj)
+        self.data = { "values": data_vals }
+
+
 # a wrapper for sklearn models
 # unlike sklean model classes, iris models keep track of the data over which they are defined
 # TODO: model.model is a bit weird
