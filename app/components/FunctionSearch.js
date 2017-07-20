@@ -32,7 +32,7 @@ class FunctionSearch extends Component {
       <div className="func_search">
         <div className="search_box"><input type="text" placeholder="search iris commands" onChange={() => onChangeInput(this.props.dispatch)} ref={node => {search_input = node;}}></input></div>
         <div className="results">
-          {this.props.results.map(func => <div className="result" onClick={() => onClick(this.props.dispatch, func)}>{func}</div>)}
+          {this.props.results.map(func => <div className="result" onClick={() => onClick(this.props.dispatch, func.id)}>{func.title}</div>)}
         </div>
       </div>
 }

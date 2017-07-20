@@ -51,16 +51,16 @@ add_cors(app.router.add_route('POST', '/new_loop', new_loop))
 # TODO: probably this should be updated so that we are not using the logistic regression model as retrieval mechanism
 async def docs(request):
     question = await request.json()
-    text = question["text"]
-    query = iris.predict_commands(text)
+    class_index = question["id"]
+    cmd = iris.get_command_by_class_index(class_index)
     # if there are results...
-    if len(query) > 0:
-        class_instance = query[0][0]
-        doc_obj = class_instance.docs()
-    # else empty doc object
+    if cmd:
+        doc_obj = cmd.docs()
+    # else empty doc object (should this ever happen?)
     # TODO: not at all clear that "" title represents empty, possibly fix on backend
     else:
         doc_obj = {"title":""}
+    print(doc_obj)
     return web.json_response({"doc":doc_obj})
 
 add_cors(app.router.add_route('POST', '/docs', docs))
@@ -69,11 +69,10 @@ add_cors(app.router.add_route('POST', '/docs', docs))
 # TODO: again, probably shouldn't use logistic regression for retrieval
 async def command(request):
     question = await request.json()
-    text = question["text"]
-    query = iris.predict_commands(text)
-    if len(query) > 0:
-        class_instance = query[0][0]
-        cmd_obj = util.command2obj(class_instance)
+    class_index = question["id"]
+    cmd = iris.get_command_by_class_index(class_index)
+    if cmd:
+        cmd_obj = util.command2obj(cmd)
     else:
         cmd_obj = None
     return web.json_response({"command":cmd_obj})
@@ -120,7 +119,13 @@ add_cors(app.router.add_route('POST', '/function_test', function_test))
 async def function_list(request):
     question = await request.json()
     text = question["text"]
-    return web.json_response([x[0].title().lower() for x in iris.class2cmd.values() if text in x[0].title().lower()])
+    query = iris.predict_commands(text, n=10)
+    response = []
+    for result in query:
+        cmd = result[0]
+        response.append({"title": cmd.title.lower(), "id": cmd.class_index})
+    # response = [x[0].title().lower() for x in iris.class2cmd.values() if text in x[0].title().lower()]
+    return web.json_response(response)
 
 add_cors(app.router.add_route('POST', '/function_list', function_list))
 

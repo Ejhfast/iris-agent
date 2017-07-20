@@ -167,7 +167,7 @@ export function updateFunc(message) {
 export function updateResults(message) {
     return {
         type: types.UPDATE_RESULTS,
-        ...message
+        results: message
     };
 }
 

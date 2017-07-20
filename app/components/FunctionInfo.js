@@ -7,8 +7,8 @@ import { setCodeEdit } from '../actions/index.js';
 
 // function to load a command into the command edit pane, and open pane
 // the button for this is in the docs pane, but maybe logic should be moved to CommandEdit?
-const editCommand = (dispatch, text) => {
-  updateCommandAPI(text);
+const editCommand = (dispatch, id) => {
+  updateCommandAPI(id);
   dispatch(setCodeEdit({code_edit:false}));
 }
 
@@ -37,7 +37,7 @@ class FunctionInfo extends Component {
             </SyntaxHighlighter>
             </pre>
           </div>
-          <button onClick={() => editCommand(this.props.dispatch, this.props.doc.title)}>Edit Command</button>
+          <button onClick={() => editCommand(this.props.dispatch, this.props.doc.id)}>Edit Command</button>
         </div>)
       }
     }

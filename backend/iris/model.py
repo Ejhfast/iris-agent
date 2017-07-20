@@ -79,6 +79,10 @@ class IrisBase:
             # TODO: need to update examples as well! remove old and replace with new
         return class_index
 
+    # lookup the command by its class index
+    def get_command_by_class_index(self, index):
+        return self.class_functions[index]
+
     # TODO: is anything using this?
     def iris(self):
         return self

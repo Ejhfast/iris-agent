@@ -187,6 +187,8 @@ class IrisCommand(Function):
     def __init__(self, index_command=True, compiled=False):
         super().__init__()
         self.compiled = compiled
+        # register the command with Iris
+        # class_index can be used as a unique identifier
         if index_command:
             self.class_index = self.iris.add_command(self)
         # make sure all the arguments have types / automata
@@ -277,6 +279,7 @@ class IrisCommand(Function):
             "title": self.title,
             "examples": self.examples,
             "description": help_text,
+            "id": self.class_index,
             # replace "def command()" and remove "self"
             "source": gencode.rename_code(self.__class__.__name__, code)[1]
         }

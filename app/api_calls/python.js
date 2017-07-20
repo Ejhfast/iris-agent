@@ -42,13 +42,13 @@ export const updateHint = (text) => {
 // This API supports documenation retrieval based on a clicked-upon function title
 // TODO: use action from actions/index
 // TODO: what is in json.doc?
-export const updateDocs = (text) => {
+export const updateDocs = (id) => {
     fetch('http://localhost:8000/docs', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({text})
+        body: JSON.stringify({id})
     })
     .then(response => response.json())
     .then(json => {
@@ -78,13 +78,13 @@ export const doSearch = (text) => {
 
 // This API loads command data into the command edit pane
 // TODO: use action from actions/index
-export const updateCommandAPI = (text) => {
+export const updateCommandAPI = (id) => {
     fetch('http://localhost:8000/command', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({text})
+        body: JSON.stringify({id})
     })
     .then(response => response.json())
     .then(json => {
