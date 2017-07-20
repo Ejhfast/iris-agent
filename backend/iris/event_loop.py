@@ -56,7 +56,7 @@ class EventLoop:
     # this wraps the main logic layer between user input and automata state
     def state_machine(self, data):
         outputs = []
-        text = util.get_last_message(data["messages"])
+        text, class_index = util.get_last_message(data["messages"])
         # if there is a metacommand registered in the input, no need to do anything else
         check, ret_val = self.check_for_metacommand(text)
         if check:
@@ -64,7 +64,7 @@ class EventLoop:
         # otherwise, first we run the automata as far as it will go without input
         self.machine.run_until_input_required()
         # then we pass it the input
-        keep_going = self.machine.next_state(text)
+        keep_going = self.machine.next_state(text, class_index)
         # then we append any outputs to the response
         for o in self.machine.current_output():
             outputs.append(o)

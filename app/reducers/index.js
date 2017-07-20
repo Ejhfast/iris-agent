@@ -21,7 +21,8 @@ const appendMessages = (oldMessages, action) => {
     }
     for (const m of action.text) {
         currentMax++;
-        newMessages.push({'origin': action.origin, 'text': m, 'id': currentMax,
+        let class_index = action.class_index !== undefined ? action.class_index : null;
+        newMessages.push({'origin': action.origin, 'text': m, 'id': currentMax, 'class_index': class_index,
                           'state': valueOrNull(action.state), 'arg': valueOrNull(action.arg)});
     }
     return oldMessages.concat(newMessages);
@@ -123,10 +124,14 @@ const functionSearch = (state = {search: '', results: []}, action) => {
 };
 
 // input reducer, manages current user input on main conversation pane
-const currentInput = (state = {'input': ''}, action) => {
+const currentInput = (state = {'input': '', 'classIndex': null}, action) => {
   switch (action.type){
     case types.STORE_CURRENT_INPUT:
-      return {'input': action.currentInput};
+      return {...state, 'input': action.currentInput};
+    case types.STORE_CLASS_INDEX:
+      return {...state, 'classIndex': action.class_index};
+    case types.CLEAR_CLASS_INDEX:
+      return {...state, 'classIndex': null};
     default:
       return state;
   }

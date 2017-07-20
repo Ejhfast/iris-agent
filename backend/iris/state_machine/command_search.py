@@ -30,23 +30,33 @@ def replace_args(bindings, text):
 # Basically, supporting first-class Iris commands
 class FunctionSearch(AssignableMachine):
     # "text" means we will use a known query, otherwise this SM will ask user
-    def __init__(self, question = ["What function would you like to retrieve?"], text = None, iris = IRIS_MODEL):
+    def __init__(self, question = ["What function would you like to retrieve?"], text = None, class_index = None, iris = IRIS_MODEL):
         self.iris = IRIS_MODEL
         super().__init__()
         self.question = question
         self.text = text
+        self.class_index = class_index
         self.output = question
         # not going to do any IO if we know what we're looking for
-        if text:
+        if text or class_index:
             self.output = []
             self.accepts_input = False
+    def set_class_index(self, index):
+        self.class_index = index
+        self.accepts_input = False
+        return self
+    def clear_class_index(self):
+        self.class_index = None
+        self.accepts_input = (self.text == None)
+        return self
     # hint will show a preview of what commands will be retrieved
+    # TODO: clean up this styling...
     def base_hint(self, text):
         predictions = self.iris.predict_commands(text, 3)
         arg_matches = [(first_match([util.arg_match(text, x) for x in self.iris.class2cmd[cmd[0].class_index]]), cmd[0].title) for cmd in predictions]
-        with_replace_args = [replace_args(*x) for x in arg_matches]
+        with_replace_args = [{"style":"normal", "text":replace_args(*x[0]), "id":x[1][0].class_index} for x in zip(arg_matches, predictions)]
         if len(with_replace_args) > 0:
-            with_replace_args[0] = {"style":"c0", "text":with_replace_args[0]}
+            with_replace_args[0]["style"] = "c0"
         return with_replace_args
     # return docs object for a search
     # TODO: is this being used anywhere?
@@ -57,8 +67,11 @@ class FunctionSearch(AssignableMachine):
     def next_state_base(self, text):
         if self.text:
             text = self.text
-        # which command do we want?
-        command, score = self.iris.predict_commands(text)[0]
+        if self.class_index:
+            command = self.iris.get_command_by_class_index(self.class_index)
+        else:
+            # which command do we want?
+            command, score = self.iris.predict_commands(text)[0]
         # create a fresh copy of a command, so that any changes to its context etc. do not affect future calls
         # TODO: this has always bothered me, is it possible to make things immutable?
         self.command = copy.copy(command)
@@ -73,16 +86,20 @@ class FunctionSearch(AssignableMachine):
 # This is the state machine that allows a user to CALL a function from the system
 class ApplySearch(Scope, AssignableMachine):
     # "text" allows again for pre-defined querys, where we don't ask the user
-    def __init__(self, question = ["What would you like to do?"], text = None):
+    def __init__(self, question = ["What would you like to do?"], text = None, class_index = None):
         self.question = question
-        self.function_generator = FunctionSearch(self.question, text=text)
+        self.function_generator = FunctionSearch(self.question, text=text, class_index = class_index)
         super().__init__()
         self.accepts_input = False
         self.init_scope()
+    def set_class_index(self, index):
+        self.function_generator.set_class_index(index)
+        return self
     # because we are making one search SM that we are using multiple times, and it uses context
     # we need to reset this context in between calls
     def reset(self):
         self.reset_context()
+        self.function_generator.clear_class_index()
         return self
     # can just use FunctionSearch to make the hint
     def base_hint(self, text):

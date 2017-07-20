@@ -44,6 +44,10 @@ class EnvVar(sm.AssignableMachine):
         self.question = question
         self.converters = []
         super().__init__()
+        self.class_index = None
+
+    def set_class_index(self, index):
+        self.class_index = index
 
     # the initial message that will be presented to user when retrieving this type
     # the .format call allows the state machine to optionally inject the name of the variable in question
@@ -128,7 +132,7 @@ class EnvVar(sm.AssignableMachine):
         # otherwise, we're going to attempt execute a new command (and wrap that in a type checking automata)
         # TODO: sometimes, this means a user executes a new command when they don't mean to (e.g., misspelling)
         # command search logic can be smarter and reject bad input in this way
-        return sm.TypeCheck(self, cs.ApplySearch(text=text)).when_done(self.get_when_done_state())
+        return sm.TypeCheck(self, cs.ApplySearch(text=text, class_index=self.class_index)).when_done(self.get_when_done_state())
         #return self.set_error(result)
 
 # using the default type class, defining new types is relatively easy

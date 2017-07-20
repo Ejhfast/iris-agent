@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { addMessage, addInputHistory, moveInputHistory, storeCurrentInput, updateDocEvent, setDocs } from '../actions/index.js';
+import { addMessage, addInputHistory, moveInputHistory, storeCurrentInput, updateDocEvent, setDocs, storeClassIndex, clearClassIndex } from '../actions/index.js';
 import { updateHint, updateDocs } from '../api_calls/python.js';
 import * as _ from 'lodash';
 
@@ -20,6 +20,7 @@ const onKeyDown = (dispatch, inputHistory, e, predictions) => {
       if(predictions.length > 0){
         let stripText = predictions[0].text.replace(/{/g, '').replace(/}/g, '');
         input.value = stripText;
+        dispatch(storeClassIndex(predictions[0].id));
         updateHint(input.value);
       }
       e.preventDefault();
@@ -41,15 +42,16 @@ const onKeyDown = (dispatch, inputHistory, e, predictions) => {
 const onChangeInput = (dispatch) => {
     dispatch(storeCurrentInput(input.value));
     updateHint(input.value);
-    updateDocs(input.value);
+    dispatch(clearClassIndex())
+    // updateDocs(input.value);
 };
 
 // this component defines main text input
-let InputBox = ({ dispatch, inputHistory, predictions }) =>
+let InputBox = ({ dispatch, inputHistory, predictions, classIndex }) =>
     <div className="input_box">
         <form onSubmit={e => {
             e.preventDefault();
-            dispatch(addMessage({'origin': 'user', 'text': [input.value] }));
+            dispatch(addMessage({'origin': 'user', 'text': [input.value], 'class_index': classIndex }));
             dispatch(addInputHistory({'message': input.value}));
             dispatch(storeCurrentInput(''));
             input.value = '';
@@ -61,6 +63,7 @@ let InputBox = ({ dispatch, inputHistory, predictions }) =>
 const mapStateToProps = (state) => ({
     inputHistory: state.inputHistory,
     predictions: state.predictions,
+    classIndex: state.currentInput.classIndex,
 });
 
 InputBox = connect(mapStateToProps)(InputBox);

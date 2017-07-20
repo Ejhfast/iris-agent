@@ -114,6 +114,19 @@ export function storeCurrentInput(input) {
     };
 }
 
+export function storeClassIndex(id) {
+    return {
+        type: types.STORE_CLASS_INDEX,
+        class_index: id
+    };
+}
+
+export function clearClassIndex(id) {
+    return {
+        type: types.CLEAR_CLASS_INDEX,
+    };
+}
+
 // -----------------------------------------------
 
 // The minimizeState reducer governs which panes are displayed in the GUI

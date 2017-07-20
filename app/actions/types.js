@@ -15,6 +15,8 @@ export const RESET_COMMAND = 'RESET_COMMAND';
 
 // currentInput reducer
 export const STORE_CURRENT_INPUT = 'STORE_CURRENT_INPUT';
+export const STORE_CLASS_INDEX = 'STORE_CLASS_INDEX';
+export const CLEAR_CLASS_INDEX = 'CLEAR_CLASS_INDEX';
 
 // minimizeState reducer
 export const SET_DOCS = 'SET_DOCS';

@@ -323,6 +323,8 @@ body{
 }
 .predictions{
 	height:100%;
+	width:10000px;
+	overflow-x: scroll;
 	overflow-y: hidden;
 }
 

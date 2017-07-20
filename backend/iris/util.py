@@ -75,7 +75,7 @@ def is_data(result):
     return False
 
 # get latest message from conversation
-def get_last_message(messages): return messages[-1]["text"]
+def get_last_message(messages): return messages[-1]["text"], messages[-1]["class_index"]
 
 # helper for checking for "yes"/"no" in response logic
 # TODO: make more sophisticated

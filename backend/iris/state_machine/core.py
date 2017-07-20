@@ -48,11 +48,13 @@ class StateMachineRunner:
             self.current_state = self.original_state
             self.original_state.reset()
     # proceed to next state for machine
-    def next_state(self, text):
+    def next_state(self, text, class_index=None):
         # commented out below was incredibly slow if i remember, reason i removed and broke "go back"?
         #self.previous_state.append(self.current_state)
         #self.previous_context.append(copy.deepcopy(self.current_state.context))
         # ask the state for its next state
+        if class_index:
+            self.current_state.set_class_index(class_index)
         new_state = self.current_state.next_state(text)
         # if that's a state, set current state there
         if isinstance(new_state, StateMachine):
@@ -78,6 +80,8 @@ class StateMachine:
     # this allows us to pass context, and gives an execution hook after context is set
     def __call__(self, context):
         self.context = dict(context)
+        return self
+    def set_class_index(self, class_index):
         return self
     # add middleware to the state, will process input text and potentially make different choices
     def add_middleware(self, middleware):
