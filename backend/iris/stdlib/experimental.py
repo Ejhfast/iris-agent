@@ -4,7 +4,6 @@ from .. import state_machine as sm
 from .. import util as util
 from ..gencode import make_script, transform_ast
 
-
 # If I want to collect and stich together functions, need
 # 1: retrieved functions should be storable state machines
 # 2: when user paramaterizes them, should ask what are paramaters of workflow and what are constants

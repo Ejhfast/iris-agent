@@ -165,7 +165,7 @@ body{
 
 .content_box{
   position:absolute;
-  bottom:79px;
+  bottom:85px;
   top:0px;
   // width:96%;
 	left:0px;
@@ -210,7 +210,7 @@ body{
  line-height: 1.2em;
 }
 .message.right .bubble{
-  background-color:#458CFF;
+  background-color:#287BFF;
   color:white;
 }
 .message.left .bubble{
@@ -304,20 +304,33 @@ body{
 
 .prediction_strip{
 	position:absolute;
-	height:18px;
-	padding: 10px 0px;
-	bottom:40px;
+	height:44px;
+	padding: 0px 0px;
+	bottom:30px;
 	// width:100%;
 	left:0px;
 	right:0px; //400px;
+	background: #efefef;
 	border-top:1px solid #ddd;
 	span.prediction{
+		font-size:.85em;
+		position: relative;
+		top:8px;
 		cursor:pointer;
-		margin:5px 13px 0px 13px;
+		margin:15px 7px 0px 7px;
 		color:#999;
+		padding:5px 15px;
+		border-radius: 25px;
+		background-color: #79ADFF;
+		line-height: .9em;
+		color:white
+	}
+	span.prediction:hover{
+		background-color: #5295FF;
 	}
 	span.prediction.c0{
-		font-weight:800;
+		background-color: #5295FF;
+		// font-weight:800;
 	}
 	overflow-x:scroll;
 }

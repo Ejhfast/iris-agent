@@ -35,7 +35,7 @@ class MakeClassifier(IrisCommand):
                  "logistic regression model on {dataframe}",
                  "logistic classifier" ]
     argument_types = {
-        "model_type": t.Select(options={
+        "model_type": t.Select(question="What kind of model would you like?", options={
             "Logistic Regression classifier": "logistic",
             "Random Forest classifier": "random_forest"
         }),

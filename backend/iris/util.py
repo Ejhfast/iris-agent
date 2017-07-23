@@ -5,6 +5,7 @@ from . import iris_objects
 import re
 import csv
 import inspect
+from collections import defaultdict
 
 # dataframe typing detection (TODO: duplicate?)
 def detect_type(type_):
@@ -93,6 +94,17 @@ def extract_number(text):
         except:
             pass
     return False, None
+
+def word_overlap(sen1, sents):
+    count_hash = defaultdict(int)
+    for w1 in sen1.lower().strip().split():
+        for s in sents.keys():
+            for w2 in s.lower().strip().split():
+                if w1 == w2:
+                    count_hash[s] += 1
+    sort = sorted(sents.items(), key=lambda x: count_hash[x[0]], reverse=True)
+    return [x[0] for x in sort], sort[0][1]
+
 
 # is this word an argument in a template string?
 def is_arg(s):

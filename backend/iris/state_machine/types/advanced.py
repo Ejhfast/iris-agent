@@ -105,28 +105,31 @@ class DataframeSelector(sm.AssignableMachine):
 # the select class allows a user to choose among some number of options
 # TODO: improve the visual representation of this!
 class Select(sm.AssignableMachine):
-    def __init__(self, options={}, option_info={}, default=None):
+    def __init__(self, question="Please choose from one of the following:", options={}, option_info={}, default=None):
         super().__init__()
         self.default = default
         self.id2option = {}
+        self.sent2id = {}
         option_keys = sorted(options.keys())
         question_text = []
         for i,k in enumerate(option_keys):
             self.id2option[i] = options[k]
-            question_text.append("{}: {}".format(i,k))
+            self.sent2id[k] = i
+            question_text.append(k) #"{}: {}".format(i,k))
             if options[k] in option_info:
                 for m in option_info[options[k]]:
                     question_text.append({"type":"explain", "value":m})
-        question_text.append("Would you like any of these?")
+        # question_text.append("Would you like any of these?")
         self.output = question_text
+        self.question = question
 
     def get_output(self):
         # is there a named variable we are asking for, otherwise use generic message
         # arg_name is some magic inherited by AssignableMachine
         if self.arg_name != None:
-            message = "Please choose from one of the following for {}:".format(self.arg_name)
-            return [message] + self.output
-        return ["Please choose from one of the following:"] + self.output
+            message = self.question.format(self.arg_name)
+            return [message]# + self.output
+        return [self.question]# + self.output
 
     def error_message(self, text):
         return ["{} is not a valid option".format(text)]
@@ -138,24 +141,25 @@ class Select(sm.AssignableMachine):
 
     # hint will display the choice the user is making
     def base_hint(self, text):
-        success, choice = util.extract_number(text)
-        if success:
-            value = self.id2option[choice]
-            if isinstance(value, str):
-                return ["{}".format(value)]
-            return ["choice {}".format(choice)]
-        return []
+        sort, choice = util.word_overlap(text, self.sent2id)
+        return [{"text":sort[0], "style":"c0"}] + sort[1:]
+        # success, choice = util.extract_number(text)
+        # if success:
+        #     value = self.id2option[choice]
+        #     if isinstance(value, str):
+        #         return ["{}".format(value)]
+        #     return ["choice {}".format(choice)]
+        # return []
 
     def next_state_base(self, text):
         new_state = self
-        success, choice = util.extract_number(text)
-        if success:
-            if choice in self.id2option:
-                new_state = self.id2option[choice]
-                # if we've hit ground, do assignment
-                if not isinstance(new_state, sm.StateMachine):
-                    self.assign(new_state, new_state)
-                return new_state
+        sort, choice = util.word_overlap(text, self.sent2id)
+        if choice in self.id2option:
+            new_state = self.id2option[choice]
+            # if we've hit ground, do assignment
+            if not isinstance(new_state, sm.StateMachine):
+                self.assign(new_state, new_state)
+            return new_state
         return self.set_error(self.error_message(text))
 
     # need to pass any when_dones on this down to component state machines, if any
