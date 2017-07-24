@@ -122,8 +122,8 @@ class CheckTypes(sm.StateMachine):
         if text == "":
             return ["yes", "no"]
         if util.verify_response(text):
-            return ["yes"]
-        return ["no"]
+            return ["yes", "no"]
+        return ["no", "yes"]
 
 class AskForHeaders(sm.StateMachine):
     def __init__(self):
@@ -185,12 +185,13 @@ class FirstLineHeader(sm.StateMachine):
             self.context['data'] = self.read_variable("loaded_file").content.split("\n")[1:]
             return sm.Print(["Great, thanks."]).when_done(self.get_when_done_state())
         return CheckHeader(force_ask=True).when_done(self.get_when_done_state())
+    # TODO: this appears twice, refactor?
     def base_hint(self, text):
         if text == "":
             return ["yes", "no"]
         if util.verify_response(text):
-            return ["yes"]
-        return ["no"]
+            return ["yes", "no"]
+        return ["no", "yes"]
 
 class CheckHeader(sm.StateMachine):
     def __init__(self, force_ask=False):

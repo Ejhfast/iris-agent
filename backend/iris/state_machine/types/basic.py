@@ -329,8 +329,8 @@ class YesNo(sm.AssignableMachine):
     # TODO: "triggers" is a bit non-standard, get these hints standardized
     def base_hint(self, text):
         if util.verify_response(text):
-            return ["triggers yes"]
-        return ["triggers no"]
+            return ["yes", "no"]
+        return ["no", "yes"]
 
     # TODO: is this assigning without checking against do_match?
     def next_state_base(self, text):

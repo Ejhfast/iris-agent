@@ -81,7 +81,7 @@ def get_last_message(messages): return messages[-1]["text"], messages[-1]["class
 # helper for checking for "yes"/"no" in response logic
 # TODO: make more sophisticated
 def verify_response(text):
-    if text.lower() == "yes":
+    if text.lower() in ["yes", "y", "yep", "sure"]:
         return True
     else:
         return False
@@ -99,7 +99,7 @@ def word_overlap(sen1, sents):
     count_hash = defaultdict(int)
     for w1 in sen1.lower().strip().split():
         for s in sents.keys():
-            for w2 in s.lower().strip().split():
+            for w2 in s.replace(":", "").lower().strip().split():
                 if w1 == w2:
                     count_hash[s] += 1
     sort = sorted(sents.items(), key=lambda x: count_hash[x[0]], reverse=True)

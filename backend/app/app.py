@@ -141,6 +141,8 @@ async def hint(request):
         else:
             # this formatting is to control which hint is bold
             formatted_list.append({"style":"normal", "text":r})
+    if len(formatted_list) > 0:
+        formatted_list[0]["style"] = "c0"
     return web.json_response({"predictions": formatted_list})
 
 add_cors(app.router.add_route('POST', '/hint', hint))
