@@ -117,9 +117,9 @@ class EnvVar(sm.AssignableMachine):
         # otherwise, we'll try to convert what's in the box to predict the future
         success, _ = self.convert_type(text, doing_match=True)
         if success:
-            return ["'{}' works as an arg".format(text)]
+            return [{"text": "'{}' works as an arg".format(text), "type":"confirm"}]
         elif text in self.iris.env:
-            return ["use '{}' as arg (not correct type)".format(text)]
+            return [{"text":"use '{}' as arg (not correct type)".format(text), "type":"warning"}]
         # otherwise, we're going to treat user input as another command request
         else:
             return cs.ApplySearch().hint(text)

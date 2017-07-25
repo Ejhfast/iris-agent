@@ -138,9 +138,11 @@ async def hint(request):
     for r in response:
         if isinstance(r,dict):
             formatted_list.append(r)
+            if not "type" in r:
+                r["type"] = "hint"
         else:
             # this formatting is to control which hint is bold
-            formatted_list.append({"style":"normal", "text":r})
+            formatted_list.append({"style":"normal", "text":r, "type":"hint"})
     if len(formatted_list) > 0:
         formatted_list[0]["style"] = "c0"
     return web.json_response({"predictions": formatted_list})

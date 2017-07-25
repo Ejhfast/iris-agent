@@ -17,7 +17,7 @@ const onKeyDown = (dispatch, inputHistory, e, predictions) => {
     const keyCode = e.keyCode || e.which;
     // tab autocomplete
     if (keyCode === 9){ // tab
-      if(predictions.length > 0){
+      if(predictions.length > 0 && predictions[0].type === "hint"){
         let stripText = predictions[0].text.replace(/{/g, '').replace(/}/g, '');
         input.value = stripText;
         dispatch(storeClassIndex(predictions[0].id));
