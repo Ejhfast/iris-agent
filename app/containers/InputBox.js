@@ -51,10 +51,12 @@ let InputBox = ({ dispatch, inputHistory, predictions, classIndex }) =>
     <div className="input_box">
         <form onSubmit={e => {
             e.preventDefault();
-            dispatch(addMessage({'origin': 'user', 'text': [input.value], 'class_index': classIndex }));
-            dispatch(addInputHistory({'message': input.value}));
-            dispatch(storeCurrentInput(''));
-            input.value = '';
+            if (predictions.length > 0){
+              dispatch(addMessage({'origin': 'user', 'text': [input.value], 'class_index': classIndex }));
+              dispatch(addInputHistory({'message': input.value}));
+              dispatch(storeCurrentInput(''));
+              input.value = '';
+            }
         }}>
             <input onChange={() => onChangeInput(dispatch)} onKeyDown={(e) => onKeyDown(dispatch, inputHistory, e, predictions)} type="text" placeholder="your message here" ref={node => {input = node;}}></input>
         </form>
