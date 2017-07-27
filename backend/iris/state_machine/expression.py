@@ -69,6 +69,7 @@ class Function(Scope, AssignableMachine):
     title = "Function title"
     # dictionary with argument type information, key=arg_name, value=arg_type
     argument_types = {}
+    can_call = [] # functions can be called within any other function by default, [] => Any
     # examples of other user input that trigger the function
     examples = []
     # this attribute is used to keep track of the original query string that triggered the function
@@ -160,11 +161,11 @@ class Function(Scope, AssignableMachine):
                 if arg in self.binding_machine:
                     # we are using copy here, because if we re-run, do not want these
                     # states to have changed
-                    type_machine = copy.copy(self.binding_machine[arg]).set_arg_name(arg)
+                    type_machine = copy.copy(self.binding_machine[arg]).set_arg_name(arg).set_caller(self)
                 # second choice is the logic for user argument extraction
                 # we should always have this
                 else:
-                    type_machine = self.argument_types[arg].set_arg_name(arg)
+                    type_machine = self.argument_types[arg].set_arg_name(arg).set_caller(self)
                     # TODO: two lines below enable the arg_1->arg_n dependency hack. make this nicer!
                     # (the only thing using this now is the dataframe stuff, search for .arg_context to see)
                     type_machine.gen_scope = self.gen_scope # hack for now

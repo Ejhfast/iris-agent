@@ -30,13 +30,16 @@ def replace_args(bindings, text):
 # Basically, supporting first-class Iris commands
 class FunctionSearch(AssignableMachine):
     # "text" means we will use a known query, otherwise this SM will ask user
-    def __init__(self, question = ["What function would you like to retrieve?"], text = None, class_index = None, iris = IRIS_MODEL):
+    def __init__(self, question = ["What function would you like to retrieve?"], text = None, class_index = None, caller_context = None, iris = IRIS_MODEL):
+        if caller_context:
+            print("searching with context", caller_context)
         self.iris = IRIS_MODEL
         super().__init__()
         self.question = question
         self.text = text
         self.class_index = class_index
         self.output = question
+        self.caller_context = caller_context
         # not going to do any IO if we know what we're looking for
         if text or class_index:
             self.output = []
@@ -52,7 +55,10 @@ class FunctionSearch(AssignableMachine):
     # hint will show a preview of what commands will be retrieved
     # TODO: clean up this styling...
     def base_hint(self, text):
-        predictions = self.iris.predict_commands(text, 3)
+        if self.caller_context == None:
+            predictions = self.iris.predict_commands(text, n=3)
+        else:
+            predictions = self.iris.predict_commands(text, n=3, context=self.caller_context)
         arg_matches = [(first_match([util.arg_match(text, x) for x in self.iris.class2cmd[cmd[0].class_index]]), cmd[0].title) for cmd in predictions]
         with_replace_args = [{"style":"normal", "text":replace_args(*x[0]), "id":x[1][0].class_index} for x in zip(arg_matches, predictions)]
         if len(with_replace_args) > 0:
@@ -61,7 +67,7 @@ class FunctionSearch(AssignableMachine):
     # return docs object for a search
     # TODO: is this being used anywhere?
     def docs(self, text):
-        prediction = self.iris.predict_commands(text, 1)[0]
+        prediction = self.iris.predict_commands(text, n=1)[0]
         return prediction[0].docs()
     # here is how we retrieve and assign the desired function
     def next_state_base(self, text):
@@ -70,8 +76,11 @@ class FunctionSearch(AssignableMachine):
         if self.class_index:
             command = self.iris.get_command_by_class_index(self.class_index)
         else:
-            # which command do we want?
-            command, score = self.iris.predict_commands(text)[0]
+            # command, score = self.iris.predict_commands(text)[0]
+            if self.caller_context == None:
+                command, score = self.iris.predict_commands(text, n=3)[0]
+            else:
+                command, score = self.iris.predict_commands(text, n=3, context=self.caller_context)[0]
         # create a fresh copy of a command, so that any changes to its context etc. do not affect future calls
         # TODO: this has always bothered me, is it possible to make things immutable?
         self.command = copy.copy(command)
@@ -86,11 +95,12 @@ class FunctionSearch(AssignableMachine):
 # This is the state machine that allows a user to CALL a function from the system
 class ApplySearch(Scope, AssignableMachine):
     # "text" allows again for pre-defined querys, where we don't ask the user
-    def __init__(self, question = ["What would you like to do?"], text = None, class_index = None):
+    def __init__(self, question = ["What would you like to do?"], text = None, caller_context = None, class_index = None):
         self.question = question
-        self.function_generator = FunctionSearch(self.question, text=text, class_index = class_index)
+        self.function_generator = FunctionSearch(self.question, text=text, class_index = class_index, caller_context = caller_context)
         super().__init__()
         self.accepts_input = False
+        self.caller_context = caller_context
         self.init_scope()
     def set_class_index(self, index):
         self.function_generator.set_class_index(index)
@@ -116,5 +126,5 @@ class ApplySearch(Scope, AssignableMachine):
         command = self.read_variable("FUNCTION").function # Wrapper
         # save a reference to the command we decided to execute
         # TODO: make an API for this!
-        self.command = command.function
+        self.command = command.function.set_caller(self.caller_context)
         return command.when_done(self.get_when_done_state())

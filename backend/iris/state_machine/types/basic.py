@@ -122,7 +122,8 @@ class EnvVar(sm.AssignableMachine):
             return [{"text":"use '{}' as arg (not correct type)".format(text), "type":"warning"}]
         # otherwise, we're going to treat user input as another command request
         else:
-            return cs.ApplySearch().hint(text)
+            # thread through info about the parent command asking for the request
+            return cs.ApplySearch(caller_context=self.caller).hint(text)
 
     # next_state_base defines automata state transitions (see ../core.py)
     def next_state_base(self, text):
@@ -132,7 +133,7 @@ class EnvVar(sm.AssignableMachine):
         # otherwise, we're going to attempt execute a new command (and wrap that in a type checking automata)
         # TODO: sometimes, this means a user executes a new command when they don't mean to (e.g., misspelling)
         # command search logic can be smarter and reject bad input in this way
-        return sm.TypeCheck(self, cs.ApplySearch(text=text, class_index=self.class_index)).when_done(self.get_when_done_state())
+        return sm.TypeCheck(self, cs.ApplySearch(text=text, caller_context=self.caller, class_index=self.class_index)).when_done(self.get_when_done_state())
         #return self.set_error(result)
 
 # using the default type class, defining new types is relatively easy

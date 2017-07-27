@@ -77,6 +77,7 @@ class IrisBase:
             class_index = self.class2index[command.__class__.__name__]
             self.class_functions[class_index] = command
             # TODO: need to update examples as well! remove old and replace with new
+            # also caller context!
         return class_index
 
     # lookup the command by its class index
@@ -126,7 +127,22 @@ class IrisBase:
         return True, new_command_string
 
     # given query (text) produce sorted list of (command, prob)
-    def predict_commands(self, text, n=1):
+    def predict_commands(self, text, n=1, context=None):
         predictions = self.predict_input(text)[0].tolist()
         sorted_predictions = sorted([(self.class_functions[i],x) for i,x in enumerate(predictions) if has_subword(self.class_functions[i], text)], key=lambda x: x[-1], reverse=True)
-        return sorted_predictions[:n]
+        if context != None:
+            print("context", context)
+            new_predictions = []
+            for p in sorted_predictions:
+                # if len(p[0].can_call) > 0:
+                #     print(p[0].can_call[0].__name__, context)
+                #     print(issubclass(p[0].can_call[0], context))
+                if len(p[0].can_call) > 0 and any([context.__class__.__name__ == c.__name__ for c in p[0].can_call]):
+                    new_predictions.append(p)
+                elif len(p[0].can_call) == 0:
+                    new_predictions.append(p)
+            # sorted_predictions = [x for x in sorted_predictions if len(x[0].can_call) > 0 and any([issubclass(context, c) for c in x[0].can_call])]
+        else:
+            print("no context")
+            new_predictions = [x for x in sorted_predictions if len(x[0].can_call) == 0]
+        return new_predictions[:n]

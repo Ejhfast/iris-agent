@@ -66,7 +66,7 @@ class TableSelectMessage extends Component {
     console.log(this.props.currentInput);
     return (<div className = {this.props.origin === 'iris' ? 'message left' : 'message right'} style={this.props.hidden === true ? {display: 'none'} : {}}>
         <div className="bubble table">
-        <div className="data_table" style={{width: this.testColumns.length * (350+10+1)}}>
+        <div className="data_table" style={{width: 50 * (350+10+1)}}>
           <div className="header">
           {this.testColumns.map((column,i) => {
             let newColStyle = {};
@@ -80,27 +80,29 @@ class TableSelectMessage extends Component {
             }
           })}
           </div>
-          {this.testRows.map((row,i) => {
-            let newRowStyle = {};
-            if (containsText){ newRowStyle['height'] = '4em'};
-            return (<div className="data_row" style={newRowStyle}>
-              {this.testColumns.map((column, i) => {
-                let newColStyle = {};
-                if(column.type === "Text"){
-                  newColStyle['width'] = 350;
-                }
-                if(containsText){
-                  newColStyle['height'] = '4em';
-                }
-                if(this.props.active && selectionContains(this.props.currentInput, this.colMap[i])){
-                  newColStyle['background-color'] = '#eee';
-                }
-                if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
-                if (i < 50){
-                  return <span className="data_column" style={newColStyle}>{row[column.name]}</span>;
-                }
-              })}
-            </div>)
+          {this.testRows.map((row,row_num) => {
+            if (row_num < 50) {
+              let newRowStyle = {};
+              if (containsText){ newRowStyle['height'] = '4em'};
+              return (<div className="data_row" style={newRowStyle}>
+                {this.testColumns.map((column, i) => {
+                  let newColStyle = {};
+                  if(column.type === "Text"){
+                    newColStyle['width'] = 350;
+                  }
+                  if(containsText){
+                    newColStyle['height'] = '4em';
+                  }
+                  if(this.props.active && selectionContains(this.props.currentInput, this.colMap[i])){
+                    newColStyle['background-color'] = '#eee';
+                  }
+                  if (singleColumn || i == 0){ newColStyle['border-left'] = 'none' };
+                  if (i < 50){
+                    return <span className="data_column" style={newColStyle}>{row[column.name]}</span>;
+                  }
+                })}
+              </div>)
+            }
           })}
         </div>
         </div>

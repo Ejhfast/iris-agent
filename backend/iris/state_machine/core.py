@@ -73,6 +73,7 @@ class StateMachine:
         self.error = None
         self.context = { "ASSIGNMENTS": {}, "ASSIGNMENT_NAMES": {}, "assign": [] }
         self.when_done_state = None
+        self.caller = None
         # important! output defines what the state will output to the user
         self.output = []
         self.middleware = []
@@ -80,6 +81,11 @@ class StateMachine:
     # this allows us to pass context, and gives an execution hook after context is set
     def __call__(self, context):
         self.context = dict(context)
+        return self
+    # set reference back to parent before transition, used for argument delegation so that
+    # an arg request has reference to its parent command
+    def set_caller(self, caller):
+        self.caller = caller
         return self
     def set_class_index(self, class_index):
         return self

@@ -28,6 +28,20 @@ class ApplyFunctionDataframe(IrisCommand):
 
 applyFunctionDataframe = ApplyFunctionDataframe()
 
+class TestContext(IrisCommand):
+    title = "see context"
+    can_call = [t.DataframeSelector]
+    argument_types = {
+    }
+    def command(self):
+        print(self.caller)
+        print(self.caller.context)
+        print(self.caller.arg_context['ASSIGNMENTS'][self.caller.gen_scope(self.caller.dataframe)])
+        print(self.caller.read_variable("dataframe").get_value(self.iris))
+        return "cool"
+
+testContext = TestContext()
+
 class TestWorkLoop(IrisCommand):
     title = "test workloop"
     argument_types = {

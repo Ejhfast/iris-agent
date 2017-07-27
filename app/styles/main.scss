@@ -171,7 +171,8 @@ body{
 	left:0px;
 	right:3px; //410px;
   padding:20px 0px 0px 10px;
-  overflow:scroll;
+  overflow-y:scroll;
+	overflow-x:hidden;
 }
 
 // conversation message styling

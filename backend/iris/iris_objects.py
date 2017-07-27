@@ -112,8 +112,9 @@ class IrisDataframe:
         column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
         row_data = []
         # each row will be a dictionary mapping column name to value
-        for row in self.data:
-            row_data.append({self.column_names[i]:util.json_encode_df_type(d) for i,d in enumerate(row)})
+        for i,row in enumerate(self.data):
+            if i < 50:
+                row_data.append({self.column_names[j]:util.json_encode_df_type(d) for j,d in enumerate(row) if j < 50 })
         return json.dumps({"column_data":column_data, "row_data":row_data})
 
     # get a single column from the dataframe

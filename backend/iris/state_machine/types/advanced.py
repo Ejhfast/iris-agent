@@ -77,7 +77,7 @@ class DataframeSelector(sm.AssignableMachine):
         if dataframe != None:
             if all([col in dataframe.get_value(self.iris).column_names for col in possible_columns]):
                 return ["your selection is a valid set of columns"]
-        return cs.ApplySearch().hint(text)
+        return cs.ApplySearch(caller_context=self).hint(text)
     def next_state_base(self, text):
         # if we passed this a dataframe ref already, no need to ask user
         if self.read_variable("dataframe") == None and self.dataframe != None:
@@ -88,19 +88,24 @@ class DataframeSelector(sm.AssignableMachine):
         elif self.read_variable("dataframe") == None:
             self.accepts_input = True
             return sm.Assign("dataframe", Dataframe(self.question)).when_done(self)
+        # handle processing of composed call
+        elif self.read_variable("function_call") != None:
+            text = self.read_variable("function_call").value
         # otherwise we have already asked user
-        else:
-            dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
-            print(self.read_variable("dataframe"))
-            print(dataframe)
-            possible_columns = [x.strip() for x in text.split(",")]
-            if all([col in dataframe.column_names for col in possible_columns]):
-                selection = dataframe.copy_frame(possible_columns)
-                self.assign(selection)
-                dataframe = self.delete_variable("dataframe")
-                self.accepts_input = False
-                return selection
-            return cs.ApplySearch(text=text).when_done(self.get_when_done_state())
+        dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
+        print(self.read_variable("dataframe"))
+        print(dataframe)
+        print(text)
+        possible_columns = [x.strip() for x in text.split(",")]
+        if all([col in dataframe.column_names for col in possible_columns]):
+            selection = dataframe.copy_frame(possible_columns)
+            self.assign(selection)
+            dataframe = self.delete_variable("dataframe")
+            self.accepts_input = False
+            return selection
+        # TODO: type checking here??
+        # pass self as caller_context because this is a fancy type! (basically a command itself)
+        return sm.Assign("function_return", cs.ApplySearch(text=text, caller_context=self)).when_done(self.get_when_done_state())
 
 # the select class allows a user to choose among some number of options
 # TODO: improve the visual representation of this!

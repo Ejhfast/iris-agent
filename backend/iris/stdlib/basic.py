@@ -22,15 +22,6 @@ class GenerateNumber(IrisCommand):
 
 generateNumber = GenerateNumber()
 
-class GenerateFloat(IrisCommand):
-    title = "generate a random float"
-    examples = [ "generate float" ]
-    def command(self):
-        import random
-        return float(random.randint(0,100))
-
-generateFloat = GenerateFloat()
-
 # class LessThan(IrisCommand):
 #     title = "{x} less than {y}"
 #     examples = ["{x} < {y}", "{x} less {y}"]
@@ -68,6 +59,16 @@ class AddTwoNumbers(IrisCommand):
         return x + y
 
 addTwoNumbers = AddTwoNumbers()
+
+class GenerateFloat(IrisCommand):
+    title = "generate a random float"
+    examples = [ "generate float" ]
+    def command(self):
+        print("I am called by", self.caller.context)
+        import random
+        return float(random.randint(0,100))
+
+generateFloat = GenerateFloat()
 
 class DivideTwoNumbers(IrisCommand):
     title = "divide two numbers: {x} and {y}"

@@ -15,10 +15,10 @@ from app import stdlib
 import unittest
 
 def mock_data_formatter(messages):
-    return { "messages":  [{ "text":m } for m in messages] }
+    return { "messages":  [{ "text":m, "class_index": None } for m in messages] }
 
 def append_mock_message(message, data):
-    return { "messages": data['messages'] + [{ "text": message }] }
+    return { "messages": data['messages'] + [{ "text": message, "class_index": None }] }
 
 class TestUM(unittest.TestCase):
 
@@ -89,6 +89,8 @@ class TestUM(unittest.TestCase):
         data_out = self.eventLoop.state_machine(mock_data_formatter(["add my_num and 4"]))
         self.assertEqual(data_out["state"], "START")
         self.assertEqual(data_out["text"][-1], "11.0")
+
+    # add test for class_index backdoor
 
 if __name__ == '__main__':
     unittest.main()
