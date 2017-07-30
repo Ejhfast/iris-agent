@@ -87,6 +87,9 @@ class StateMachine:
     def set_caller(self, caller):
         self.caller = caller
         return self
+    # define state that parent commands can expose to children under composition
+    def expose_state(self):
+        return {}
     def set_class_index(self, class_index):
         return self
     # add middleware to the state, will process input text and potentially make different choices

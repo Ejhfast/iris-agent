@@ -59,10 +59,12 @@ class DataframeSelector(sm.AssignableMachine):
         self.question = question
         self.dataframe = dataframe
         self.accepts_input = False
+        self.show_ouput = True
         self.iris = iris
     def get_output(self):
         dataframe = self.read_variable("dataframe") # we are assuming EnvReference now...
-        if dataframe:
+        if dataframe and self.show_ouput:
+            print("showing output")
             return [
                 self.question,
                 {"type": "collection_select", "value": dataframe.get_value(IRIS_MODEL).generate_spreadsheet_data() }
@@ -70,6 +72,8 @@ class DataframeSelector(sm.AssignableMachine):
         return []
     def convert_type(self, x):
         return False, None
+    def expose_state(self):
+        return {"dataframe": self.caller.read_variable("dataframe").get_value(self.iris)}
     # here the hint will verify whether the user has selected a valid set of columns
     def base_hint(self, text):
         dataframe = self.read_variable("dataframe")
@@ -79,33 +83,44 @@ class DataframeSelector(sm.AssignableMachine):
                 return ["your selection is a valid set of columns"]
         return cs.ApplySearch(caller_context=self).hint(text)
     def next_state_base(self, text):
+        print("in next_state DataframeSelector")
         # if we passed this a dataframe ref already, no need to ask user
         if self.read_variable("dataframe") == None and self.dataframe != None:
+            print("already have dataframe ref")
             print(self.arg_context['ASSIGNMENTS'].keys())
             self.accepts_input = True
             return sm.Assign("dataframe", sm.ValueState(self.arg_context['ASSIGNMENTS'][self.gen_scope(self.dataframe)])).when_done(self)
         # otherwise ask user
         elif self.read_variable("dataframe") == None:
+            print("asking user for dataframe ref")
             self.accepts_input = True
             return sm.Assign("dataframe", Dataframe(self.question)).when_done(self)
         # handle processing of composed call
-        elif self.read_variable("function_call") != None:
-            text = self.read_variable("function_call").value
+        elif self.read_variable("function_return") != None:
+            print("did we see state?", self.read_variable("function_return"))
+            text = self.read_variable("function_return").value
+            self.delete_variable("function_return")
+            self.accepts_input = True
         # otherwise we have already asked user
         dataframe = self.read_variable("dataframe").get_value(IRIS_MODEL)
         print(self.read_variable("dataframe"))
         print(dataframe)
-        print(text)
+        print("current text", text)
         possible_columns = [x.strip() for x in text.split(",")]
         if all([col in dataframe.column_names for col in possible_columns]):
+            print("matching...")
             selection = dataframe.copy_frame(possible_columns)
             self.assign(selection)
             dataframe = self.delete_variable("dataframe")
             self.accepts_input = False
+            self.show_ouput = True
             return selection
         # TODO: type checking here??
         # pass self as caller_context because this is a fancy type! (basically a command itself)
-        return sm.Assign("function_return", cs.ApplySearch(text=text, caller_context=self)).when_done(self.get_when_done_state())
+        print("no match so calling command")
+        self.accepts_input = False
+        self.show_ouput = False
+        return sm.Assign("function_return", cs.ApplySearch(text=text, caller_context=self)).when_done(self)
 
 # the select class allows a user to choose among some number of options
 # TODO: improve the visual representation of this!

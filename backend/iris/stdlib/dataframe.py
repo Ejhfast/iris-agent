@@ -16,6 +16,17 @@ class SaveDf(IrisCommand):
 
 saveDf = SaveDf()
 
+class SelectAllColumnsExcept(IrisCommand):
+    title = "select all columns except for {column}"
+    examples = ["all columns except {column}", "all but {column}"]
+    can_call = [t.DataframeSelector]
+    argument_types = {"column": t.String("What column do you want to exclude?")}
+    def command(self, column):
+        dataframe = self.caller.expose_state()["dataframe"]
+        return ", ".join([x for x in dataframe.column_names if x != column])
+
+selectAllColumnsExcept = SelectAllColumnsExcept()
+
 class LoadCSVData(IrisCommand):
     title = "load csv data from {file}"
     examples = ["load csv {file}"]
