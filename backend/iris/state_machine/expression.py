@@ -35,7 +35,7 @@ def value_or_program(value):
 # and so we want to stitch these ASTs together
 # TODO: this function is only called in Function, refactor?
 # TODO: so messy, give IrisCommand a proper API for this?
-def compile_function(function, args):
+def compile_function(function, args, ignore_partial = True):
     new_function = IrisCommand(index_command=False, compiled=True)
     new_function.command = function.command
     new_function.explanation = function.explanation
@@ -49,7 +49,8 @@ def compile_function(function, args):
     new_function.set_output()
     #new_function.output = ["Sure, I can call {}".format(function.title)]
     for key, value in args.items():
-        new_function.binding_machine[key] = value_or_program(value)
+        if ignore_partial or not (isinstance(value, FunctionReturn) and isinstance(value.value, iris_objects.FreeVariable)):
+            new_function.binding_machine[key] = value_or_program(value)
     return new_function
 
 # arguments resolved by the Function state machine need to be unwrapped, because
@@ -74,6 +75,8 @@ class Function(Scope, AssignableMachine):
     examples = []
     # this attribute is used to keep track of the original query string that triggered the function
     query = None
+    # ignore FreeVariables in return, by default going to create partial
+    ignore_free = False
     def __init__(self, iris = IRIS_MODEL):
         # infer argument names from keys in argument_types dict
         self.command_args = self.command.__code__.co_varnames[:self.command.__code__.co_argcount][1:]
@@ -126,18 +129,34 @@ class Function(Scope, AssignableMachine):
             scoped = self.gen_scope(arg)
             out[arg] = self.context["ASSIGNMENT_NAMES"][scoped]
         return out
+    def check_partial(self, x):
+        print("partial check", self, self.ignore_free)
+        print(x)
+        print((not self.ignore_free) and isinstance(x, iris_objects.FreeVariable))
+        return (not self.ignore_free) and isinstance(x, iris_objects.FreeVariable)
     # main transition logic for Iris functions
     def next_state_base(self, text):
+        print(self)
         self.output = []
         # if we have gathered all the arguments
-        if all([self.read_variable(arg) != None for arg in self.command_args]):
+        if len(self.command_args) == 0 or all([self.read_variable(arg) != None for arg in self.command_args]):
             # so here we want to create a new function
             program_so_far = compile_function(self, {arg:self.read_variable(arg) for arg in self.command_args})
             # get a concrete representation of the args
             args = [resolve_arg_ref(self.iris, self.read_variable(arg)) for arg in self.command_args]
+            if any([self.check_partial(x) for x in args]):
+                partial = compile_function(self, {arg:self.read_variable(arg) for arg in self.command_args}, ignore_partial = False)
+                wrapped = iris_objects.PartialWrapper(partial, "partial function")
+                self.iris.add_to_env("__MEMORY__", wrapped)
+                self.iris.add_to_env("__MEMORY_FUNC__", program_so_far)
+                return_val = FunctionReturn(wrapped, program_so_far)
+                self.assign(return_val, name="COMMAND VALUE")
+                print("returning partial")
+                return return_val
             try:
                 # run the function!
                 result = self.command(*args)
+                print("result", result)
             except:
                 # TODO: why does this seem to sometimes not catch exceptions?
                 print(str(sys.exc_info()[1]))
@@ -259,7 +278,10 @@ class IrisCommand(Function):
     # iris commands also wrap the results provided by explanations, and give them types and
     # data formatting that match up with react components on the frontend
     def wrap_explanation(self, result):
-        results = self.explanation(result)
+        if isinstance(result, iris_objects.PartialWrapper):
+            results = result
+        else:
+            results = self.explanation(result)
         out = []
         for r in util.single_or_list(results):
             # basically, if command wants to overwrite display type directly, let it
@@ -331,7 +353,7 @@ class TypeCheck(Scope, AssignableMachine):
         else:
             result_val = result
         # if type checks, great
-        if self.to_check.is_type(result_val):
+        if isinstance(result, iris_objects.FreeVariable) or self.to_check.is_type(result_val):
             self.assign(self.read_variable("RUN_RESULT"), name="COMMAND VALUE")#(result_val, name="COMMAND VALUE")
             return None
         # otherwise try conversion

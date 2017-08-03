@@ -248,9 +248,18 @@ class FunctionWrapper:
         self.function = function
         self.name = name
 
+class PartialWrapper(FunctionWrapper):
+    def __init__(self, function, name="anonymous partial"):
+        self.function = function
+        self.name = name
+
 # references point to data in the iris environment
 class EnvReference:
     def __init__(self, name):
         self.name = name
     def get_value(self, iris):
         return iris.env[self.name]
+
+class FreeVariable:
+    def __init__(self):
+        return None

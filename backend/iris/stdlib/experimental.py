@@ -2,6 +2,7 @@ from .. import IrisCommand
 from .. import state_types as t
 from .. import state_machine as sm
 from .. import util as util
+from .. import iris_objects
 from ..gencode import make_script, transform_ast
 
 # If I want to collect and stich together functions, need
@@ -11,6 +12,16 @@ from ..gencode import make_script, transform_ast
 # 4: then stitch together partial functions and ask for metadata
 
 # Notes, I can get this (below) to work, just fancier version of jump
+
+class MakeVariable(IrisCommand):
+    title = "make variable"
+    ignore_free = True
+    argument_types = {
+    }
+    def command(self):
+        return iris_objects.FreeVariable()
+
+makeVariable = MakeVariable()
 
 class TestWorkLoop(IrisCommand):
     title = "test workloop"

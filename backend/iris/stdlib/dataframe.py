@@ -21,10 +21,11 @@ class ApplyFunctionDataframe(IrisCommand):
     argument_types = {
         "dataframe": t.Dataframe("What dataframe?"),
         "selector_names": t.DataframeSelector("Please choose a the columns to transform.", dataframe="dataframe"),
-        "command": sm.FunctionSearch(question=["What function do you want to apply to the columns?"])
+        "command": sm.ApplySearch(question=["What function do you want to apply to the columns?"])
     }
     def command(self, dataframe, selector_names, command):
-        function_to_apply = command.function.function.partial # wrapper + argmatch object...
+        function_to_apply = command.function.partial # wrapper... # wrapper + argmatch object...
+        print("function to apply", function_to_apply)
         new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
