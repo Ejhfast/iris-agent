@@ -12,22 +12,6 @@ from ..gencode import make_script, transform_ast
 
 # Notes, I can get this (below) to work, just fancier version of jump
 
-class ApplyFunctionDataframe(IrisCommand):
-    title = "apply function to {dataframe}"
-    argument_types = {
-        "dataframe": t.Dataframe("What dataframe?"),
-        "selector_names": t.DataframeSelector("Please choose a the columns to transform.", dataframe="dataframe"),
-        "command": sm.FunctionSearch(question=["What function do you want to apply to the columns?"])
-    }
-    def command(self, dataframe, selector_names, command):
-        function_to_apply = command.function.function.command # wrapper + argmatch object...
-        new_df = dataframe.copy_frame(dataframe.column_names)
-        # somehow check whether the function only takes one argument?
-        # also, whether the function takes the right type? and what type it returns?
-        return new_df.map_columns(selector_names.column_names, function_to_apply)
-
-applyFunctionDataframe = ApplyFunctionDataframe()
-
 class TestWorkLoop(IrisCommand):
     title = "test workloop"
     argument_types = {

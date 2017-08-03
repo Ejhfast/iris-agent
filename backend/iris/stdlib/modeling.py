@@ -69,8 +69,9 @@ class MakeRegression(IrisCommand):
                  "make a new regression model",
                  "regression using {features} to predict {classes}" ]
     argument_types = {
-        "features": t.Dataframe("What do you want to use as features?"), #t.DataframeSelector("What dataframe do you want to use to select the features?"), #t.ArgList(question="Please give me a comma-separated list of features"),
-        "classes": t.Dataframe("What do you want to predict?"),
+        "dataframe": t.Dataframe("What do you want to use as features?"),
+        "features": t.DataframeSelector("What features do you want to use?", dataframe="dataframe"),
+        "classes": t.DataframeSelector("What do you want to predict?", dataframe="dataframe"),
         "name": t.String("What would you like to call the model?")
     }
     help_text = [
@@ -78,7 +79,7 @@ class MakeRegression(IrisCommand):
         "This command takes a list of input features, as arrays, that will be used to predict the value in question.",
         "It then takes the name of an array that corresponds to the values to be predicted."
     ]
-    def command(self, features, classes, name = None):
+    def command(self, dataframe, features, classes, name = None):
         from sklearn.linear_model import LinearRegression
         model = LinearRegression()
         model = iris_objects.IrisModel(model, features, classes, name=name)

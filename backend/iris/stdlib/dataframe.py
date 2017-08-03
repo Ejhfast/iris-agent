@@ -16,6 +16,38 @@ class SaveDf(IrisCommand):
 
 saveDf = SaveDf()
 
+class ApplyFunctionDataframe(IrisCommand):
+    title = "apply function to {dataframe}"
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe?"),
+        "selector_names": t.DataframeSelector("Please choose a the columns to transform.", dataframe="dataframe"),
+        "command": sm.FunctionSearch(question=["What function do you want to apply to the columns?"])
+    }
+    def command(self, dataframe, selector_names, command):
+        function_to_apply = command.function.function.partial # wrapper + argmatch object...
+        new_df = dataframe.copy_frame(dataframe.column_names)
+        # somehow check whether the function only takes one argument?
+        # also, whether the function takes the right type? and what type it returns?
+        return new_df.map_columns(selector_names.column_names, function_to_apply)
+
+applyFunctionDataframe = ApplyFunctionDataframe()
+
+class FilterFunctionDataframe(IrisCommand):
+    title = "filter {dataframe}"
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe?"),
+        "selector_names": t.DataframeSelector("Please choose a the columns to filter by.", dataframe="dataframe"),
+        "command": sm.FunctionSearch(question=["What filter do you want to apply to the columns?"])
+    }
+    def command(self, dataframe, selector_names, command):
+        function_to_apply = command.function.function.command # wrapper + argmatch object...
+        new_df = dataframe.copy_frame(dataframe.column_names)
+        # somehow check whether the function only takes one argument?
+        # also, whether the function takes the right type? and what type it returns?
+        return new_df.map_columns(selector_names.column_names, function_to_apply)
+
+applyFunctionDataframe = ApplyFunctionDataframe()
+
 class SelectAllColumnsExcept(IrisCommand):
     title = "select all columns except for {column}"
     examples = ["all columns except {column}", "all but {column}"]
@@ -26,6 +58,19 @@ class SelectAllColumnsExcept(IrisCommand):
         return ", ".join([x for x in dataframe.column_names if x != column])
 
 selectAllColumnsExcept = SelectAllColumnsExcept()
+
+class SwitchDataframe(IrisCommand):
+    title = "choose from {dataframe} instead"
+    examples = ["from {dataframe}", "select from {dataframe}"]
+    can_call = [t.DataframeSelector]
+    argument_types = {
+        "dataframe": t.Dataframe("What other dataframe would you like?"),
+        "new_selector": t.DataframeSelector("What columns would you like?", dataframe="dataframe")
+    }
+    def command(self, dataframe, new_selector):
+        return new_selector
+
+switchDataframe = SwitchDataframe()
 
 class LoadCSVData(IrisCommand):
     title = "load csv data from {file}"

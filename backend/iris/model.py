@@ -63,6 +63,7 @@ class IrisBase:
 
     # register new iris command with the env and model
     def add_command(self, command):
+        print(command.title)
         # if the name of class is the same as something we already know about, going to overwrite
         if not command.__class__.__name__ in self.class2index:
             class_index = len(self.class_functions)

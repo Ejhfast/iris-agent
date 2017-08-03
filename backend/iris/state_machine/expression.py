@@ -168,12 +168,24 @@ class Function(Scope, AssignableMachine):
                     type_machine = self.argument_types[arg].set_arg_name(arg).set_caller(self)
                     # TODO: two lines below enable the arg_1->arg_n dependency hack. make this nicer!
                     # (the only thing using this now is the dataframe stuff, search for .arg_context to see)
-                    type_machine.gen_scope = self.gen_scope # hack for now
-                    type_machine.arg_context = self.context
+                    type_machine.gen_caller_scope = self.gen_scope # hack for now
+                    type_machine.caller_context = self.context
                 # assign this arg and loop back to self
                 return Assign(self.gen_scope(arg), type_machine).when_done(self)
     def command(self):
         pass
+    def partial(self, *args):
+        new_values = []
+        arg_index = 0
+        print(args)
+        for arg in self.command_args:
+            if arg in self.binding_machine:
+                new_values.append(self.binding_machine[arg].value) # it is a ValueState?
+            else:
+                new_values.append(args[arg_index])
+                arg_index += 1
+        print(new_values)
+        return self.command(*new_values)
 
 # Here is the prettier form of functions that we expose to users
 class IrisCommand(Function):
@@ -284,6 +296,7 @@ class IrisCommand(Function):
             # replace "def command()" and remove "self"
             "source": gencode.rename_code(self.__class__.__name__, code)[1]
         }
+
 
 # This state machine prints out an exception and exits the current state loop (if any)
 # TODO: can this just be a flat function?
@@ -446,7 +459,7 @@ class MakeHolesFunction(Scope, AssignableMachine):
                 # otherwise, this is a concrete value, ask if the user wants to keep it
                 return Assign(self.gen_scope(arg), DoAll([
                     to_print,
-                    Print(util.print_assignment(arg, None, self.function.binding_machine[arg].value)),
+                    Print(["{} is {}".format(arg, self.function.binding_machine[arg].value)]),
                     t.YesNo("Do you want to keep {}? If not, I will make it a variable".format(arg),
                         yes=True,
                         no=False)])).when_done(self)
