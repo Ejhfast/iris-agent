@@ -123,6 +123,14 @@ class IrisDataframe:
         indexes = {name:i for i, name in enumerate(self.column_names)}
         return np.array([row[indexes[name]] for row in self.data])
 
+    # add a new column to the dataframe
+    def add_column(self, name, column):
+        new_df = self.copy_frame(self.column_names)
+        new_df.data = np.concatenate((new_df.data, column).reshape(len(column), 1), axis=1)
+        new_df.column_names += [name]
+        new_df.column_types += ["Number"]
+        return new_df
+
     # return matrix representation of underlying data
     def to_matrix(self):
         return np.array(self.data)#.T
