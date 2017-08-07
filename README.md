@@ -55,7 +55,7 @@ Install and run the Python components:
     # run the backend application
     python app.py
 
-Install and run the Javascript components:
+Install and run the Javascript components. First if you do not already have webpack installed, run `npm install webpack -g`:
 
     cd iris-agent
     npm install
