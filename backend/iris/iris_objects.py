@@ -252,6 +252,10 @@ class PartialWrapper(FunctionWrapper):
     def __init__(self, function, name="anonymous partial"):
         self.function = function
         self.name = name
+    def partial_wrap(*args):
+        return self.function.partial_wrap(*(args[1:]))
+    def partial(*args):
+        return self.function.partial(*(args[1:]))
 
 # references point to data in the iris environment
 class EnvReference:

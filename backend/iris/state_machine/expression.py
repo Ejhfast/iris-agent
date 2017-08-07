@@ -26,7 +26,12 @@ class FunctionReturn:
 # helper for .binding_machine that wraps a value in ValueState (for assignment)
 # or else unwraps the program component from a FunctionReturn value, the logic that produced the resul
 def value_or_program(value):
-    return ValueState(value) if not isinstance(value, FunctionReturn) else value.program
+    if isinstance(value, FunctionReturn):
+        if isinstance(value.value, iris_objects.PartialWrapper):
+            return value.value.function
+        else:
+            return value.program
+    return ValueState(value)
 
 # as a user interacts with commands in the environment, we want to build an AST that reflects what they have done
 # this handles a basic component of that, given an Iris Command ("function") that has been resolved with
@@ -49,7 +54,7 @@ def compile_function(function, args, ignore_partial = True):
     new_function.set_output()
     #new_function.output = ["Sure, I can call {}".format(function.title)]
     for key, value in args.items():
-        if ignore_partial or not (isinstance(value, FunctionReturn) and isinstance(value.value, iris_objects.FreeVariable)):
+        if ignore_partial or not (isinstance(value, FunctionReturn) and (isinstance(value.value, iris_objects.FreeVariable))):
             new_function.binding_machine[key] = value_or_program(value)
     return new_function
 
@@ -130,10 +135,7 @@ class Function(Scope, AssignableMachine):
             out[arg] = self.context["ASSIGNMENT_NAMES"][scoped]
         return out
     def check_partial(self, x):
-        print("partial check", self, self.ignore_free)
-        print(x)
-        print((not self.ignore_free) and isinstance(x, iris_objects.FreeVariable))
-        return (not self.ignore_free) and isinstance(x, iris_objects.FreeVariable)
+        return (not self.ignore_free) and (isinstance(x, iris_objects.FreeVariable) or isinstance(x, iris_objects.PartialWrapper))
     # main transition logic for Iris functions
     def next_state_base(self, text):
         print(self)
@@ -193,18 +195,33 @@ class Function(Scope, AssignableMachine):
                 return Assign(self.gen_scope(arg), type_machine).when_done(self)
     def command(self):
         pass
-    def partial(self, *args):
+    def partial_wrap(*args):
+        print("calling partial {}".format(args))
+        self = args[0]
+        arg_copy = [x for x in args[1:]]
+        arg_copy.reverse()
         new_values = []
-        arg_index = 0
-        print(args)
         for arg in self.command_args:
+            print("arg", arg)
             if arg in self.binding_machine:
-                new_values.append(self.binding_machine[arg].value) # it is a ValueState?
+                print("arg binding", arg, self.binding_machine[arg])
+                if isinstance(self.binding_machine[arg], IrisCommand):
+                    reverse_again = [x for x in arg_copy]
+                    reverse_again.reverse()
+                    print("calling nested partial {}".format(reverse_again))
+                    remaining_args, ret_val = self.binding_machine[arg].partial_wrap(*reverse_again)
+                    arg_copy = remaining_args
+                    new_values.append(ret_val)
+                else:
+                    new_values.append(self.binding_machine[arg].value) # it is a ValueState?
             else:
-                new_values.append(args[arg_index])
-                arg_index += 1
-        print(new_values)
-        return self.command(*new_values)
+                new_values.append(arg_copy.pop())
+        print("will call with", new_values)
+        print("remaining args", arg_copy)
+        return arg_copy, self.command(*new_values)
+    def partial(*args):
+        _, ret_val = args[0].partial_wrap(*(args[1:]))
+        return ret_val
 
 # Here is the prettier form of functions that we expose to users
 class IrisCommand(Function):
@@ -353,7 +370,7 @@ class TypeCheck(Scope, AssignableMachine):
         else:
             result_val = result
         # if type checks, great
-        if isinstance(result, iris_objects.FreeVariable) or self.to_check.is_type(result_val):
+        if isinstance(result, iris_objects.FreeVariable) or isinstance(result, iris_objects.PartialWrapper) or self.to_check.is_type(result_val):
             self.assign(self.read_variable("RUN_RESULT"), name="COMMAND VALUE")#(result_val, name="COMMAND VALUE")
             return None
         # otherwise try conversion

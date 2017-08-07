@@ -20,12 +20,26 @@ class TFIDF(IrisCommand):
         i2t = {v:k for k,v in vec.vocabulary_.items()}
         c_names = [i2t[i] for i in range(len(i2t.keys()))]
         c_types = ["Number" for _ in range(len(i2t.keys()))]
-        print(c_names)
-        print(c_types)
         new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray())
         return new_df
 
 tfidf = TFIDF()
+
+# class BinByPercentile(IrisCommand):
+#     title = "bin {dataframe} by percentile"
+#     argument_types = {
+#         "dataframe": t.Dataframe("What dataframe?"),
+#         "selector_names": t.DataframeSelector("Please choose a the columns to use for the binning.", dataframe="dataframe"),
+#         "percentile": t.Int("What percentile?"),
+#     }
+#     def command(self, dataframe, selector_names):
+#         import numpy as np
+#         data = selector_names.to_matrix().flatten()
+#         top = np.percentile()
+#         new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray())
+#         return new_df
+#
+# tfidf = TFIDF()
 
 class MakeClassifier(IrisCommand):
     title = "make a classification model using {dataframe}"

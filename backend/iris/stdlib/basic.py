@@ -22,17 +22,17 @@ class GenerateNumber(IrisCommand):
 
 generateNumber = GenerateNumber()
 
-# class LessThan(IrisCommand):
-#     title = "{x} less than {y}"
-#     examples = ["{x} < {y}", "{x} less {y}"]
-#     argument_types = {
-#         "x": t.Int("Give an integer value for x:"),
-#         "y": t.Int("Give an integer value for y:")
-#     }
-#     def command(self, x, y):
-#         return x < y
-#
-# lessThan = LessThan()
+class LessThan(IrisCommand):
+    title = "{x} less than {y}"
+    examples = ["{x} < {y}", "{x} less {y}"]
+    argument_types = {
+        "x": t.Int("Give an integer value for x:"),
+        "y": t.Int("Give an integer value for y:")
+    }
+    def command(self, x, y):
+        return x < y
+
+lessThan = LessThan()
 
 class GenerateArray(IrisCommand):
     title = "generate a random array of {n} numbers"

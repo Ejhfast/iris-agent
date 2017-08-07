@@ -13,6 +13,22 @@ from ..gencode import make_script, transform_ast
 
 # Notes, I can get this (below) to work, just fancier version of jump
 
+class TestPartial(IrisCommand):
+    title = "test partial"
+    argument_types = {
+        "command": sm.ApplySearch(question=["What filter do you want to apply to the columns?"])
+    }
+    ignore_free = True
+    def command(self, command):
+        function_to_apply = command.function.partial # wrapper + argmatch object...
+        # somehow check whether the function only takes one argument?
+        # also, whether the function takes the right type? and what type it returns?
+        print("running partial from inside command...")
+        return function_to_apply(3)
+        #return new_df.map_columns(selector_names.column_names, function_to_apply)
+
+testPartial = TestPartial()
+
 class MakeVariable(IrisCommand):
     title = "make variable"
     ignore_free = True

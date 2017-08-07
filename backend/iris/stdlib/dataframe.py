@@ -2,6 +2,8 @@ from .. import IrisCommand
 from .. import state_types as t
 from .. import state_machine as sm
 from .. import util as util
+from .. import iris_objects
+
 
 class SaveDf(IrisCommand):
     title = "save {dataframe} to csv"
@@ -16,13 +18,34 @@ class SaveDf(IrisCommand):
 
 saveDf = SaveDf()
 
+class CombineDataframes(IrisCommand):
+    title = "combine {dataframe1} and {dataframe2}"
+    examples = [
+        "combine dataframe {dataframe1} {dataframe2}"
+    ]
+    argument_types = {
+        "dataframe1": t.Dataframe("What is the first dataframe to combine?"),
+        "dataframe2": t.Dataframe("The second dataframe?")
+    }
+    ignore_free = True
+    def command(self, dataframe1, dataframe2):
+        import numpy as np
+        all_column_names = dataframe1.column_names + dataframe2.column_names
+        all_types = dataframe1.column_types + dataframe2.column_types
+        # add better error message here
+        all_data = np.concatenate((dataframe1.to_matrix(), dataframe2.to_matrix()), axis=1)
+        return iris_objects.IrisDataframe(column_names=all_column_names, column_types=all_types, data=all_data)
+
+combineDataframes = CombineDataframes()
+
 class ApplyFunctionDataframe(IrisCommand):
     title = "apply function to {dataframe}"
     argument_types = {
         "dataframe": t.Dataframe("What dataframe?"),
-        "selector_names": t.DataframeSelector("Please choose a the columns to transform.", dataframe="dataframe"),
+        "selector_names": t.DataframeSelector("Please choose the columns to transform.", dataframe="dataframe"),
         "command": sm.ApplySearch(question=["What function do you want to apply to the columns?"])
     }
+    ignore_free = True
     def command(self, dataframe, selector_names, command):
         function_to_apply = command.function.partial # wrapper... # wrapper + argmatch object...
         print("function to apply", function_to_apply)
@@ -37,17 +60,19 @@ class FilterFunctionDataframe(IrisCommand):
     title = "filter {dataframe}"
     argument_types = {
         "dataframe": t.Dataframe("What dataframe?"),
-        "selector_names": t.DataframeSelector("Please choose a the columns to filter by.", dataframe="dataframe"),
-        "command": sm.FunctionSearch(question=["What filter do you want to apply to the columns?"])
+        "selector_names": t.DataframeSelector("Please choose a column to filter by.", dataframe="dataframe"),
+        "command": sm.ApplySearch(question=["What filter do you want to apply to the column?"])
     }
+    ignore_free = True
     def command(self, dataframe, selector_names, command):
-        function_to_apply = command.function.function.command # wrapper + argmatch object...
+        function_to_apply = command.function.partial # wrapper + argmatch object...
         new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
-        return new_df.map_columns(selector_names.column_names, function_to_apply)
+        return new_df.select_data(selector_names.column_names[0], function_to_apply)
+        #return new_df.map_columns(selector_names.column_names, function_to_apply)
 
-applyFunctionDataframe = ApplyFunctionDataframe()
+filterFunctionDataframe = FilterFunctionDataframe()
 
 class SelectAllColumnsExcept(IrisCommand):
     title = "select all columns except for {column}"
@@ -59,6 +84,17 @@ class SelectAllColumnsExcept(IrisCommand):
         return ", ".join([x for x in dataframe.column_names if x != column])
 
 selectAllColumnsExcept = SelectAllColumnsExcept()
+
+class SelectAllColumns(IrisCommand):
+    title = "select all columns"
+    examples = ["all columns except"]
+    can_call = [t.DataframeSelector]
+    argument_types = { }
+    def command(self):
+        dataframe = self.caller.expose_state()["dataframe"]
+        return ", ".join([x for x in dataframe.column_names])
+
+selectAllColumns = SelectAllColumns()
 
 class SwitchDataframe(IrisCommand):
     title = "choose from {dataframe} instead"
@@ -124,37 +160,37 @@ class GetDFColumn(IrisCommand):
 
 getDFColumn = GetDFColumn()
 
-class FilterDataLessThan(IrisCommand):
-    title = "filter {data} with {column} less than {number}"
-    examples = [ "filter {data} {column} < {number}" ]
-    argument_types = {
-        "data": t.Dataframe("What dataframe to extract the column from?"),
-        "column": t.String("What is the name of the column?"),
-        "number": t.Float("What number must the column be less than?")
-    }
-    help_text = [
-        "This command selects all data where a column is less than a number."
-    ]
-    def command(self, data, column, number):
-        return data.select_data(column, lambda x: x < number)
-
-filterDataLessThan = FilterDataLessThan()
-
-class FilterDataGreaterThan(IrisCommand):
-    title = "filter {data} with {column} greater than {number}"
-    examples = [ "filter {data} {column} > {number}" ]
-    argument_types = {
-        "data": t.Dataframe("What dataframe to extract the column from?"),
-        "column": t.String("What is the name of the column?"),
-        "number": t.Float("What number must the column be greater than?")
-    }
-    help_text = [
-        "This command selects all data where a column is greater than a number."
-    ]
-    def command(self, data, column, number):
-        return data.select_data(column, lambda x: x > number)
-
-filterDataGreaterThan = FilterDataGreaterThan()
+# class FilterDataLessThan(IrisCommand):
+#     title = "filter {data} with {column} less than {number}"
+#     examples = [ "filter {data} {column} < {number}" ]
+#     argument_types = {
+#         "data": t.Dataframe("What dataframe to extract the column from?"),
+#         "column": t.String("What is the name of the column?"),
+#         "number": t.Float("What number must the column be less than?")
+#     }
+#     help_text = [
+#         "This command selects all data where a column is less than a number."
+#     ]
+#     def command(self, data, column, number):
+#         return data.select_data(column, lambda x: x < number)
+#
+# filterDataLessThan = FilterDataLessThan()
+#
+# class FilterDataGreaterThan(IrisCommand):
+#     title = "filter {data} with {column} greater than {number}"
+#     examples = [ "filter {data} {column} > {number}" ]
+#     argument_types = {
+#         "data": t.Dataframe("What dataframe to extract the column from?"),
+#         "column": t.String("What is the name of the column?"),
+#         "number": t.Float("What number must the column be greater than?")
+#     }
+#     help_text = [
+#         "This command selects all data where a column is greater than a number."
+#     ]
+#     def command(self, data, column, number):
+#         return data.select_data(column, lambda x: x > number)
+#
+# filterDataGreaterThan = FilterDataGreaterThan()
 
 class SelectorTest(IrisCommand):
     title = "selector test"
