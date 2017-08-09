@@ -18,16 +18,15 @@ class SaveDf(IrisCommand):
 
 saveDf = SaveDf()
 
-class CombineDataframes(IrisCommand):
-    title = "combine {dataframe1} and {dataframe2}"
+class CombineDataframesColumnwise(IrisCommand):
+    title = "combine columns for {dataframe1} and {dataframe2}"
     examples = [
-        "combine dataframe {dataframe1} {dataframe2}"
+        "combine dataframe columns {dataframe1} {dataframe2}"
     ]
     argument_types = {
         "dataframe1": t.Dataframe("What is the first dataframe to combine?"),
         "dataframe2": t.Dataframe("The second dataframe?")
     }
-    ignore_free = True
     def command(self, dataframe1, dataframe2):
         import numpy as np
         all_column_names = dataframe1.column_names + dataframe2.column_names
@@ -36,7 +35,21 @@ class CombineDataframes(IrisCommand):
         all_data = np.concatenate((dataframe1.to_matrix(), dataframe2.to_matrix()), axis=1)
         return iris_objects.IrisDataframe(column_names=all_column_names, column_types=all_types, data=all_data)
 
-combineDataframes = CombineDataframes()
+combineDataframesColumnwise = CombineDataframesColumnwise()
+
+class CombineDataframesRowwise(IrisCommand):
+    title = "combine rows {dataframe1} and {dataframe2}"
+    examples = [
+        "combine dataframe rows {dataframe1} {dataframe2}"
+    ]
+    argument_types = {
+        "dataframe1": t.Dataframe("What is the first dataframe to combine?"),
+        "dataframe2": t.Dataframe("The second dataframe?")
+    }
+    def command(self, dataframe1, dataframe2):
+        return dataframe1.copy_frame(dataframe1.column_names).add_rows(dataframe2.to_matrix())
+
+combineDataframesRowwise = CombineDataframesRowwise()
 
 class ApplyFunctionDataframe(IrisCommand):
     title = "apply function to {dataframe}"
@@ -56,6 +69,18 @@ class ApplyFunctionDataframe(IrisCommand):
 
 applyFunctionDataframe = ApplyFunctionDataframe()
 
+class ShowTypes(IrisCommand):
+    title = "show types dataframe {dataframe}"
+    argument_types = {
+        "dataframe": t.Dataframe("What dataframe?"),
+        "selector_names": t.DataframeSelector("Please choose a column to filter by.", dataframe="dataframe"),
+    }
+    def command(self, dataframe, selector_names):
+        return selector_names.column_types
+        #return new_df.map_columns(selector_names.column_names, function_to_apply)
+
+showTypes = ShowTypes()
+
 class FilterFunctionDataframe(IrisCommand):
     title = "filter {dataframe}"
     argument_types = {
@@ -69,6 +94,7 @@ class FilterFunctionDataframe(IrisCommand):
         new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
+        print(selector_names.to_matrix())
         return new_df.select_data(selector_names.column_names[0], function_to_apply)
         #return new_df.map_columns(selector_names.column_names, function_to_apply)
 

@@ -35,18 +35,11 @@ class BinByPercentile(IrisCommand):
     def command(self, dataframe, selector_names, percentile):
         import numpy as np
         data = selector_names.to_matrix().flatten()
-        top = np.percentile(data, percentile)
-        bottom = np.percentile(data, 100-percentile)
-        def compute_group(num, topq, bottomq):
-            if num > qval:
-                return 0
-            elif num < bottomq:
-                return 1
-            return 2
-        new_column = np.array([compute_group(x, top, bottom) for x in selector_names.to_matrix().flatten()])
-        new_data = dataframe.to_matrix()
-        new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=new_data)
-        return dataframe.add_column("groups", new_column)
+        bins = [np.percentile(data, i) for i in range(percentile,101,percentile)]
+        print(bins)
+        new_column = np.digitize(data, bins, right=True)
+        print(new_column)
+        return dataframe.add_column("groups", new_column, "Number")
 
 binByPercentile = BinByPercentile()
 

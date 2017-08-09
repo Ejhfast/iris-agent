@@ -90,6 +90,7 @@ class IrisFile:
 
 # defines API for dataframes in Iris
 # TODO: this API is very important, so needs a lot of work
+# http://pbpython.com/pandas-list-dict.html
 class IrisDataframe:
     type="DataFrame"
     # "column_names" is ordered list of names associated with each column
@@ -124,11 +125,20 @@ class IrisDataframe:
         return np.array([row[indexes[name]] for row in self.data])
 
     # add a new column to the dataframe
-    def add_column(self, name, column):
+    def add_column(self, name, column, type_):
         new_df = self.copy_frame(self.column_names)
-        new_df.data = np.concatenate((new_df.data, column).reshape(len(column), 1), axis=1)
-        new_df.column_names += [name]
-        new_df.column_types += ["Number"]
+        new_df.data = np.concatenate((new_df.data, column.reshape(len(column), 1)), axis=1)
+        print(new_df)
+        new_df.column_names = new_df.column_names + [name]
+        new_df.column_types = new_df.column_names + [type_]
+        print(new_df.data)
+        new_df.cat2index = defaultdict(dict)
+        return new_df
+
+    # concatenate rows to dataframe
+    def add_rows(self, rows):
+        new_df = self.copy_frame(self.column_names)
+        new_df.data = np.concatenate((new_df.data, rows), axis=0)
         return new_df
 
     # return matrix representation of underlying data
