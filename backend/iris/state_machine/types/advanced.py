@@ -81,7 +81,7 @@ class DataframeSelector(sm.Scope, sm.AssignableMachine):
         dataframe = self.read_variable("dataframe")
         if dataframe != None:
             possible_columns = [x.strip() for x in text.split(",")]
-            if all([col in dataframe.get_value(self.iris).column_names for col in possible_columns]):
+            if all([col in dataframe.get_value(self.iris).columns() for col in possible_columns]):
                 return ["your selection is a valid set of columns"]
         return cs.ApplySearch(caller_context=self).hint(text)
     def next_state_base(self, text):
@@ -102,7 +102,7 @@ class DataframeSelector(sm.Scope, sm.AssignableMachine):
             print("did we see state?", self.read_variable("function_return"))
             if isinstance(self.read_variable("function_return").value, iris_objects.IrisDataframe):
                 new_df = self.read_variable("function_return").value
-                selection = new_df.copy_frame(new_df.column_names)
+                selection = new_df.copy_frame(new_df.columns())
                 self.assign(selection)
                 dataframe = self.delete_variable("dataframe")
                 self.accepts_input = False
@@ -118,7 +118,7 @@ class DataframeSelector(sm.Scope, sm.AssignableMachine):
         print(dataframe)
         print("current text", text)
         possible_columns = [x.strip() for x in text.split(",")]
-        if all([col in dataframe.column_names for col in possible_columns]):
+        if all([col in dataframe.columns() for col in possible_columns]):
             print("matching...")
             selection = dataframe.copy_frame(possible_columns)
             self.assign(selection)

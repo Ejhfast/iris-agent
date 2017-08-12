@@ -35,7 +35,11 @@ class Done(sm.StateMachine):
     def next_state_base(self, next):
         filename = self.read_variable("loaded_file").name
         out_dialog = []
-        dataframe = iris_objects.IrisDataframe(self.context["headers"], self.context["types"], self.context["data"], type_convert_data=True)
+        print("being done")
+        print(self.context["data"])
+        print(self.context["headers"])
+        dataframe = iris_objects.IrisDataframe(self.context["data"], column_names=self.context["headers"])
+        print("made df")
         out_dialog.append(sm.ValueState(dataframe))
         if dataframe.missing_data:
             out_dialog.append(sm.Print(["Warning: I detected missing data in the CSV, you may want to handle that prior to any analyses."]))
@@ -110,11 +114,11 @@ class CheckTypes(sm.StateMachine):
             self.accepts_input = False
     def next_state_base(self, text):
         file_str = self.context['data']
-        types = rows_and_types(split_line(file_str[0]))
+        types = rows_and_types(split_line(file_str.split("\n")[0]))
         if not self.force_check:
             self.context["types"] = types
         if self.force_check or util.verify_response(text):
-            dummy_frame = iris_objects.IrisDataframe(column_names=self.context['headers'], column_types=["String" for _ in types], data=[self.context["types"]])
+            dummy_frame = iris_objects.IrisDataframe([self.context["types"]], column_names=self.context['headers'])
             print_types = sm.Print([{"type":"collection_select_one", "value":dummy_frame.generate_spreadsheet_data()}]) #util.prettify_data(type_obj)}])
             return sm.DoAll([print_types, ChangeIndex()]).when_done(self.get_when_done_state())
         return None #True, Done().when_done(self.get_when_done_state())
@@ -131,7 +135,7 @@ class AskForHeaders(sm.StateMachine):
     def get_output(self):
         start_from = 1 if self.read_variable("throw_away") else 0
         sample_data = split_line(self.read_variable("loaded_file").content.split("\n")[start_from])
-        dummy_frame = iris_objects.IrisDataframe(column_names=["column {}".format(i) for i,_ in enumerate(sample_data)], column_types=["_" for x in sample_data], data=[sample_data])
+        dummy_frame = iris_objects.IrisDataframe([sample_data], column_names=["column {}".format(i) for i,_ in enumerate(sample_data)])
         return [
             "What are the headers? Please enter a list of comma-separated values. I've provided a line of sample data below.",
             {"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}
@@ -161,10 +165,10 @@ class GenerateHeaders(sm.StateMachine):
         headers = ["column{}".format(i) for i in range(0,num_cols)]
         self.context['headers'] = headers
         start_from = 1 if self.read_variable("throw_away") else 0
-        self.context['data'] = file_str.split("\n")[start_from:]
+        self.context['data'] = file_str#.split("\n")[start_from:]
         format_header = util.prettify_data(headers)
-        data_sample = [[x for x in split_line(line)] for line in self.context['data'][start_from+1:start_from+4]]
-        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample)
+        data_sample = [[x for x in split_line(line)] for line in self.context['data'].split("\n")[start_from+1:start_from+4]]
+        dummy_frame = iris_objects.IrisDataframe(data_sample, column_names=headers)
         return sm.Print([{"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}]).when_done(self.get_when_done_state())
 
 class FirstLineHeader(sm.StateMachine):
@@ -174,7 +178,7 @@ class FirstLineHeader(sm.StateMachine):
         headers = [x.lower() for x in split_line(file_str.split("\n")[start_read])]
         data_sample = [[x for x in split_line(line)] for line in file_str.split("\n")[start_read+1:start_read+4]]
         format_header = util.prettify_data(headers)
-        dummy_frame = iris_objects.IrisDataframe(column_names=headers, column_types=headers, data=data_sample)
+        dummy_frame = iris_objects.IrisDataframe(data_sample, column_names=headers)
         return [
             "Here are the headers I inferred from the first line. Do these look good?",
             {"type":"collection", "value":dummy_frame.generate_spreadsheet_data()}
@@ -182,7 +186,7 @@ class FirstLineHeader(sm.StateMachine):
     def next_state_base(self, text):
         if util.verify_response(text):
             self.write_variable("throw_away", True)
-            self.context['data'] = self.read_variable("loaded_file").content.split("\n")[1:]
+            self.context['data'] = self.read_variable("loaded_file").content#.split("\n")[1:]
             return sm.Print(["Great, thanks."]).when_done(self.get_when_done_state())
         return CheckHeader(force_ask=True).when_done(self.get_when_done_state())
     # TODO: this appears twice, refactor?
@@ -226,7 +230,7 @@ def file_state(file):
     return sm.DoAll([
         sm.Assign("loaded_file", sm.ValueState(file)),
         CheckHeader(),
-        CheckTypes(),
+        # CheckTypes(),
         sm.Assign("dataframe", Done()),
         sm.Assign("env_name", t.String("Where would you like to save the dataframe?")),
         sm.AddToIrisEnv("env_name", "dataframe"),

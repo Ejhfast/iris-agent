@@ -34,6 +34,7 @@ nbformat==4.3.0
 notebook==4.4.1
 numpy==1.11.2
 oauthlib==2.0.2
+olefile==0.44
 pandas==0.19.2
 pandocfilters==1.4.1
 pexpect==4.2.1

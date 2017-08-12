@@ -5,6 +5,24 @@ from .. import util as util
 from .. import iris_objects
 
 
+class LoadCSV(IrisCommand):
+    title = "load csv from {filename}"
+    examples = [ "load csv {filename}",
+                 "csv data from {filename}" ]
+    help_text = [
+        "This command loads an csv file into a dataframe."
+    ]
+    argument_types = {
+        "filename" : t.File(question="What csv to load?")
+    }
+    def command(self, filename):
+        import pandas as pd
+        new_df = iris_objects.IrisDataframe(None, empty=True)
+        new_df.df = pd.read_csv(filename.path, sep=None)
+        return new_df
+
+loadCSV = LoadCSV()
+
 class SaveDf(IrisCommand):
     title = "save {dataframe} to csv"
     argument_types = {
@@ -28,12 +46,7 @@ class CombineDataframesColumnwise(IrisCommand):
         "dataframe2": t.Dataframe("The second dataframe?")
     }
     def command(self, dataframe1, dataframe2):
-        import numpy as np
-        all_column_names = dataframe1.column_names + dataframe2.column_names
-        all_types = dataframe1.column_types + dataframe2.column_types
-        # add better error message here
-        all_data = np.concatenate((dataframe1.to_matrix(), dataframe2.to_matrix()), axis=1)
-        return iris_objects.IrisDataframe(column_names=all_column_names, column_types=all_types, data=all_data)
+        return dataframe1.add_columns(dataframe2.columns(), dataframe2.get_columns())
 
 combineDataframesColumnwise = CombineDataframesColumnwise()
 
@@ -62,10 +75,9 @@ class ApplyFunctionDataframe(IrisCommand):
     def command(self, dataframe, selector_names, command):
         function_to_apply = command.function.partial # wrapper... # wrapper + argmatch object...
         print("function to apply", function_to_apply)
-        new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
-        return new_df.map_columns(selector_names.column_names, function_to_apply)
+        return dataframe.map_columns(selector_names.columns(), function_to_apply)
 
 applyFunctionDataframe = ApplyFunctionDataframe()
 

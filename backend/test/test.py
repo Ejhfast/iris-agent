@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.abspath('..'))
 from iris import state_machine as sm
 from iris import state_types as t
 from iris import EventLoop
+from iris import iris_objects
 
 # import all the Iris commands we care about
 from iris import stdlib
@@ -89,6 +90,17 @@ class TestUM(unittest.TestCase):
         data_out = self.eventLoop.state_machine(mock_data_formatter(["add my_num and 4"]))
         self.assertEqual(data_out["state"], "START")
         self.assertEqual(data_out["text"][-1], "11.0")
+
+    def test_dataframe(self):
+        dataframe = iris_objects.IrisDataframe([{"firstname":"Ethan", "lastname":"Fast"}, {"firstname":"Binbin", "lastname":"Chen"}])
+        dataframe2 = dataframe.add_column("age", [27, 27])
+        dataframe3 = dataframe.add_columns(["age", "occupation"], [[27, 27], ["CS PhD Student", "Bioinformatics PhD Student"]])
+        data = dataframe3.generate_spreadsheet_data()
+        dataframe.add_rows([""])
+        print(dataframe)
+        print(dataframe2.df["age"])
+        print(dataframe3.df["occupation"])
+
 
     # add test for class_index backdoor
 
