@@ -40,7 +40,7 @@ class GenerateArray(IrisCommand):
 
 These are instructions to install and run Iris in debugging mode. A self-contained Electron app for OSX will be released later this summer.
 
-You will first need to [install anaconda](https://conda.io/docs/install/quick.html).
+You will first need to [install anaconda](https://conda.io/docs/install/quick.html). (Make sure to run `source ~/.bash_profile` after you have installed Anaconda, if it is not appearing in your path.)
 
 Install and run the Python components:
 
@@ -55,7 +55,7 @@ Install and run the Python components:
     # run the backend application
     python app.py
 
-Install and run the Javascript components:
+Install and run the Javascript components. If you do not already have webpack, run `npm install webpack -g`:
 
     cd iris-agent
     npm install
