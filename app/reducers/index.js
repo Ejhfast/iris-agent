@@ -85,7 +85,16 @@ const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 
 const variables = (state = [], action) => {
     switch (action.type) {
         case types.UPDATE_VARIABLES:
-            return action.variables;
+            console.log(action.variables);
+            return _.map(_.sortBy(action.variables, (v) => { return v.order; }));
+        case types.TOGGLE_VARIABLE_ATTRIBUTES:
+            let newVariables = _.map(_.sortBy(state, (v) => { return v.order; })).concat([]);
+            if (newVariables[action.index].show == true){
+              newVariables[action.index].show = false;
+            } else {
+              newVariables[action.index].show = true;
+            }
+            return newVariables;
         default:
             return state;
     }

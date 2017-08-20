@@ -227,3 +227,10 @@ export function updateVariables(variables) {
         variables: variables
     };
 }
+
+export function toggleVariableAttributes(index) {
+    return {
+        type: types.TOGGLE_VARIABLE_ATTRIBUTES,
+        index: index
+    };
+}

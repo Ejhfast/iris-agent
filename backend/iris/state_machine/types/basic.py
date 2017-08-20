@@ -319,6 +319,20 @@ class YesNo(sm.AssignableMachine):
         else:
             self.output = [question]
 
+    # pass through caller context (give YesNo children the same context...)
+    # may need to also edit this for the other command dependency stuff
+    def set_caller(self, caller):
+        self.caller = caller
+        if isinstance(self.yes, sm.StateMachine):
+            self.yes.caller_context = caller.context
+            if hasattr(caller, 'gen_scope'):
+                self.yes.gen_caller_scope = caller.gen_scope
+        if isinstance(self.no, sm.StateMachine):
+            self.no.caller_context = caller.context
+            if hasattr(caller, 'gen_scope'):
+                self.no.gen_caller_scope = caller.gen_scope
+        return self
+
     # here this type checks if ANY branch type checks
     def convert_type(self, text):
         return OR([

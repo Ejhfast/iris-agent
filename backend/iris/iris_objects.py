@@ -38,22 +38,26 @@ class IrisBar(IrisVega):
 
 #vega class for scatter plot (Binbin Chen 7/18/2017)
 class IrisScatter(IrisVega):
-    def __init__(self, name, data_x, data_y, x_label="x value", y_label="y value"):
+    def __init__(self, name, data_x, data_y, colors=None, color_name=None, x_label="x value", y_label="y value"):
         self.name = name
         self.x_label = x_label
         self.y_label = y_label
         self.spec = {
           "mark": "point",
           "encoding": {
-            "x": {"field": self.x_label, "type": "quantitative"},
-            "y": {"field": self.y_label, "type": "quantitative"}
+            "x": {"field": self.x_label, "type": "quantitative", "scale": {"domain": [min(data_x), max(data_x)]}},
+            "y": {"field": self.y_label, "type": "quantitative", "scale": {"domain": [min(data_y), max(data_y)]}},
           }
         }
+        if color_name != None:
+            self.spec["encoding"]["color"] = {"field": color_name, "type": "nominal"}
         data_vals = []
-        for x0,y0 in zip(data_x,data_y):
+        for i in range(0,len(data_x)):
             obj = {}
-            obj[self.x_label] = x0
-            obj[self.y_label] = y0
+            obj[self.x_label] = data_x[i]
+            obj[self.y_label] = data_y[i]
+            if color_name != None:
+                obj[color_name] = colors[i]
             data_vals.append(obj)
         self.data = { "values": data_vals }
 
@@ -121,15 +125,18 @@ class IrisDataframe:
         return self.df.columns.tolist()
 
     def dtype_name(self, t):
+        print(t)
         if is_numeric(t):
             return "Number"
+        elif isinstance(t, str) and len(t) > 50:
+            return "Text"
         else:
             return "String"
 
     # produce a data representation that the frontend can understand and display
     def generate_spreadsheet_data(self):
         # column data listing columns and types # TODO: key, name currently redundant
-        column_data = [{"key":obj[0], "name":obj[0], "type":self.dtype_name(obj[1])} for obj in zip(self.df.columns, self.df.dtypes)]
+        column_data = [{"key":obj, "name":obj, "type":self.dtype_name(self.df[obj][0])} for obj in self.df.columns]
         # column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
         row_data = self.df.to_dict('records')[:50]
         for row in row_data:
@@ -159,6 +166,9 @@ class IrisDataframe:
             new_columns = new_columns.add_column(name, column)
         return new_columns
 
+    def concat(self, dataframe, axis = 0):
+        return IrisDataframe(pd.concat([self.df, dataframe.df], axis))
+
     # add a new column to the dataframe
     def add_column(self, name, column):
         new_column = self.copy_frame(self.columns())
@@ -182,9 +192,10 @@ class IrisDataframe:
     # function takes row[i][j] and can return anything
     # this function happens in place! so usually make a copy of the frame first
     def map_columns(self, columns, func):
+        new_dataframe = self.copy_frame(self.columns())
         for c in columns:
-            self.df[c] = self.df[c].map(func)
-        return self
+            new_dataframe.df[c] = new_dataframe.df[c].map(func)
+        return new_dataframe
 
     # create a copy of a dataframe with the columns in question removed
     def remove_column(self, names):
@@ -192,11 +203,14 @@ class IrisDataframe:
             self.df = self.df.drop(name, 1)
         return self
 
+    def to_matrix(self):
+        return self.df.as_matrix()
+
     # select rows across the dataframe where corresponding values in a column match an operation
     # e.g., "filter dataframe to all rows with petal-length less than 2"
     # creates a new copy of the dataframe
     def select_data(self, column, operation):
-        return self.df[self.df.apply(lambda x: operation(x[column]), axis=1)]
+        return IrisDataframe(self.df[self.df.apply(lambda x: operation(x[column]), axis=1)])
 
     # export a dataframe to a string representation
     # TODO: this is really brittle, need to escape commas in quoted strings etc.

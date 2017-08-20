@@ -36,6 +36,8 @@ class EventLoop:
         # TODO: refactor
         if "quit" in text:
             return ["quit"]
+        if "help" in text:
+            return ["help"]
         future_text = self.machine.current_state.hint(text)
         return future_text
     # metacommands override everything else! TODO: change from simple text match

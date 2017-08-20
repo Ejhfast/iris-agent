@@ -15,12 +15,12 @@ class TFIDF(IrisCommand):
     def command(self, dataframe, selector_names):
         from sklearn.feature_extraction.text import CountVectorizer
         vec = CountVectorizer(max_features=200)
-        documents = dataframe.get_column(selector_names.column_names[0]).tolist()
+        documents = dataframe.get_column(selector_names.columns()[0])
         features = vec.fit_transform(documents)
         i2t = {v:k for k,v in vec.vocabulary_.items()}
-        c_names = [i2t[i] for i in range(len(i2t.keys()))]
+        c_names = ["word."+i2t[i] for i in range(len(i2t.keys()))]
         c_types = ["Number" for _ in range(len(i2t.keys()))]
-        new_df = iris_objects.IrisDataframe(column_names=c_names, column_types=c_types, data=features.toarray())
+        new_df = iris_objects.IrisDataframe(features.toarray(), column_names=c_names)
         return new_df
 
 tfidf = TFIDF()
@@ -39,7 +39,7 @@ class BinByPercentile(IrisCommand):
         print(bins)
         new_column = np.digitize(data, bins, right=True)
         print(new_column)
-        return dataframe.add_column("groups", new_column, "Number")
+        return dataframe.add_column("groups", new_column)
 
 binByPercentile = BinByPercentile()
 
@@ -55,7 +55,7 @@ class MakeClassifier(IrisCommand):
             "Logistic Regression classifier": "logistic",
             "Random Forest classifier": "random_forest"
         }),
-        "dataframe": t.Dataframe("What do you want to use as features?"),
+        "dataframe": t.Dataframe("What dataframe holds the data you want to model?"),
         "features": t.DataframeSelector("What features do you want to use?", dataframe="dataframe"),
         "classes": t.DataframeSelector("What do you want to predict?", dataframe="dataframe"),
         "name": t.String("What would you like to call the model?")
@@ -320,14 +320,14 @@ class CrossValidateClassifier(IrisCommand):
         "The resulting scores will be averaged together as a measure of overall performance."
     ]
     argument_types = {
-        "model": t.Model(),
+        "model": t.Model("What model do you want to evaluate?"),
         "score": t.Select(options={
             "Accuracy: correct predictions / incorrect predictions": "accuracy",
             "F1 macro: f1 score computed with average across classes": "f1_macro",
             "F1 binary: f1 score computed on the positive class": "f1",
             "AUC: Area under the ROC curve": "roc_auc"
         }, default="accuracy"),
-        "n": t.Int()
+        "n": t.Int("How many folds should I use?")
     }
     argument_help = {
         "score": t.YesNo(["I'm happy to help.",

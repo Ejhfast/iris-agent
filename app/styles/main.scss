@@ -444,6 +444,17 @@ body{
 	width:100%;
 	margin-top:0px;
 	overflow-y:scroll;
+	.attributes{
+		position: relative;
+		top:-3px;
+		font-size:.9em;
+		padding-left:6px;
+		li{
+			margin:0;
+		}
+		.value{
+		}
+	}
 	.title{
 		font-weight:400;
 		color:rgba(0,0,0,0.4);
@@ -457,6 +468,9 @@ body{
 		margin:0;
 	}
 	li{
+		-webkit-user-select: none; /* Chrome/Safari */
+		-moz-user-select: none; /* Firefox */
+		-ms-user-select: none; /* IE10+ */
 		width:100%;
 		float: left;
 		clear:both;
@@ -479,6 +493,7 @@ body{
 			font-family: courier;
 			font-size:.9em;
 			color:#444;
+			cursor: pointer;
 		}
 	}
 	font-weight:400;

@@ -307,7 +307,7 @@ class IrisCommand(Function):
             elif isinstance(r, iris_objects.FunctionWrapper):
                 out.append("<Bound function: {}>".format(r.name))
             elif isinstance(r, iris_objects.IrisModel):
-                out.append("<{} X={} y={}>".format(r.model.__class__.__name__, util.print_list(r.dataframe_X.column_names, 4), util.print_list(r.dataframe_y.column_names, 4)))
+                out.append("<{} X={} y={}>".format(r.model.__class__.__name__, util.print_list(r.dataframe_X.columns(), 4), util.print_list(r.dataframe_y.columns(), 4)))
             elif isinstance(r, iris_objects.IrisVega):
                 out.append({"type":"vega", "spec":r.spec, "data":r.data})
             elif isinstance(r, iris_objects.IrisDataframe):

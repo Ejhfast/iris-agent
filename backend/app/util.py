@@ -31,13 +31,30 @@ def detect_type(x):
     else:
         return str(type(x))
 
+def attributes(x):
+    if isinstance(x, str):
+        return {"value": x[:20], "components": []}
+    elif isinstance(x, int) or isinstance(x, float):
+        return {"value": str(x), "components": []}
+    elif isinstance(x, iris_objects.IrisDataframe):
+        rows = x.df.shape[0]
+        cols = x.df.shape[1]
+        value = "({} rows x {} columns)".format(rows, cols)
+        components = [name for name in x.columns()][:7]
+        if len(x.columns()) > 7:
+            components.append("...")
+        return {"value": value, "components": components}
+    else:
+        return {"value": "No information available", "components":[]}
+
+
 # this returns a dictionary of name and type for variables in the environment
 # TODO: what doesn't ASTS have an underscore?
 def env_vars(iris):
     out = []
     for k,v in iris.env.items():
         if k in ["__MEMORY__", "__MEMORY_FUNC__", "ASTS"]: continue
-        out.append({"name": k, "value": detect_type(v), "order": iris.env_order[k]})
+        out.append({"name": k, "value": detect_type(v), "order": iris.env_order[k], "attributes":attributes(v) })
     return out
 
 # command construction utils

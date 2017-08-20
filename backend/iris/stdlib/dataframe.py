@@ -7,18 +7,20 @@ from .. import iris_objects
 
 class LoadCSV(IrisCommand):
     title = "load csv from {filename}"
-    examples = [ "load csv {filename}",
+    examples = [ "load csv {filename} into {name}",
                  "csv data from {filename}" ]
     help_text = [
         "This command loads an csv file into a dataframe."
     ]
     argument_types = {
-        "filename" : t.File(question="What csv to load?")
+        "filename" : t.File(question="What csv to load?"),
+        "name": t.String("Where would you like to save the data?")
     }
-    def command(self, filename):
+    def command(self, filename, name):
         import pandas as pd
         new_df = iris_objects.IrisDataframe(None, empty=True)
         new_df.df = pd.read_csv(filename.path, sep=None)
+        self.iris.add_to_env(name, new_df)
         return new_df
 
 loadCSV = LoadCSV()
@@ -46,7 +48,7 @@ class CombineDataframesColumnwise(IrisCommand):
         "dataframe2": t.Dataframe("The second dataframe?")
     }
     def command(self, dataframe1, dataframe2):
-        return dataframe1.add_columns(dataframe2.columns(), dataframe2.get_columns())
+        return dataframe1.concat(dataframe2, axis=1)
 
 combineDataframesColumnwise = CombineDataframesColumnwise()
 
@@ -60,7 +62,7 @@ class CombineDataframesRowwise(IrisCommand):
         "dataframe2": t.Dataframe("The second dataframe?")
     }
     def command(self, dataframe1, dataframe2):
-        return dataframe1.copy_frame(dataframe1.column_names).add_rows(dataframe2.to_matrix())
+        return dataframe1.concat(dataframe2, axis=0)
 
 combineDataframesRowwise = CombineDataframesRowwise()
 
@@ -74,24 +76,11 @@ class ApplyFunctionDataframe(IrisCommand):
     ignore_free = True
     def command(self, dataframe, selector_names, command):
         function_to_apply = command.function.partial # wrapper... # wrapper + argmatch object...
-        print("function to apply", function_to_apply)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
         return dataframe.map_columns(selector_names.columns(), function_to_apply)
 
 applyFunctionDataframe = ApplyFunctionDataframe()
-
-class ShowTypes(IrisCommand):
-    title = "show types dataframe {dataframe}"
-    argument_types = {
-        "dataframe": t.Dataframe("What dataframe?"),
-        "selector_names": t.DataframeSelector("Please choose a column to filter by.", dataframe="dataframe"),
-    }
-    def command(self, dataframe, selector_names):
-        return selector_names.column_types
-        #return new_df.map_columns(selector_names.column_names, function_to_apply)
-
-showTypes = ShowTypes()
 
 class FilterFunctionDataframe(IrisCommand):
     title = "filter {dataframe}"
@@ -103,11 +92,10 @@ class FilterFunctionDataframe(IrisCommand):
     ignore_free = True
     def command(self, dataframe, selector_names, command):
         function_to_apply = command.function.partial # wrapper + argmatch object...
-        new_df = dataframe.copy_frame(dataframe.column_names)
         # somehow check whether the function only takes one argument?
         # also, whether the function takes the right type? and what type it returns?
-        print(selector_names.to_matrix())
-        return new_df.select_data(selector_names.column_names[0], function_to_apply)
+        print(dataframe)
+        return dataframe.select_data(selector_names.columns()[0], function_to_apply)
         #return new_df.map_columns(selector_names.column_names, function_to_apply)
 
 filterFunctionDataframe = FilterFunctionDataframe()
@@ -119,7 +107,7 @@ class SelectAllColumnsExcept(IrisCommand):
     argument_types = {"column": t.String("What column do you want to exclude?")}
     def command(self, column):
         dataframe = self.caller.expose_state()["dataframe"]
-        return ", ".join([x for x in dataframe.column_names if x != column])
+        return ", ".join([x for x in dataframe.columns() if x != column])
 
 selectAllColumnsExcept = SelectAllColumnsExcept()
 
@@ -130,7 +118,7 @@ class SelectAllColumns(IrisCommand):
     argument_types = { }
     def command(self):
         dataframe = self.caller.expose_state()["dataframe"]
-        return ", ".join([x for x in dataframe.column_names])
+        return ", ".join([x for x in dataframe.columns()])
 
 selectAllColumns = SelectAllColumns()
 
@@ -146,22 +134,6 @@ class SwitchDataframe(IrisCommand):
         return new_selector
 
 switchDataframe = SwitchDataframe()
-
-class LoadCSVData(IrisCommand):
-    title = "load csv data from {file}"
-    examples = ["load csv {file}"]
-    argument_types = {
-        "file": t.File("What file would you like to load?"),
-    }
-    def command(self, file):
-        from .fileupload import file_state
-        # file_state is a custom state machine, built using Iris low-level library
-        # allows for injection of user input into code logic
-        return file_state(file)
-    def explanation(self, result):
-        return []
-
-loadCSVData = LoadCSVData()
 
 class ListDataframeNames(IrisCommand):
     title = "list columns from {dataframe}"
@@ -190,10 +162,6 @@ class GetDFColumn(IrisCommand):
         "This command pull a column from a dataframe into the main environment."
     ]
     def command(self, dataframe, column):
-        print("LIWC")
-        print(dataframe.to_matrix().shape)
-        print(len(dataframe.column_names))
-        print(dataframe.column_names)
         return dataframe.get_column(column)
 
 getDFColumn = GetDFColumn()
@@ -229,11 +197,3 @@ getDFColumn = GetDFColumn()
 #         return data.select_data(column, lambda x: x > number)
 #
 # filterDataGreaterThan = FilterDataGreaterThan()
-
-class SelectorTest(IrisCommand):
-    title = "selector test"
-    examples = []
-    def command(self, selector : t.DataframeSelector("Give me dataframe")):
-        return selector
-
-selectorTest = SelectorTest()

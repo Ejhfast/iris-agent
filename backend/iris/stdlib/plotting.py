@@ -17,7 +17,7 @@ class BarChart(IrisCommand):
         "selector_values": t.DataframeSelector("Now tell me a column for the values.", dataframe="dataframe")
     }
     def command(self, dataframe, selector_names, selector_values):
-        return iris_objects.IrisBar("name", selector_names.to_matrix().flatten(), selector_values.to_matrix().flatten(), bar_label=selector_names.column_names[0], value_label=selector_values.column_names[0])
+        return iris_objects.IrisBar("name", selector_names.to_matrix().flatten(), selector_values.to_matrix().flatten(), bar_label=selector_names.columns()[0], value_label=selector_values.columns()[0])
 
 barChart = BarChart()
 
@@ -28,12 +28,18 @@ class ScatterPlot(IrisCommand):
     argument_types = {
         "dataframe": t.Dataframe("What dataframe?"),
         "selector_x": t.DataframeSelector("Please choose a column with values for the x-axis.", dataframe="dataframe"),
-        "selector_y": t.DataframeSelector("Now tell me a column with values for the y-axis", dataframe="dataframe")
+        "selector_y": t.DataframeSelector("Now tell me a column with values for the y-axis", dataframe="dataframe"),
+        "colors": t.YesNo("Do you want to to color different kinds of datapoints?",
+            yes=t.DataframeSelector("Please choose a column for color.", dataframe="dataframe"),
+            no=False)
     }
-    def command(self, dataframe, selector_x, selector_y):
-
-        return iris_objects.IrisScatter("name", selector_x.to_matrix().flatten(), selector_y.to_matrix().flatten(), 
-            x_label=selector_x.column_names[0], y_label=selector_y.column_names[0])
+    def command(self, dataframe, selector_x, selector_y, colors):
+        color_name = None
+        if colors:
+            color_name = colors.columns()[0]
+            colors = colors.to_matrix().flatten()
+        return iris_objects.IrisScatter("name", selector_x.to_matrix().flatten(), selector_y.to_matrix().flatten(),
+            colors=colors, color_name = color_name, x_label=selector_x.columns()[0], y_label=selector_y.columns()[0])
 
 scatterPlot = ScatterPlot()
 
