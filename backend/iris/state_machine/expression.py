@@ -218,7 +218,12 @@ class Function(Scope, AssignableMachine):
                 new_values.append(arg_copy.pop())
         print("will call with", new_values)
         print("remaining args", arg_copy)
-        return arg_copy, self.command(*new_values)
+        def unwrap(x):
+            if isinstance(x, iris_objects.EnvReference):
+                return x.get_value(self.iris)
+            else:
+                return x
+        return arg_copy, self.command(*[unwrap(x) for x in new_values])
     def partial(*args):
         _, ret_val = args[0].partial_wrap(*(args[1:]))
         return ret_val
@@ -304,6 +309,8 @@ class IrisCommand(Function):
             # basically, if command wants to overwrite display type directly, let it
             if isinstance(r, dict) and "type" in r:
                 out.append(r)
+            elif isinstance(r, iris_objects.FreeVariable):
+                out = out # do nothing
             elif isinstance(r, iris_objects.FunctionWrapper):
                 out.append("<Bound function: {}>".format(r.name))
             elif isinstance(r, iris_objects.IrisModel):

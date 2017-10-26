@@ -35,29 +35,28 @@ def analyze(doc,normalize=False,lex=word2cat,keys=liwc_keys):
   return cats
 
 class LiwcAnalysis(IrisCommand):
-    title = "run liwc analysis on {documents}"
-    examples = [ "liwc {documents}" ]
+    title = "run liwc analysis on {dataframe}"
+    examples = [ "liwc {dataframe}" ]
     argument_types = {
-        "documents": t.Array("Where is the collection of documents?"),
-        "top_n": t.Int("How many categories would you like to see?")
+        "dataframe": t.Dataframe("What dataframe would you like to analyze?"),
+        "selector": t.DataframeSelector("What column would you like to analyze?", dataframe="dataframe"),
+        "aggregate_scores": t.YesNo(question="Aggregate counts?", yes="aggregate", no="documents")
     }
-    def command(self, documents, top_n):
+    def command(self, dataframe, selector, aggregate_scores):
+        documents = selector.to_matrix().flatten()
         import numpy as np
-        data = np.array([order_liwc(analyze(doc, normalize=True), liwc_keys) for doc in documents])
-        liwc_types = ["Number" for _ in order_liwc.s_keys]
-        return top_n, iris_objects.IrisDataframe(column_names=order_liwc.s_keys, column_types=liwc_types, data=data)
-    def explanation(self, result):
-        top_n = result[0]
-        result = result[1]
-        import numpy as np
-        data = result.to_matrix()
-        cat_hash = {}
-        for i,name in enumerate(result.column_names):
-            score = np.mean(data[:,i])
-            cat_hash[name] = score
-        out_text = []
-        for name, score in sorted(cat_hash.items(), key=lambda x: x[1], reverse=True)[:top_n]:
-            out_text.append([name, score])
-        return ["Here are the top 10 categories:"] + [np.array(out_text)]
+        to_df = []
+        if aggregate_scores == "aggregate":
+            out_dict = analyze(documents.tolist(), normalize=True)
+            for k,v in sorted(out_dict.items(), key=lambda x: x[1], reverse=True):
+                to_df.append([k,v])
+            return iris_objects.IrisDataframe(column_names=["category", "normalized_count"], column_types=["String", "Number"], data=to_df)
+        else:
+            out_scores = [order_liwc(analyze(d, normalize=True)) for d in documents.tolist()]
+            return iris_objects.IrisDataframe(column_names=order_liwc.s_keys, data=out_scores)
+        # import numpy as np
+        # data = np.array([order_liwc(analyze(doc, normalize=True), liwc_keys) for doc in documents])
+        # liwc_types = ["Number" for _ in order_liwc.s_keys]
+        # return top_n, iris_objects.IrisDataframe(column_names=order_liwc.s_keys, column_types=liwc_types, data=data)
 
 liwcAnalysis = LiwcAnalysis()

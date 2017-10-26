@@ -34,6 +34,18 @@ class LessThan(IrisCommand):
 
 lessThan = LessThan()
 
+class GreaterThan(IrisCommand):
+    title = "{x} greater than {y}"
+    examples = ["{x} > {y}", "{x} greater {y}"]
+    argument_types = {
+        "x": t.Int("Give an integer value for x:"),
+        "y": t.Int("Give an integer value for y:")
+    }
+    def command(self, x, y):
+        return x > y
+
+greaterThan = GreaterThan()
+
 class GenerateArray(IrisCommand):
     title = "generate a random array of {n} numbers"
     examples = [ "generate numpy array of size {n}"]

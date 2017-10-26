@@ -43,6 +43,7 @@ async def new_loop(request):
     response["origin"] = "iris"
     response["type"] = "ADD_SERVER_MESSAGE"
     response["variables"] = util.env_vars(iris)
+    print(response)
     return web.json_response(response)
 
 add_cors(app.router.add_route('POST', '/new_loop', new_loop))

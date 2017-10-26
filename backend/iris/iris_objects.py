@@ -45,8 +45,8 @@ class IrisScatter(IrisVega):
         self.spec = {
           "mark": "point",
           "encoding": {
-            "x": {"field": self.x_label, "type": "quantitative", "scale": {"domain": [min(data_x), max(data_x)]}},
-            "y": {"field": self.y_label, "type": "quantitative", "scale": {"domain": [min(data_y), max(data_y)]}},
+            "x": {"field": self.x_label, "type": "quantitative", "scale": {"domain": [float(min(data_x)), float(max(data_x))]}},
+            "y": {"field": self.y_label, "type": "quantitative", "scale": {"domain": [float(min(data_y)), float(max(data_y))]}},
           }
         }
         if color_name != None:
@@ -54,8 +54,8 @@ class IrisScatter(IrisVega):
         data_vals = []
         for i in range(0,len(data_x)):
             obj = {}
-            obj[self.x_label] = data_x[i]
-            obj[self.y_label] = data_y[i]
+            obj[self.x_label] = float(data_x[i])
+            obj[self.y_label] = float(data_y[i])
             if color_name != None:
                 obj[color_name] = colors[i]
             data_vals.append(obj)
@@ -125,7 +125,6 @@ class IrisDataframe:
         return self.df.columns.tolist()
 
     def dtype_name(self, t):
-        print(t)
         if is_numeric(t):
             return "Number"
         elif isinstance(t, str) and len(t) > 50:
@@ -135,14 +134,18 @@ class IrisDataframe:
 
     # produce a data representation that the frontend can understand and display
     def generate_spreadsheet_data(self):
-        # column data listing columns and types # TODO: key, name currently redundant
-        column_data = [{"key":obj, "name":obj, "type":self.dtype_name(self.df[obj][0])} for obj in self.df.columns]
+        print(self.df)
+        print(self.df.columns)
+        for c in self.df.columns:
+            print(self.df[c])
+        # column data listing columns and types # TODO: key, name currently redundant #self.df[obj][0]
+        column_data = [{"key":obj, "name":obj, "type":self.dtype_name(self.df[obj].tolist()[0])} for obj in self.df.columns]
         # column_data = [{"key":name, "name":name, "type":self.column_types[i]} for i,name in enumerate(self.column_names)]
         row_data = self.df.to_dict('records')[:50]
         for row in row_data:
             for k,v in row.items():
                 row[k] = util.json_encode_df_type(v)
-        return json.dumps({"column_data":column_data, "row_data":row_data})
+        return pd.io.json.dumps({"column_data":column_data, "row_data":row_data})
 
     # get a single column from the dataframe
     # TODO: likely unnecessary give dataframe-centric functions
@@ -210,7 +213,10 @@ class IrisDataframe:
     # e.g., "filter dataframe to all rows with petal-length less than 2"
     # creates a new copy of the dataframe
     def select_data(self, column, operation):
-        return IrisDataframe(self.df[self.df.apply(lambda x: operation(x[column]), axis=1)])
+        def new_operation(x):
+            print(x, operation(x))
+            return operation(x)
+        return IrisDataframe(self.df[self.df.apply(lambda x: new_operation(x[column]), axis=1)])
 
     # export a dataframe to a string representation
     # TODO: this is really brittle, need to escape commas in quoted strings etc.

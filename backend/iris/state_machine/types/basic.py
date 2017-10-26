@@ -184,7 +184,10 @@ class Model(EnvVar):
 # the type for strings
 class String(EnvVar):
     def is_type(self, x):
-        if isinstance(x, str): return True
+        if isinstance(x, str):
+            if len(x.split()) > 1:
+                return False
+            return True
         return False
 
     def error_message(self, text):

@@ -30,7 +30,7 @@ class TestPartial(IrisCommand):
 testPartial = TestPartial()
 
 class MakeVariable(IrisCommand):
-    title = "reference a variable"
+    title = "use column as a variable"
     examples = ["variable", "that column", "column"]
     ignore_free = True
     argument_types = {

@@ -5,22 +5,23 @@ from .. import util as util
 from .. import iris_objects
 
 class Mean(IrisCommand):
-    title = "take mean of {array}"
+    title = "take mean of {dataframe}"
     examples = [
-        "mean of {array} of numbers",
-        "mean {array}",
-        "average of {array}",
-        "average value of {array}",
+        "mean of {dataframe} of numbers",
+        "mean {dataframe}",
+        "average of {dataframe}",
+        "average value of {dataframe}",
     ]
     help_text = [
         "This computes the average values of an array of numbers"
     ]
     argument_types = {
-        "array": t.Array("What is the array you'd like to analyze?")
+        "dataframe": t.Dataframe("What dataframe would you like to analyze?"),
+        "selector": t.DataframeSelector("What are the columns you'd like to transform?", dataframe="dataframe")
     }
-    def command(self, array):
+    def command(self, dataframe, selector):
         import numpy as np
-        return np.average(array)
+        return np.average(selector.to_matrix().flatten())
     def explanation(self, val):
         return "The mean is {}".format(round(val, 6))
 
