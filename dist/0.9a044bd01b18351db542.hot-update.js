@@ -1,0 +1,10 @@
+webpackHotUpdate(0,{
+
+/***/ 1422:
+/***/ (function(module, exports, __webpack_require__) {
+
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(2);\n\nvar _react2 = _interopRequireDefault(_react);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar Attributes = function Attributes(_ref) {\n  var variable = _ref.variable;\n  return _react2.default.createElement(\n    \"div\",\n    { className: \"attributes\" },\n    variable.attributes.components.map(function (x) {\n      return _react2.default.createElement(\n        \"li\",\n        null,\n        x\n      );\n    }),\n    _react2.default.createElement(\n      \"li\",\n      { className: \"value\" },\n      variable.attributes.value\n    )\n  );\n};\n\nexports.default = Attributes;//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8vLi9hcHAvY29tcG9uZW50cy9BdHRyaWJ1dGVzLmpzPzdjZWEiXSwibmFtZXMiOlsiQXR0cmlidXRlcyIsInZhcmlhYmxlIiwiYXR0cmlidXRlcyIsImNvbXBvbmVudHMiLCJtYXAiLCJ4IiwidmFsdWUiXSwibWFwcGluZ3MiOiI7Ozs7OztBQUFBOzs7Ozs7QUFFQSxJQUFNQSxhQUFhLFNBQWJBLFVBQWE7QUFBQSxNQUFFQyxRQUFGLFFBQUVBLFFBQUY7QUFBQSxTQUNqQjtBQUFBO0FBQUEsTUFBSyxXQUFVLFlBQWY7QUFDR0EsYUFBU0MsVUFBVCxDQUFvQkMsVUFBcEIsQ0FBK0JDLEdBQS9CLENBQW1DLFVBQUNDLENBQUQsRUFBTztBQUFDLGFBQU87QUFBQTtBQUFBO0FBQUtBO0FBQUwsT0FBUDtBQUFxQixLQUFoRSxDQURIO0FBRUU7QUFBQTtBQUFBLFFBQUksV0FBVSxPQUFkO0FBQXVCSixlQUFTQyxVQUFULENBQW9CSTtBQUEzQztBQUZGLEdBRGlCO0FBQUEsQ0FBbkI7O2tCQU1lTixVIiwiZmlsZSI6IjE0MjIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgUmVhY3QgZnJvbSAncmVhY3QnO1xuXG5jb25zdCBBdHRyaWJ1dGVzID0gKHt2YXJpYWJsZX0pID0+XG4gIDxkaXYgY2xhc3NOYW1lPVwiYXR0cmlidXRlc1wiPlxuICAgIHt2YXJpYWJsZS5hdHRyaWJ1dGVzLmNvbXBvbmVudHMubWFwKCh4KSA9PiB7cmV0dXJuIDxsaT57eH08L2xpPjt9KX1cbiAgICA8bGkgY2xhc3NOYW1lPVwidmFsdWVcIj57dmFyaWFibGUuYXR0cmlidXRlcy52YWx1ZX08L2xpPlxuICA8L2Rpdj47XG5cbmV4cG9ydCBkZWZhdWx0IEF0dHJpYnV0ZXM7XG5cblxuXG4vLyBXRUJQQUNLIEZPT1RFUiAvL1xuLy8gLi9hcHAvY29tcG9uZW50cy9BdHRyaWJ1dGVzLmpzIl0sInNvdXJjZVJvb3QiOiIifQ==");
+
+/***/ })
+
+})
