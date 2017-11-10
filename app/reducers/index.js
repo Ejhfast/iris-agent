@@ -34,14 +34,11 @@ const appendMessagesConvo = (convo, action) => {
     return { ...convo, messages: appendMessages(messages, action), args: action.arg_map };
 };
 
-const hello_message = {'origin': 'iris', 'text': 'hello', 'id': 0, 'class_index': null, 'state': null, 'arg': null};
-const start_convo = { 'messages': [hello_message], 'title': null, 'hidden': false, 'id': 0, 'args': {} };
-
 // reducer for conversations
 // TODO: This definition state is pretty long, messy
 // Also not clear what "args" represents in a conversation with multiple sub-convos
 // Maybe it is only important to represent the convo title, if so maybe that should be refactored
-const conversation = (state = {'history': [start_convo], 'currentConvo': { 'messages': [], 'title': null, 'hidden': false, 'id': 1, 'args': {} }, 'state': 'START'}, action) => {
+const conversation = (state = {'history': [], 'currentConvo': { 'messages': [], 'title': null, 'hidden': false, 'id': 1, 'args': {} }, 'state': 'START'}, action) => {
     const { history, currentConvo } = state;
     let newConvo;
     switch (action.type) {
