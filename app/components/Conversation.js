@@ -5,6 +5,7 @@ import DataMessage from './DataMessage';
 import CodeMessage from './CodeMessage';
 import ExplainMessage from './ExplainMessage';
 import FilePickMessage from './FilePickMessage';
+import IrisImage from './IrisImage';
 import CollectionMessage from './CollectionMessage';
 import TableSelectMessage from './TableSelectMessage';
 import VegaMessage from './VegaMessage';
@@ -30,6 +31,8 @@ class Conversation extends Component {
                 let content;
                 if (typeof message.text === 'object' && message.text.type === 'data') {
                     content = <DataMessage key={message.id} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
+                } else if (typeof message.text === 'object' && message.text.type === 'image') {
+                      content = <IrisImage key={message.id} origin={message.origin} content={message.text.value} hidden={this.props.hidden}/>;
                 } else if (typeof message.text === 'object' && message.text.type === 'explain') {
                     content = <ExplainMessage key={message.id} origin={message.origin} text={message.text.value} hidden={this.props.hidden}/>;
                 } else if (typeof message.text === 'object' && message.text.type === 'file_pick') {

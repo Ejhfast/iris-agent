@@ -313,6 +313,8 @@ class IrisCommand(Function):
                 out = out # do nothing
             elif isinstance(r, iris_objects.FunctionWrapper):
                 out.append("<Bound function: {}>".format(r.name))
+            elif isinstance(r, iris_objects.IrisImage):
+                out.append({"type": "image", "value": r.value})
             elif isinstance(r, iris_objects.IrisModel):
                 out.append("<{} X={} y={}>".format(r.model.__class__.__name__, util.print_list(r.dataframe_X.columns(), 4), util.print_list(r.dataframe_y.columns(), 4)))
             elif isinstance(r, iris_objects.IrisVega):

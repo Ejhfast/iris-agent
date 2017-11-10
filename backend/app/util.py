@@ -26,8 +26,8 @@ def detect_type(x):
         return "dataframe"
     elif isinstance(x, iris_objects.FunctionWrapper):
         return "function"
-    elif isinstance(x, iris_objects.CoefficientResults):
-        return "coefficients"
+    elif isinstance(x, iris_objects.IrisImage):
+        return "image"
     else:
         return str(type(x))
 

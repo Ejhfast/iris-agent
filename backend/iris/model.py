@@ -32,6 +32,13 @@ class IrisBase:
         # we are also keeping track of convo history, so that env does not change on e.g. browser refesh
         # TODO: this is a bit hacky, literally storing react data
         self.history = {"history": [], "currentConvo": { 'messages': [], 'title': None, 'hidden': False, 'id': 0, 'args': {} }}
+        self.plots = {}
+
+    # for matplotlib
+    def gen_plot_id(self, name):
+        if not name in self.plots:
+            self.plots[name] = len(self.plots)
+        return self.plots[name]
 
     # add "result" to env under "name"
     def add_to_env(self, name, result):
