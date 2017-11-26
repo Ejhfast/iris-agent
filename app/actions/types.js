@@ -40,6 +40,8 @@ export const UPDATE_PREDICTIONS = 'UPDATE_PREDICTIONS';
 export const UPDATE_VARIABLES = 'UPDATE_VARIABLES';
 export const TOGGLE_VARIABLE_ATTRIBUTES = 'TOGGLE_VARIABLE_ATTRIBUTES';
 
+// type to toggle between waiting and not waiting
+export const WAITING_TOGGLE = 'WAITING_TOGGLE';
 
 // TODO: do these exist? I think the server deals with them?
 // which means they don't have corresponding actions, should probably make this explicit

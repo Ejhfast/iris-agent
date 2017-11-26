@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { addMessage, addInputHistory, moveInputHistory, storeCurrentInput, updateDocEvent, setDocs, storeClassIndex, clearClassIndex } from '../actions/index.js';
+import { addMessage, addInputHistory, moveInputHistory, storeCurrentInput, updateDocEvent, setDocs, storeClassIndex, clearClassIndex, waitingToggle } from '../actions/index.js';
 import { updateHint, updateDocs } from '../api_calls/python.js';
 import * as _ from 'lodash';
 
@@ -55,6 +55,7 @@ let InputBox = ({ dispatch, inputHistory, predictions, classIndex }) =>
               dispatch(addMessage({'origin': 'user', 'text': [input.value], 'class_index': classIndex }));
               dispatch(addInputHistory({'message': input.value}));
               dispatch(storeCurrentInput(''));
+              dispatch(waitingToggle());
               input.value = '';
             }
         }}>

@@ -4,6 +4,7 @@ import Conversation from '../components/Conversation';
 import { PredictionStrip } from '../components/PredictionStrip';
 import { input, InputBox } from './InputBox';
 import { postMessages, getVariables, getHistory, setHistory, updateHint } from '../api_calls/python';
+import Waiting from '../components/Waiting';
 
 // dom element for conversation window, important for scroll etc.
 let messageDOM;
@@ -42,6 +43,7 @@ class ConversationPane extends Component {
                     return <Conversation key={convo.id} active={false} messages={convo.messages} title={convo.title} args={convo.args} id={convo.id} hidden={convo.hidden} />;
                 })}
                 <Conversation key={this.props.convo.id} active={true} messages={this.props.messages} title={this.props.convo.title} args={this.props.args} id={this.props.convo.id} hidden={this.props.convo.hidden} />
+                <Waiting />
             </div>
             <PredictionStrip />
             <InputBox />

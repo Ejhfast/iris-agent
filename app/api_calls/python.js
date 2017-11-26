@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import dispatch from '../index.js';
-import { updateCodeEditor, updatePredictions, updateVariables } from '../actions/index.js';
+import { updateCodeEditor, updatePredictions, updateVariables, waitingToggle } from '../actions/index.js';
 
 
 // This is the primary interface through which the client interacts with the state machine
@@ -17,6 +17,7 @@ export const postMessages = (messages, state, conversation) => {
     .then(json => {
         dispatch(json); // what is this??
         dispatch(updateVariables(json.variables));
+        dispatch(waitingToggle());
     })
     .then(() => {
         dispatch(updatePredictions([]));
