@@ -10,7 +10,6 @@ import CollectionMessage from './CollectionMessage';
 import TableSelectMessage from './TableSelectMessage';
 import VegaMessage from './VegaMessage';
 import Title from './Title';
-import WaitingComponent from './WaitingComponent';
 import * as proptypes from '../proptypes/types';
 
 
@@ -58,10 +57,8 @@ class Conversation extends Component {
                 }
                 return content;
             })}
-            <WaitingComponent />
         </div>);
       }
 }
 
 export default Conversation;
-

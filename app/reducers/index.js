@@ -234,12 +234,11 @@ const inputHistory = (state = {'history': [], 'currId': null, 'showHistory': fal
 //defining state of if we are waiting for the python code to finish
 const waitIndicator = (state = {'indicator': false}, action) => {
   if (action.type === types.WAITING_TOGGLE){
-    {...state, indicator: !state.indicator};
+    return {...state, indicator: !state.indicator};
   } else {
     return state;
   }
-}
-
+};
 
 // combine all these reducers together
 const rootReducer = combineReducers({
@@ -252,6 +251,7 @@ const rootReducer = combineReducers({
     functionSearch,
     minimizeState,
     commandEditPane,
+    waitIndicator,
     routing
 });
 
